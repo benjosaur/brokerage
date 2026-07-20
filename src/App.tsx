@@ -1,30 +1,35 @@
 import { Navigate, Route, Routes } from "react-router";
+import PublicShell from "./components/PublicShell";
 import Shell from "./components/Shell";
 import { useSignedIn } from "./lib/store";
+import CoordinatorHome from "./pages/CoordinatorHome";
 import FindSupport from "./pages/FindSupport";
-import Home from "./pages/Home";
+import Landing from "./pages/Landing";
 import Login from "./pages/Login";
+
+function Coordinator() {
+  const signedIn = useSignedIn();
+  if (!signedIn) return <Navigate to="/coordinator/login" replace />;
+  return <Shell />;
+}
 
 export default function App() {
   const signedIn = useSignedIn();
 
-  if (!signedIn) {
-    return (
-      <Routes>
-        <Route path="/login" element={<Login />} />
-        <Route path="*" element={<Navigate to="/login" replace />} />
-      </Routes>
-    );
-  }
-
   return (
     <Routes>
-      <Route path="/login" element={<Navigate to="/" replace />} />
-      <Route element={<Shell />}>
-        <Route path="/" element={<Home />} />
+      <Route path="/" element={<Landing />} />
+      <Route element={<PublicShell />}>
         <Route path="/find-support" element={<FindSupport />} />
-        <Route path="*" element={<Navigate to="/" replace />} />
       </Route>
+      <Route
+        path="/coordinator/login"
+        element={signedIn ? <Navigate to="/coordinator" replace /> : <Login />}
+      />
+      <Route path="/coordinator" element={<Coordinator />}>
+        <Route index element={<CoordinatorHome />} />
+      </Route>
+      <Route path="*" element={<Navigate to="/" replace />} />
     </Routes>
   );
 }

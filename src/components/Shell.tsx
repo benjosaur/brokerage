@@ -1,6 +1,6 @@
 import {
   HandHeart,
-  HeartHandshake,
+  LayoutDashboard,
   LogOut,
   RotateCcw,
   ShieldCheck,
@@ -9,36 +9,27 @@ import {
 } from "lucide-react";
 import { NavLink, Outlet, useNavigate } from "react-router";
 import { resetDemo, signOut } from "../lib/store";
+import DemoRibbon from "./DemoRibbon";
 
 const navItems = [
-  { to: "/", label: "Find support", icon: HeartHandshake, end: true },
-  { to: "/providers", label: "Micro-providers", icon: UsersRound },
-  { to: "/clients", label: "Clients", icon: UserRound },
-  { to: "/volunteers", label: "Volunteers", icon: HandHeart },
-  { to: "/compliance", label: "Compliance", icon: ShieldCheck },
+  { to: "/coordinator", label: "Overview", icon: LayoutDashboard, end: true },
+  { to: "/coordinator/providers", label: "Micro-providers", icon: UsersRound },
+  { to: "/coordinator/clients", label: "Clients", icon: UserRound },
+  { to: "/coordinator/volunteers", label: "Volunteers", icon: HandHeart },
+  { to: "/coordinator/compliance", label: "Compliance", icon: ShieldCheck },
 ];
-
-function DemoRibbon() {
-  return (
-    <div className="border-b border-pk-amber/25 bg-pk-amber-soft px-4 py-1.5 text-center font-plex text-[11px] text-pk-amber">
-      Demonstration — sample data only. Every person is fictional and nothing
-      is sent anywhere.
-    </div>
-  );
-}
 
 export default function Shell() {
   const navigate = useNavigate();
 
   const handleSignOut = () => {
     signOut();
-    navigate("/login");
+    navigate("/");
   };
 
   const handleReset = () => {
     if (window.confirm("Clear every request and client created in this demo?")) {
       resetDemo();
-      navigate("/");
     }
   };
 
@@ -48,12 +39,14 @@ export default function Shell() {
       <div className="flex flex-1 flex-col md:flex-row">
         <aside className="flex flex-col border-b border-pk-line bg-pk-mist md:w-60 md:shrink-0 md:border-r md:border-b-0">
           <div className="px-5 pt-5 pb-4">
-            <p className="font-display text-xl font-bold tracking-tight">
-              Paddock
-            </p>
-            <p className="mt-0.5 font-plex text-[11px] leading-snug text-pk-slate">
-              for Wells Community Network
-            </p>
+            <NavLink to="/" className="block leading-tight">
+              <p className="font-display text-xl font-bold tracking-tight">
+                Paddock
+              </p>
+              <p className="mt-0.5 font-plex text-[11px] leading-snug text-pk-slate">
+                for Wells Community Network
+              </p>
+            </NavLink>
           </div>
           <nav
             aria-label="Main"

@@ -1,7 +1,8 @@
+import { ArrowLeft } from "lucide-react";
 import { useState } from "react";
-import { useNavigate } from "react-router";
-import { signIn } from "../lib/store";
+import { Link, useNavigate } from "react-router";
 import { Eyebrow } from "../components/badges";
+import { signIn } from "../lib/store";
 
 export default function Login() {
   const navigate = useNavigate();
@@ -20,13 +21,19 @@ export default function Login() {
       return;
     }
     signIn();
-    navigate("/");
+    navigate("/coordinator");
   };
 
   return (
     <main className="flex min-h-full items-center justify-center px-4">
       <div className="w-full max-w-sm">
-        <p className="font-display text-2xl font-bold tracking-tight">
+        <Link
+          to="/"
+          className="inline-flex items-center gap-1.5 text-xs text-pk-slate hover:text-pk-ink"
+        >
+          <ArrowLeft size={13} aria-hidden /> Back
+        </Link>
+        <p className="mt-4 font-display text-2xl font-bold tracking-tight">
           Paddock
         </p>
         <p className="mt-1 font-plex text-xs text-pk-slate">
@@ -37,7 +44,7 @@ export default function Login() {
           onSubmit={handleSubmit}
           className="mt-6 rounded-2xl border border-pk-line bg-white p-6 shadow-[0_12px_30px_rgba(28,39,51,0.06)]"
         >
-          <Eyebrow>Sign in</Eyebrow>
+          <Eyebrow>Coordinator sign in</Eyebrow>
           <label className="mt-4 block text-sm font-medium" htmlFor="username">
             Username
           </label>
