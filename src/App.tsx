@@ -1,6 +1,7 @@
 import { Navigate, Route, Routes } from "react-router";
 import Shell from "./components/Shell";
 import { useSignedIn } from "./lib/store";
+import FindSupport from "./pages/FindSupport";
 import Home from "./pages/Home";
 import Login from "./pages/Login";
 
@@ -21,6 +22,7 @@ export default function App() {
       <Route path="/login" element={<Navigate to="/" replace />} />
       <Route element={<Shell />}>
         <Route path="/" element={<Home />} />
+        <Route path="/find-support" element={<FindSupport />} />
         <Route path="*" element={<Navigate to="/" replace />} />
       </Route>
     </Routes>
