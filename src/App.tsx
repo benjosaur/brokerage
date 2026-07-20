@@ -6,6 +6,7 @@ import CoordinatorHome from "./pages/CoordinatorHome";
 import FindSupport from "./pages/FindSupport";
 import Landing from "./pages/Landing";
 import Login from "./pages/Login";
+import Results from "./pages/Results";
 
 function Coordinator() {
   const signedIn = useSignedIn();
@@ -21,6 +22,10 @@ export default function App() {
       <Route path="/" element={<Landing />} />
       <Route element={<PublicShell />}>
         <Route path="/find-support" element={<FindSupport />} />
+        <Route
+          path="/find-support/results/:requestId"
+          element={<Results />}
+        />
       </Route>
       <Route
         path="/coordinator/login"
