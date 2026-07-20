@@ -10,8 +10,7 @@ deployed on Vercel. Full plan: ~/.claude/plans/structured-splashing-spring.md
 - [x] 5. Results: matching, provider cards, mailto email drafts
 - [x] 6. Browse pages: providers, clients, volunteers, compliance
 - [x] 7. Verify: build clean + Playwright e2e (happy path, rejection, persistence)
-- [ ] 8. Deploy: Vercel — CLI installed, awaiting `vercel login` (or dashboard
-       import of benjosaur/brokerage); then `vercel link` + `vercel --prod`
+- [x] 8. Deploy: Vercel — live at brokerage-benjosaurs-projects.vercel.app
 
 ## Review
 

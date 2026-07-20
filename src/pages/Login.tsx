@@ -1,6 +1,7 @@
 import { ArrowLeft } from "lucide-react";
 import { useState } from "react";
 import { Link, useNavigate } from "react-router";
+import DemoRibbon from "../components/DemoRibbon";
 import { Eyebrow } from "../components/badges";
 import { signIn } from "../lib/store";
 
@@ -25,8 +26,10 @@ export default function Login() {
   };
 
   return (
-    <main className="flex min-h-full items-center justify-center px-4">
-      <div className="w-full max-w-sm">
+    <div className="flex min-h-full flex-col">
+      <DemoRibbon />
+      <main className="flex flex-1 items-center justify-center px-4">
+        <div className="w-full max-w-sm">
         <Link
           to="/"
           className="inline-flex items-center gap-1.5 text-xs text-pk-slate hover:text-pk-ink"
@@ -80,7 +83,8 @@ export default function Login() {
             any password.
           </p>
         </form>
-      </div>
-    </main>
+        </div>
+      </main>
+    </div>
   );
 }
