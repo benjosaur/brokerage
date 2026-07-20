@@ -15,6 +15,10 @@
   --color-pk-amber: #b96a24;
   --color-pk-amber-soft: #f7ead8;
   --color-pk-line: #e6e5dd;
+  /* Demo-only extension: the landing palette has no error colour; expired
+     compliance chips need one. Clay sits between pk-amber and pk-ink. */
+  --color-pk-clay: #9c3d2e;
+  --color-pk-clay-soft: #f5e3de;
   --color-pk-cream: #f6f5f0;
   --color-pk-mist: #faf9f5;
   --color-pk-sand: #fbfaf6;

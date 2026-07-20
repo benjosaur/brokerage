@@ -1,0 +1,79 @@
+import { useState } from "react";
+import { useNavigate } from "react-router";
+import { signIn } from "../lib/store";
+import { Eyebrow } from "../components/badges";
+
+export default function Login() {
+  const navigate = useNavigate();
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
+  const [error, setError] = useState("");
+
+  const handleSubmit = (event: React.FormEvent) => {
+    event.preventDefault();
+    if (username.trim().toLowerCase() !== "wells") {
+      setError("This demo signs in as “wells” — try that username.");
+      return;
+    }
+    if (!password) {
+      setError("Enter any password — it isn’t checked in the demo.");
+      return;
+    }
+    signIn();
+    navigate("/");
+  };
+
+  return (
+    <main className="flex min-h-full items-center justify-center px-4">
+      <div className="w-full max-w-sm">
+        <p className="font-display text-2xl font-bold tracking-tight">
+          Paddock
+        </p>
+        <p className="mt-1 font-plex text-xs text-pk-slate">
+          for Wells Community Network
+        </p>
+
+        <form
+          onSubmit={handleSubmit}
+          className="mt-6 rounded-2xl border border-pk-line bg-white p-6 shadow-[0_12px_30px_rgba(28,39,51,0.06)]"
+        >
+          <Eyebrow>Sign in</Eyebrow>
+          <label className="mt-4 block text-sm font-medium" htmlFor="username">
+            Username
+          </label>
+          <input
+            id="username"
+            value={username}
+            onChange={(event) => setUsername(event.target.value)}
+            autoComplete="username"
+            autoFocus
+            className="mt-1.5 w-full rounded-lg border border-pk-line bg-pk-paper px-3 py-2 text-sm placeholder:text-pk-slate/60"
+            placeholder="wells"
+          />
+          <label className="mt-4 block text-sm font-medium" htmlFor="password">
+            Password
+          </label>
+          <input
+            id="password"
+            type="password"
+            value={password}
+            onChange={(event) => setPassword(event.target.value)}
+            autoComplete="current-password"
+            className="mt-1.5 w-full rounded-lg border border-pk-line bg-pk-paper px-3 py-2 text-sm"
+          />
+          {error && <p className="mt-3 text-sm text-pk-clay">{error}</p>}
+          <button
+            type="submit"
+            className="mt-5 w-full rounded-[10px] bg-pk-blue px-4 py-2.5 text-sm font-medium text-white transition-colors hover:bg-pk-blue-deep"
+          >
+            Sign in
+          </button>
+          <p className="mt-4 text-center font-plex text-[11px] text-pk-slate">
+            Demo login: username <span className="text-pk-ink">wells</span>,
+            any password.
+          </p>
+        </form>
+      </div>
+    </main>
+  );
+}

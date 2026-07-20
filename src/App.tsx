@@ -1,9 +1,28 @@
+import { Navigate, Route, Routes } from "react-router";
+import Shell from "./components/Shell";
+import { useSignedIn } from "./lib/store";
+import Home from "./pages/Home";
+import Login from "./pages/Login";
+
 export default function App() {
+  const signedIn = useSignedIn();
+
+  if (!signedIn) {
+    return (
+      <Routes>
+        <Route path="/login" element={<Login />} />
+        <Route path="*" element={<Navigate to="/login" replace />} />
+      </Routes>
+    );
+  }
+
   return (
-    <main className="flex h-full items-center justify-center">
-      <p className="font-plex text-sm text-pk-slate">
-        Wells Community Network — brokerage demo (scaffolding)
-      </p>
-    </main>
+    <Routes>
+      <Route path="/login" element={<Navigate to="/" replace />} />
+      <Route element={<Shell />}>
+        <Route path="/" element={<Home />} />
+        <Route path="*" element={<Navigate to="/" replace />} />
+      </Route>
+    </Routes>
   );
 }
