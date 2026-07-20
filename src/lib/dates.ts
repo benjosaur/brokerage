@@ -13,6 +13,11 @@ export function daysUntil(iso: string): number {
   return Math.ceil(ms / 86_400_000);
 }
 
+export function isWithinLastDays(iso: string, days: number): boolean {
+  const age = Date.now() - new Date(iso).getTime();
+  return age >= 0 && age < days * 86_400_000;
+}
+
 export type ExpiryStatus = "valid" | "expiring" | "expired";
 
 /** Expiring = within 90 days, the typical renewal window WCN chases. */

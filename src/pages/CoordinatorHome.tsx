@@ -1,17 +1,71 @@
-import { ArrowRight, PlusCircle } from "lucide-react";
+import {
+  ArrowRight,
+  FileCheck2,
+  PlusCircle,
+  ShieldCheck,
+  Sparkles,
+  UserRound,
+} from "lucide-react";
 import { Link } from "react-router";
 import { Eyebrow, ServiceBadgeList } from "../components/badges";
-import { expiryStatus } from "../lib/dates";
-import { formatDate } from "../lib/dates";
+import { expiryStatus, formatDate, isWithinLastDays } from "../lib/dates";
 import { useDemoData } from "../lib/store";
+
+function StatTile({
+  to,
+  icon: Icon,
+  value,
+  label,
+  sub,
+  subTone = "muted",
+}: {
+  to: string;
+  icon: typeof ShieldCheck;
+  value: number;
+  label: string;
+  sub: string;
+  subTone?: "muted" | "alert";
+}) {
+  return (
+    <Link
+      to={to}
+      className="group rounded-2xl border border-pk-line bg-white p-4 transition-colors hover:border-pk-blue/40"
+    >
+      <div className="flex items-start justify-between">
+        <p className="font-display text-3xl font-bold tracking-tight">
+          {value}
+        </p>
+        <Icon size={16} aria-hidden className="mt-1 text-pk-slate/70" />
+      </div>
+      <p className="mt-1.5 text-[13px] font-medium text-pk-ink">{label}</p>
+      <p
+        className={`mt-0.5 font-plex text-[11px] ${
+          subTone === "alert" ? "text-pk-clay" : "text-pk-slate"
+        }`}
+      >
+        {sub}
+      </p>
+    </Link>
+  );
+}
 
 export default function CoordinatorHome() {
   const { providers, clients, volunteers, requests } = useDemoData();
 
-  const attention = providers.filter(
-    (provider) =>
-      expiryStatus(provider.dbsExpiry) !== "valid" ||
-      expiryStatus(provider.liabilityExpiry) !== "valid",
+  const dbsDue = [
+    ...providers.map((provider) => provider.dbsExpiry),
+    ...volunteers.map((volunteer) => volunteer.dbsExpiry),
+  ].filter((date) => expiryStatus(date) !== "valid");
+
+  const liabilityDue = providers
+    .map((provider) => provider.liabilityExpiry)
+    .filter((date) => expiryStatus(date) !== "valid");
+  const liabilityExpired = liabilityDue.filter(
+    (date) => expiryStatus(date) === "expired",
+  ).length;
+
+  const newThisWeek = clients.filter((client) =>
+    isWithinLastDays(client.onboarded, 7),
   ).length;
 
   return (
@@ -20,15 +74,49 @@ export default function CoordinatorHome() {
       <h1 className="mt-3 font-display text-3xl font-bold tracking-tight">
         Good day, Wells.
       </h1>
-      <p className="mt-2 max-w-xl text-[15px] leading-relaxed text-pk-slate">
+      <p className="mt-2 text-[15px] text-pk-slate">
         {requests.length === 0
-          ? "No new support requests waiting."
-          : `${requests.length} support request${requests.length === 1 ? "" : "s"} in the book.`}{" "}
-        {providers.length} accredited micro-providers, {clients.length}{" "}
-        clients and {volunteers.length} volunteers on file.
+          ? "No new support requests waiting — here's the state of the network."
+          : `${requests.length} support request${requests.length === 1 ? "" : "s"} in the book — here's the state of the network.`}
       </p>
 
-      <div className="mt-6 flex flex-wrap items-center gap-3">
+      <div className="mt-6 grid grid-cols-2 gap-3 lg:grid-cols-4">
+        <StatTile
+          to="/coordinator/compliance"
+          icon={ShieldCheck}
+          value={dbsDue.length}
+          label="DBS renewals due"
+          sub="within 90 days · providers & volunteers"
+        />
+        <StatTile
+          to="/coordinator/compliance"
+          icon={FileCheck2}
+          value={liabilityDue.length}
+          label="Public liability due"
+          sub={
+            liabilityExpired > 0
+              ? `includes ${liabilityExpired} already expired`
+              : "within 90 days"
+          }
+          subTone={liabilityExpired > 0 ? "alert" : "muted"}
+        />
+        <StatTile
+          to="/coordinator/clients"
+          icon={UserRound}
+          value={clients.length}
+          label="Clients"
+          sub="total on file"
+        />
+        <StatTile
+          to="/coordinator/clients"
+          icon={Sparkles}
+          value={newThisWeek}
+          label="New this week"
+          sub="onboarded via Find Support"
+        />
+      </div>
+
+      <div className="mt-6">
         <Link
           to="/find-support"
           className="inline-flex items-center gap-2 rounded-[10px] bg-pk-blue px-5 py-2.5 text-sm font-medium text-white transition-colors hover:bg-pk-blue-deep"
@@ -36,15 +124,6 @@ export default function CoordinatorHome() {
           <PlusCircle size={16} aria-hidden />
           Start a support request
         </Link>
-        {attention > 0 && (
-          <Link
-            to="/coordinator/compliance"
-            className="inline-flex items-center gap-2 rounded-[10px] border border-pk-amber/40 bg-pk-amber-soft px-5 py-2.5 text-sm font-medium text-pk-amber transition-colors hover:border-pk-amber"
-          >
-            {attention} provider{attention === 1 ? "" : "s"} need
-            {attention === 1 ? "s" : ""} a compliance check
-          </Link>
-        )}
       </div>
 
       <section className="mt-10">
