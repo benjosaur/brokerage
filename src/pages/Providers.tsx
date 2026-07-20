@@ -1,7 +1,15 @@
-import { MapPin, Search } from "lucide-react";
+import { Search } from "lucide-react";
 import { useState } from "react";
-import { Eyebrow, ExpiryChip, ServiceBadgeList } from "../components/badges";
-import { formatDate } from "../lib/dates";
+import { ExpiryChip, ServiceBadgeList } from "../components/badges";
+import {
+  pageTitle,
+  tableCard,
+  tableEl,
+  tbodyEl,
+  tdEl,
+  thEl,
+  theadEl,
+} from "../components/tableStyles";
 import { useDemoData } from "../lib/store";
 
 export default function Providers() {
@@ -18,70 +26,73 @@ export default function Providers() {
 
   return (
     <div>
-      <Eyebrow>Micro-providers</Eyebrow>
-      <div className="mt-3 flex flex-wrap items-center justify-between gap-4">
-        <h1 className="font-display text-3xl font-bold tracking-tight">
-          {providers.length} accredited micro-providers
-        </h1>
-      </div>
-      <label className="relative mt-5 block max-w-sm">
-        <Search
-          size={15}
-          aria-hidden
-          className="pointer-events-none absolute top-1/2 left-3 -translate-y-1/2 text-pk-slate"
-        />
+      <h1 className={pageTitle}>Micro-providers</h1>
+      <p className="mt-1 text-sm text-gray-600">
+        {providers.length} accredited micro-providers on the network.
+      </p>
+
+      <div className="group relative mt-5 max-w-sm">
+        <Search className="absolute top-1/2 left-3 h-4 w-4 -translate-y-1/2 text-gray-400 transition-colors duration-200 group-focus-within:text-gray-500" />
         <input
           value={query}
           onChange={(event) => setQuery(event.target.value)}
           placeholder="Search by name, village or service…"
           aria-label="Search micro-providers"
-          className="w-full rounded-lg border border-pk-line bg-white py-2 pr-3 pl-9 text-sm placeholder:text-pk-slate/50"
+          className="w-full rounded-xl border border-gray-200/60 bg-white/80 py-2 pr-4 pl-10 text-sm shadow-sm backdrop-blur-sm placeholder:text-gray-400"
         />
-      </label>
+      </div>
 
-      {filtered.length === 0 ? (
-        <p className="mt-6 text-sm text-pk-slate">
-          No micro-provider matches “{query}”. Try a village or a service
-          like “garden”.
-        </p>
-      ) : (
-        <ul className="mt-6 grid gap-4 lg:grid-cols-2">
-          {filtered.map((provider) => (
-            <li
-              key={provider.id}
-              className="flex flex-col rounded-2xl border border-pk-line bg-white p-5"
-            >
-              <div className="flex items-baseline justify-between gap-3">
-                <h2 className="font-display text-lg font-bold">
-                  {provider.name}
-                </h2>
-                <span className="flex items-center gap-1 font-plex text-[12px] whitespace-nowrap text-pk-slate">
-                  <MapPin size={12} aria-hidden />
-                  {provider.locality} · {provider.outwardPostcode}
-                </span>
-              </div>
-              <p className="mt-2 text-sm leading-relaxed text-pk-slate">
-                {provider.bio}
-              </p>
-              <p className="mt-2 font-plex text-[12px] text-pk-slate">
-                {provider.availability}
-              </p>
-              <div className="mt-3">
-                <ServiceBadgeList services={provider.services} />
-              </div>
-              <div className="mt-4 flex flex-wrap items-center justify-between gap-2 border-t border-pk-line pt-3.5">
-                <div className="flex flex-wrap gap-1.5">
-                  <ExpiryChip label="DBS" date={provider.dbsExpiry} />
-                  <ExpiryChip label="Insurance" date={provider.liabilityExpiry} />
-                </div>
-                <span className="font-plex text-[11px] text-pk-slate">
-                  accredited {formatDate(provider.startDate)}
-                </span>
-              </div>
-            </li>
-          ))}
-        </ul>
-      )}
+      <div className={`mt-5 ${tableCard}`}>
+        <table className={tableEl}>
+          <thead className={theadEl}>
+            <tr>
+              <th className={thEl}>Name</th>
+              <th className={thEl}>Locality</th>
+              <th className={thEl}>Services</th>
+              <th className={thEl}>Availability</th>
+              <th className={thEl}>DBS</th>
+              <th className={thEl}>Public Liability</th>
+            </tr>
+          </thead>
+          <tbody className={tbodyEl}>
+            {filtered.length === 0 ? (
+              <tr>
+                <td className={tdEl} colSpan={6}>
+                  No micro-provider matches “{query}”. Try a village or a
+                  service like “garden”.
+                </td>
+              </tr>
+            ) : (
+              filtered.map((provider) => (
+                <tr key={provider.id} className="hover:bg-gray-50/60">
+                  <td
+                    className={`${tdEl} font-medium whitespace-nowrap text-gray-800`}
+                    title={provider.bio}
+                  >
+                    {provider.name}
+                  </td>
+                  <td className={`${tdEl} whitespace-nowrap`}>
+                    {provider.locality} · {provider.outwardPostcode}
+                  </td>
+                  <td className={tdEl}>
+                    <ServiceBadgeList services={provider.services} />
+                  </td>
+                  <td className={`${tdEl} min-w-40 text-xs text-gray-500`}>{provider.availability}</td>
+                  <td className={`${tdEl} whitespace-nowrap`}>
+                    <ExpiryChip date={provider.dbsExpiry} />
+                  </td>
+                  <td className={`${tdEl} whitespace-nowrap`}>
+                    <ExpiryChip
+                      
+                      date={provider.liabilityExpiry}
+                    />
+                  </td>
+                </tr>
+              ))
+            )}
+          </tbody>
+        </table>
+      </div>
     </div>
   );
 }

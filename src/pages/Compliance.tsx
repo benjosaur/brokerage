@@ -1,4 +1,13 @@
-import { Eyebrow, ExpiryChip } from "../components/badges";
+import { ExpiryChip } from "../components/badges";
+import {
+  pageTitle,
+  tableCard,
+  tableEl,
+  tbodyEl,
+  tdEl,
+  thEl,
+  theadEl,
+} from "../components/tableStyles";
 import { daysUntil, expiryStatus } from "../lib/dates";
 import { useDemoData } from "../lib/store";
 import type { TrainingRecord } from "../lib/types";
@@ -59,61 +68,58 @@ export default function Compliance() {
 
   return (
     <div>
-      <Eyebrow>Compliance</Eyebrow>
-      <h1 className="mt-3 font-display text-3xl font-bold tracking-tight">
-        DBS, insurance &amp; training
-      </h1>
-      <p className="mt-2 max-w-xl text-sm leading-relaxed text-pk-slate">
+      <h1 className={pageTitle}>Compliance</h1>
+      <p className="mt-1 max-w-xl text-sm text-gray-600">
         {expired > 0 || expiring > 0 ? (
           <>
-            <span className="font-medium text-pk-clay">
-              {expired} expired
-            </span>{" "}
+            <span className="font-medium text-red-700">{expired} expired</span>{" "}
             and{" "}
-            <span className="font-medium text-pk-amber">
+            <span className="font-medium text-amber-700">
               {expiring} due within 90 days
             </span>{" "}
             across the network — most urgent first.
           </>
         ) : (
-          "Everything is in date. Renewals appear here 90 days before they’re due."
+          "Everything is in date. Renewals appear here 90 days before they're due."
         )}
       </p>
 
-      <div className="mt-6 overflow-x-auto rounded-2xl border border-pk-line bg-white">
-        <table className="w-full min-w-[640px] text-left text-sm">
-          <thead>
-            <tr className="border-b border-pk-line font-plex text-[11px] tracking-wide text-pk-slate uppercase">
-              <th className="px-5 py-3 font-medium">Name</th>
-              <th className="px-5 py-3 font-medium">Role</th>
-              <th className="px-5 py-3 font-medium">DBS</th>
-              <th className="px-5 py-3 font-medium">Public liability</th>
-              <th className="px-5 py-3 font-medium">Next training due</th>
+      <div className={`mt-5 ${tableCard}`}>
+        <table className={tableEl}>
+          <thead className={theadEl}>
+            <tr>
+              <th className={thEl}>Name</th>
+              <th className={thEl}>Role</th>
+              <th className={thEl}>DBS</th>
+              <th className={thEl}>Public Liability</th>
+              <th className={thEl}>Next Training Due</th>
             </tr>
           </thead>
-          <tbody>
+          <tbody className={tbodyEl}>
             {rows.map((row) => (
-              <tr key={row.id} className="border-b border-pk-line/60 last:border-0">
-                <td className="px-5 py-3.5 font-medium">{row.name}</td>
-                <td className="px-5 py-3.5 text-pk-slate">{row.kind}</td>
-                <td className="px-5 py-3.5">
-                  <ExpiryChip label="DBS" date={row.dbsExpiry} />
+              <tr key={row.id} className="hover:bg-gray-50/60">
+                <td className={`${tdEl} font-medium text-gray-800`}>
+                  {row.name}
                 </td>
-                <td className="px-5 py-3.5">
+                <td className={tdEl}>{row.kind}</td>
+                <td className={`${tdEl} whitespace-nowrap`}>
+                  <ExpiryChip date={row.dbsExpiry} />
+                </td>
+                <td className={`${tdEl} whitespace-nowrap`}>
                   {row.liabilityExpiry ? (
-                    <ExpiryChip label="Insurance" date={row.liabilityExpiry} />
+                    <ExpiryChip date={row.liabilityExpiry} />
                   ) : (
-                    <span className="text-pk-slate">—</span>
+                    <span className="text-gray-400">—</span>
                   )}
                 </td>
-                <td className="px-5 py-3.5">
+                <td className={`${tdEl} whitespace-nowrap`}>
                   {row.nextTraining ? (
                     <ExpiryChip
                       label={row.nextTraining.name}
                       date={row.nextTraining.expiry}
                     />
                   ) : (
-                    <span className="text-pk-slate">—</span>
+                    <span className="text-gray-400">—</span>
                   )}
                 </td>
               </tr>

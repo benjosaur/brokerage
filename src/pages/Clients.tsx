@@ -1,12 +1,21 @@
-import { Eyebrow, ServiceBadgeList } from "../components/badges";
+import { ServiceBadgeList } from "../components/badges";
+import {
+  pageTitle,
+  tableCard,
+  tableEl,
+  tbodyEl,
+  tdEl,
+  thEl,
+  theadEl,
+} from "../components/tableStyles";
 import { formatDate } from "../lib/dates";
 import { useDemoData } from "../lib/store";
 import type { Client } from "../lib/types";
 
 const statusStyles: Record<Client["status"], string> = {
-  Active: "bg-pk-leaf-soft text-pk-leaf",
-  Matched: "bg-pk-blue-soft text-pk-blue-deep",
-  "New request": "bg-pk-amber-soft text-pk-amber",
+  Active: "bg-green-100 text-green-800",
+  Matched: "bg-blue-100 text-blue-800",
+  "New request": "bg-amber-100 text-amber-800",
 };
 
 export default function Clients() {
@@ -14,43 +23,53 @@ export default function Clients() {
 
   return (
     <div>
-      <Eyebrow>Clients</Eyebrow>
-      <h1 className="mt-3 font-display text-3xl font-bold tracking-tight">
-        {clients.length} clients on file
-      </h1>
-      <p className="mt-2 text-sm text-pk-slate">
-        People supported through the network, including anyone onboarded via
-        Find Support in this demo.
+      <h1 className={pageTitle}>Clients</h1>
+      <p className="mt-1 text-sm text-gray-600">
+        {clients.length} people supported through the network, including
+        anyone onboarded via Find Support in this demo.
       </p>
 
-      <ul className="mt-6 space-y-3">
-        {clients.map((client) => (
-          <li
-            key={client.id}
-            className="rounded-2xl border border-pk-line bg-white p-5"
-          >
-            <div className="flex flex-wrap items-baseline justify-between gap-2">
-              <div className="flex items-baseline gap-3">
-                <h2 className="font-display text-[16px] font-bold">
+      <div className={`mt-5 ${tableCard}`}>
+        <table className={tableEl}>
+          <thead className={theadEl}>
+            <tr>
+              <th className={thEl}>Name</th>
+              <th className={thEl}>Locality</th>
+              <th className={thEl}>Services</th>
+              <th className={thEl}>Onboarded</th>
+              <th className={thEl}>Status</th>
+            </tr>
+          </thead>
+          <tbody className={tbodyEl}>
+            {clients.map((client) => (
+              <tr key={client.id} className="hover:bg-gray-50/60">
+                <td className={`${tdEl} font-medium text-gray-800`}>
                   {client.name}
-                </h2>
-                <span
-                  className={`rounded-full px-2.5 py-0.5 text-[11px] font-medium ${statusStyles[client.status]}`}
-                >
-                  {client.status}
-                </span>
-              </div>
-              <span className="font-plex text-[11px] text-pk-slate">
-                {client.locality} · onboarded {formatDate(client.onboarded)}
-              </span>
-            </div>
-            <p className="mt-2 text-sm text-pk-slate">“{client.headline}”</p>
-            <div className="mt-3">
-              <ServiceBadgeList services={client.services} />
-            </div>
-          </li>
-        ))}
-      </ul>
+                  <p className="mt-0.5 max-w-sm text-xs font-normal text-gray-500">
+                    “{client.headline}”
+                  </p>
+                </td>
+                <td className={`${tdEl} whitespace-nowrap`}>
+                  {client.locality}
+                </td>
+                <td className={tdEl}>
+                  <ServiceBadgeList services={client.services} />
+                </td>
+                <td className={`${tdEl} whitespace-nowrap`}>
+                  {formatDate(client.onboarded)}
+                </td>
+                <td className={`${tdEl} whitespace-nowrap`}>
+                  <span
+                    className={`inline-flex rounded-full px-2.5 py-0.5 text-xs font-medium ${statusStyles[client.status]}`}
+                  >
+                    {client.status}
+                  </span>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
     </div>
   );
 }

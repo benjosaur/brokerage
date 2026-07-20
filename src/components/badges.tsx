@@ -39,14 +39,17 @@ const expiryStyles = {
   expired: "bg-pk-clay-soft text-pk-clay",
 } as const;
 
-export function ExpiryChip({ label, date }: { label: string; date: string }) {
+export function ExpiryChip({ label, date }: { label?: string; date: string }) {
   const status = expiryStatus(date);
+  const prefix = label ? `${label} ` : "";
   const wording =
     status === "expired"
-      ? `${label} expired ${formatDate(date)}`
+      ? `${prefix}expired ${formatDate(date)}`
       : status === "expiring"
-        ? `${label} expires ${formatDate(date)}`
-        : `${label} to ${formatDate(date)}`;
+        ? `${prefix}expires ${formatDate(date)}`
+        : label
+          ? `${label} to ${formatDate(date)}`
+          : `valid to ${formatDate(date)}`;
   return (
     <span
       className={`inline-flex items-center rounded-full px-2.5 py-0.5 font-plex text-[11px] whitespace-nowrap ${expiryStyles[status]}`}

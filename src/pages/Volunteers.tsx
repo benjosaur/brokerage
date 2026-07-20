@@ -1,4 +1,13 @@
-import { Eyebrow, ExpiryChip } from "../components/badges";
+import { ExpiryChip } from "../components/badges";
+import {
+  pageTitle,
+  tableCard,
+  tableEl,
+  tbodyEl,
+  tdEl,
+  thEl,
+  theadEl,
+} from "../components/tableStyles";
 import { formatDate } from "../lib/dates";
 import { useDemoData } from "../lib/store";
 
@@ -7,40 +16,51 @@ export default function Volunteers() {
 
   return (
     <div>
-      <Eyebrow>Volunteers</Eyebrow>
-      <h1 className="mt-3 font-display text-3xl font-bold tracking-tight">
-        {volunteers.length} WCN volunteers
-      </h1>
-      <p className="mt-2 text-sm text-pk-slate">
-        The helpline and liaison team behind the brokerage service.
+      <h1 className={pageTitle}>Volunteers</h1>
+      <p className="mt-1 text-sm text-gray-600">
+        The {volunteers.length}-strong helpline and liaison team behind the
+        brokerage service.
       </p>
 
-      <ul className="mt-6 space-y-3">
-        {volunteers.map((volunteer) => (
-          <li
-            key={volunteer.id}
-            className="flex flex-wrap items-center justify-between gap-3 rounded-2xl border border-pk-line bg-white p-5"
-          >
-            <div>
-              <h2 className="font-display text-[16px] font-bold">
-                {volunteer.name}
-              </h2>
-              <p className="mt-0.5 text-sm text-pk-slate">
-                {volunteer.role} · {volunteer.locality}
-              </p>
-              <p className="mt-1 font-plex text-[12px] text-pk-slate">
-                {volunteer.email} · {volunteer.phone}
-              </p>
-            </div>
-            <div className="flex flex-col items-end gap-1.5">
-              <ExpiryChip label="DBS" date={volunteer.dbsExpiry} />
-              <span className="font-plex text-[11px] text-pk-slate">
-                volunteering since {formatDate(volunteer.since)}
-              </span>
-            </div>
-          </li>
-        ))}
-      </ul>
+      <div className={`mt-5 ${tableCard}`}>
+        <table className={tableEl}>
+          <thead className={theadEl}>
+            <tr>
+              <th className={thEl}>Name</th>
+              <th className={thEl}>Role</th>
+              <th className={thEl}>Locality</th>
+              <th className={thEl}>Contact</th>
+              <th className={thEl}>Volunteering Since</th>
+              <th className={thEl}>DBS</th>
+            </tr>
+          </thead>
+          <tbody className={tbodyEl}>
+            {volunteers.map((volunteer) => (
+              <tr key={volunteer.id} className="hover:bg-gray-50/60">
+                <td className={`${tdEl} font-medium text-gray-800`}>
+                  {volunteer.name}
+                </td>
+                <td className={tdEl}>{volunteer.role}</td>
+                <td className={`${tdEl} whitespace-nowrap`}>
+                  {volunteer.locality}
+                </td>
+                <td className={tdEl}>
+                  {volunteer.email}
+                  <p className="mt-0.5 text-xs text-gray-500">
+                    {volunteer.phone}
+                  </p>
+                </td>
+                <td className={`${tdEl} whitespace-nowrap`}>
+                  {formatDate(volunteer.since)}
+                </td>
+                <td className={`${tdEl} whitespace-nowrap`}>
+                  <ExpiryChip date={volunteer.dbsExpiry} />
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
     </div>
   );
 }

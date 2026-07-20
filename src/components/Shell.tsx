@@ -1,26 +1,50 @@
-import {
-  HandHeart,
-  LayoutDashboard,
-  LogOut,
-  RotateCcw,
-  ShieldCheck,
-  UserRound,
-  UsersRound,
-} from "lucide-react";
-import { NavLink, Outlet, useNavigate } from "react-router";
+import { LogOut, Menu, RotateCcw, X } from "lucide-react";
+import { useEffect, useState } from "react";
+import { Link, Outlet, useLocation, useNavigate } from "react-router";
 import { resetDemo, signOut } from "../lib/store";
 import DemoRibbon from "./DemoRibbon";
 
-const navItems = [
-  { to: "/coordinator", label: "Overview", icon: LayoutDashboard, end: true },
-  { to: "/coordinator/providers", label: "Micro-providers", icon: UsersRound },
-  { to: "/coordinator/clients", label: "Clients", icon: UserRound },
-  { to: "/coordinator/volunteers", label: "Volunteers", icon: HandHeart },
-  { to: "/coordinator/compliance", label: "Compliance", icon: ShieldCheck },
+// Coordinator chrome mirrors the live Paddock app shell
+// (client/src/App.tsx + components/Sidebar.tsx).
+const menuItems = [
+  { key: "overview", label: "Dashboard", path: "/coordinator" },
+  { key: "providers", label: "Micro-providers", path: "/coordinator/providers" },
+  { key: "clients", label: "Clients", path: "/coordinator/clients" },
+  { key: "volunteers", label: "Volunteers", path: "/coordinator/volunteers" },
+  { key: "compliance", label: "Compliance", path: "/coordinator/compliance" },
 ];
+
+function Brand() {
+  return (
+    <div className="flex items-center gap-2.5 px-3">
+      <span
+        aria-hidden
+        className="flex h-7 w-7 items-center justify-center rounded-md bg-gradient-to-br from-blue-600 to-blue-700 text-sm font-bold text-white"
+      >
+        W
+      </span>
+      <span className="text-lg font-bold text-gray-800">Paddock</span>
+    </div>
+  );
+}
 
 export default function Shell() {
   const navigate = useNavigate();
+  const location = useLocation();
+  const [mobileOpen, setMobileOpen] = useState(false);
+
+  useEffect(() => {
+    setMobileOpen(false);
+  }, [location.pathname]);
+
+  useEffect(() => {
+    if (!mobileOpen) return;
+    const onKey = (event: KeyboardEvent) => {
+      if (event.key === "Escape") setMobileOpen(false);
+    };
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, [mobileOpen]);
 
   const handleSignOut = () => {
     signOut();
@@ -33,67 +57,110 @@ export default function Shell() {
     }
   };
 
-  return (
-    <div className="flex min-h-full flex-col">
-      <DemoRibbon />
-      <div className="flex flex-1 flex-col md:flex-row">
-        <aside className="flex flex-col border-b border-pk-line bg-pk-mist md:w-60 md:shrink-0 md:border-r md:border-b-0">
-          <div className="px-5 pt-5 pb-4">
-            <NavLink to="/" className="block leading-tight">
-              <p className="font-display text-xl font-bold tracking-tight">
-                Paddock
-              </p>
-              <p className="mt-0.5 font-plex text-[11px] leading-snug text-pk-slate">
-                for Wells Community Network
-              </p>
-            </NavLink>
-          </div>
-          <nav
-            aria-label="Main"
-            className="flex gap-1 overflow-x-auto px-3 pb-3 md:flex-col md:pb-0"
+  const content = (
+    <>
+      <Brand />
+      <div className="mt-1 px-3">
+        <span className="text-xs text-gray-500">
+          for Wells Community Network
+        </span>
+      </div>
+      <div className="mt-3 mb-4 px-3">
+        <span className="inline-block rounded-full bg-gray-200/70 px-2.5 py-0.5 text-xs font-semibold text-gray-700">
+          Coordinator
+        </span>
+      </div>
+
+      <nav className="flex flex-1 flex-col space-y-1 overflow-y-auto">
+        {menuItems.map((item) => (
+          <Link
+            key={item.key}
+            to={item.path}
+            className={`block w-full px-3 py-2.5 text-left text-sm select-none rounded-md transition-colors duration-150 ease-in-out ${
+              location.pathname === item.path
+                ? "bg-gray-200/70 font-medium text-gray-900"
+                : "text-gray-600 hover:bg-gray-100/70 hover:text-gray-800"
+            }`}
           >
-            {navItems.map(({ to, label, icon: Icon, end }) => (
-              <NavLink
-                key={to}
-                to={to}
-                end={end}
-                className={({ isActive }) =>
-                  `flex items-center gap-2.5 rounded-lg px-3 py-2 text-sm whitespace-nowrap transition-colors ${
-                    isActive
-                      ? "bg-pk-blue-soft font-medium text-pk-blue-deep"
-                      : "text-pk-slate hover:bg-pk-fog hover:text-pk-ink"
-                  }`
-                }
-              >
-                <Icon size={17} aria-hidden />
-                {label}
-              </NavLink>
-            ))}
-          </nav>
-          <div className="mt-auto hidden border-t border-pk-line px-5 py-4 md:block">
-            <p className="font-plex text-[11px] text-pk-slate">
-              Signed in as <span className="text-pk-ink">wells</span>
-            </p>
-            <div className="mt-2 flex flex-col items-start gap-1.5">
+            {item.label}
+          </Link>
+        ))}
+      </nav>
+
+      <button
+        onClick={handleReset}
+        className="mt-3 flex w-full cursor-pointer items-center space-x-2 rounded-md px-3 pt-2 text-sm text-gray-600 transition-colors duration-150 ease-in-out hover:text-gray-800"
+      >
+        <RotateCcw className="h-4 w-4" />
+        <span>Reset demo data</span>
+      </button>
+      <button
+        onClick={handleSignOut}
+        className="mt-1 flex w-full cursor-pointer items-center space-x-2 rounded-md border-t border-gray-200/60 px-3 pt-4 pb-2.5 text-sm text-gray-600 transition-colors duration-150 ease-in-out hover:text-gray-800"
+      >
+        <LogOut className="h-4 w-4" />
+        <span>Sign Out</span>
+      </button>
+    </>
+  );
+
+  return (
+    <div className="flex h-screen flex-col">
+      <DemoRibbon />
+      <div className="flex min-h-0 flex-1 flex-col bg-gradient-to-br from-gray-50 to-gray-100/30 md:flex-row">
+        {/* Mobile top bar */}
+        <header className="flex items-center gap-2 border-b border-gray-200/60 bg-white/90 px-3 py-2.5 backdrop-blur-sm md:hidden">
+          <button
+            onClick={() => setMobileOpen(true)}
+            aria-label="Open menu"
+            aria-expanded={mobileOpen}
+            className="rounded-md p-2 text-gray-600 transition-colors hover:bg-gray-100 hover:text-gray-800"
+          >
+            <Menu className="h-5 w-5" />
+          </button>
+          <span
+            aria-hidden
+            className="flex h-6 w-6 items-center justify-center rounded bg-gradient-to-br from-blue-600 to-blue-700 text-xs font-bold text-white"
+          >
+            W
+          </span>
+          <span className="font-bold text-gray-800">Paddock</span>
+        </header>
+
+        {/* Mobile drawer */}
+        {mobileOpen && (
+          <div className="fixed inset-0 z-50 md:hidden">
+            <div
+              className="absolute inset-0 bg-gray-900/40"
+              onClick={() => setMobileOpen(false)}
+              aria-hidden="true"
+            />
+            <div
+              role="dialog"
+              aria-modal="true"
+              aria-label="Menu"
+              className="absolute inset-y-0 left-0 flex w-64 flex-col bg-gray-50 p-4 shadow-xl"
+            >
               <button
-                onClick={handleSignOut}
-                className="flex items-center gap-1.5 text-xs text-pk-slate hover:text-pk-ink"
+                onClick={() => setMobileOpen(false)}
+                aria-label="Close menu"
+                autoFocus
+                className="mb-2 self-end rounded-md p-2 text-gray-600 transition-colors hover:bg-gray-100 hover:text-gray-800"
               >
-                <LogOut size={13} aria-hidden /> Sign out
+                <X className="h-5 w-5" />
               </button>
-              <button
-                onClick={handleReset}
-                className="flex items-center gap-1.5 text-xs text-pk-slate hover:text-pk-clay"
-              >
-                <RotateCcw size={13} aria-hidden /> Reset demo data
-              </button>
+              {content}
             </div>
           </div>
+        )}
+
+        {/* Desktop sidebar */}
+        <aside className="hidden w-52 flex-col border-r border-gray-200/60 bg-gradient-to-b from-gray-50/90 to-gray-100/80 p-4 backdrop-blur-sm md:flex">
+          {content}
         </aside>
-        <main className="min-w-0 flex-1">
-          <div className="mx-auto max-w-4xl px-4 py-8 md:px-8 md:py-10">
-            <Outlet />
-          </div>
+
+        <main className="flex-1 overflow-auto p-4 md:p-8">
+          <Outlet />
         </main>
       </div>
     </div>
