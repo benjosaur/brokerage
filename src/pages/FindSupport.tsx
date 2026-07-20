@@ -126,13 +126,15 @@ function YesNoChoice({
   value,
   onChange,
   name,
+  labels,
 }: {
   value: YesNo;
   onChange: (next: YesNo) => void;
   name: string;
+  labels?: Partial<Record<"Yes" | "No", string>>;
 }) {
   return (
-    <div role="radiogroup" aria-label={name} className="mt-3 flex gap-2">
+    <div role="radiogroup" aria-label={name} className="mt-3 flex flex-wrap gap-2">
       {(["Yes", "No"] as const).map((option) => (
         <label
           key={option}
@@ -149,7 +151,7 @@ function YesNoChoice({
             onChange={() => onChange(option)}
             className="sr-only"
           />
-          {option}
+          {labels?.[option] ?? option}
         </label>
       ))}
     </div>
@@ -479,6 +481,10 @@ export default function FindSupport() {
               <label className="text-[15px] font-medium" htmlFor="email">
                 Email address
               </label>
+              <HelpText>
+                Please make sure your email is accurate — WCN will contact
+                you here with local care options.
+              </HelpText>
               <input
                 id="email"
                 type="email"
@@ -596,6 +602,7 @@ export default function FindSupport() {
                 name="pets"
                 value={form.pets}
                 onChange={(next) => set("pets", next)}
+                labels={{ Yes: "Yes — please indicate how many and what sort" }}
               />
               <FieldError message={errors.pets} />
               {form.pets === "Yes" && (
@@ -604,7 +611,7 @@ export default function FindSupport() {
                     className="text-sm font-medium"
                     htmlFor="petDetails"
                   >
-                    How many, and what sort?
+                    Please give details of any pets
                   </label>
                   <textarea
                     id="petDetails"
@@ -712,6 +719,7 @@ export default function FindSupport() {
                 name="newsletter"
                 value={form.newsletter}
                 onChange={(next) => set("newsletter", next)}
+                labels={{ Yes: "Yes, please", No: "No, thank you" }}
               />
               <FieldError message={errors.newsletter} />
             </div>
