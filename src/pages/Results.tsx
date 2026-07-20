@@ -111,7 +111,7 @@ export default function Results() {
                       {provider.locality} · {provider.outwardPostcode}
                       {sameLocality && (
                         <span className="ml-1.5 rounded-full bg-pk-blue-soft px-2 py-0.5 text-[11px] font-medium text-pk-blue-deep">
-                          Same village
+                          Same area
                         </span>
                       )}
                     </p>

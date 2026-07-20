@@ -9,7 +9,7 @@ deployed on Vercel. Full plan: ~/.claude/plans/structured-splashing-spring.md
 - [x] 4. Find Support wizard: 6 sections, screening branch, rejection + success
 - [x] 5. Results: matching, provider cards, mailto email drafts
 - [x] 6. Browse pages: providers, clients, volunteers, compliance
-- [ ] 7. Verify: build clean + Playwright e2e (happy path, rejection, persistence)
+- [x] 7. Verify: build clean + Playwright e2e (happy path, rejection, persistence)
 - [ ] 8. Deploy: Vercel (CLI or dashboard import), smoke prod URL
 
 ## Review

@@ -75,7 +75,7 @@ export const seedProviders: MicroProvider[] = [
     dbsExpiry: "2027-06-18",
     liabilityExpiry: "2026-10-05",
     training: [
-      { name: "Safeguarding Adults L1", completed: "2025-04-22", expiry: "2026-04-22" },
+      { name: "Safeguarding Adults L1", completed: "2026-04-22", expiry: "2027-04-22" },
       { name: "Passenger Assistance", completed: "2025-07-01", expiry: "2027-07-01" },
     ],
   },
@@ -129,7 +129,7 @@ export const seedProviders: MicroProvider[] = [
     dbsExpiry: "2027-05-26",
     liabilityExpiry: "2026-12-14",
     training: [
-      { name: "Safeguarding Adults L1", completed: "2025-05-27", expiry: "2026-05-27" },
+      { name: "Safeguarding Adults L1", completed: "2026-05-27", expiry: "2027-05-27" },
       { name: "Dementia Friends", completed: "2024-06-10", expiry: "2027-06-10" },
     ],
   },
@@ -148,7 +148,7 @@ export const seedProviders: MicroProvider[] = [
     liabilityExpiry: "2026-06-30",
     training: [
       { name: "Moving & Handling", completed: "2025-10-30", expiry: "2026-10-30" },
-      { name: "Safeguarding Adults L1", completed: "2025-02-14", expiry: "2026-02-14" },
+      { name: "Safeguarding Adults L1", completed: "2025-08-14", expiry: "2026-08-14" },
     ],
   },
 ];
