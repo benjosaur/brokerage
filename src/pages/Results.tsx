@@ -2,6 +2,7 @@ import { CheckCircle2, Info, Mail, MapPin } from "lucide-react";
 import { Link, useParams } from "react-router";
 import { Eyebrow, ExpiryChip, ServiceBadgeList } from "../components/badges";
 import { formatDate } from "../lib/dates";
+import { FORM_META } from "../lib/formContent";
 import { buildMailto } from "../lib/mailto";
 import { matchProviders } from "../lib/matching";
 import { useDemoData } from "../lib/store";
@@ -35,11 +36,12 @@ export default function Results() {
     <div>
       <div className="flex items-start gap-3 rounded-2xl border border-pk-leaf/25 bg-pk-leaf-soft p-4">
         <CheckCircle2 className="mt-0.5 shrink-0 text-pk-leaf" size={18} aria-hidden />
-        <p className="text-sm leading-relaxed text-pk-leaf">
-          <span className="font-semibold">Request received.</span> In the live
-          service WCN processes requests within three working days — in this
-          demo, the matches are ready now.
-        </p>
+        <div className="text-sm leading-relaxed text-pk-leaf">
+          <p className="font-medium">{FORM_META.confirmationMessage}</p>
+          <p className="mt-1 text-[13px] text-pk-leaf/80">
+            In this demo, the matches are ready now.
+          </p>
+        </div>
       </div>
 
       <section className="mt-6 rounded-2xl border border-pk-line bg-pk-sand p-6">
@@ -56,6 +58,11 @@ export default function Results() {
         </blockquote>
         <div className="mt-4 flex flex-wrap items-center gap-2">
           <ServiceBadgeList services={request.services} />
+          {request.servicesOther && (
+            <span className="rounded-full bg-pk-fog px-2.5 py-0.5 text-xs text-pk-slate">
+              Other: {request.servicesOther}
+            </span>
+          )}
           {request.hasPets && (
             <span className="rounded-full bg-pk-fog px-2.5 py-0.5 text-xs text-pk-slate">
               Pets at home
