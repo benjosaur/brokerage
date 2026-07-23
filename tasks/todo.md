@@ -7,25 +7,25 @@ decide later what to exclude for the WCN context.
 
 Paddock reference: ~/Projects/paddock (routes/*.tsx, components/tables/DataTable.tsx).
 
-- [ ] 1. Data: extend types + seed with Paddock fields — client customId /
+- [x] 1. Data: extend types + seed with Paddock fields — client customId /
       dateOfBirth / postCode / attendanceAllowance / deprivation; volunteer
       dateOfBirth / postCode / dbsNumber / publicLiability* / training;
       provider dateOfBirth / postCode / dbsNumber / publicLiabilityNumber /
       feePaymentDate; rename liabilityExpiry → publicLiabilityExpiry;
       canonical core training names + coreCompletion() helper;
       formatYmdToDmy() (DD-MM-YYYY like Paddock)
-- [ ] 2. UI: port Paddock DataTable (title + Total pill, search, sortable
+- [x] 2. UI: port Paddock DataTable (title + Total pill, search, sortable
       headers with arrow icons, per-column filter row, empty-values-last
       sort) minus CRUD/permissions; minimal Tabs; ExpiryChip renders
       date-only text (label prefix stays for Results cards)
-- [ ] 3. Rewrite Clients / Volunteers / Micro-providers pages on DataTable
+- [x] 3. Rewrite Clients / Volunteers / Micro-providers pages on DataTable
       with Paddock's exact columns + headers (Services pills kept as the
       last column on Clients + Micro-providers)
-- [ ] 4. Replace Compliance with Paddock's three pages: DBS ("DBS
+- [x] 4. Replace Compliance with Paddock's three pages: DBS ("DBS
       Records"), Public Liability ("Insurance Records"), Records ("Training
       Records") — each with MPs | Volunteers tabs; nav + routes updated,
       /coordinator/compliance redirects to /coordinator/dbs
-- [ ] 5. Verify: bun run build clean; Playwright pass over all coordinator
+- [x] 5. Verify: bun run build clean; Playwright pass over all coordinator
       pages + Results; commit atomically as work lands
 
 ## Decisions taken (flag to user)
@@ -38,3 +38,22 @@ Paddock reference: ~/Projects/paddock (routes/*.tsx, components/tables/DataTable
   WCN-only columns (Contact, Availability, Status, headline) dropped from
   tables — data stays in the model.
 - No Add New / row-action menus / Show Ended: demo data is read-only seed.
+
+## Review
+
+Landed as five commits (data → DataTable/Tabs/chips → entity pages →
+DBS/PL/Records pages → docs), `bun run build` clean on each. Every
+coordinator table now uses the ported Paddock DataTable with its exact
+column sets, headers and DD-MM-YYYY dates; the DBS ("DBS Records"),
+Public Liability ("Insurance Records") and Records ("Training Records")
+pages carry Paddock's MPs | Volunteers tabs and network-wide Total pill.
+Seed keeps its single red flag (Josh Parkin's insurance, expired
+30-06-2026, sorts first on the Insurance MPs tab).
+
+Verified via Playwright signed in as wells: all five tables' columns and
+fallbacks ("Unknown" DOB, blank DOB for couples, "No DBS"-style empties
+sorting last, "Unpaid" fee), expiry-date default sorts on the tabbed
+pages, numeric sort on Core Completion Rate (33→100%), Locality column
+filter narrowing Total to 1, /coordinator/compliance → /coordinator/dbs
+redirect, and Results cards showing labelled date-only chips
+("DBS 05-09-2027").
