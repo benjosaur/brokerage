@@ -36,12 +36,9 @@ export default function Results() {
     <div>
       <div className="flex items-start gap-3 rounded-2xl border border-pk-leaf/25 bg-pk-leaf-soft p-4">
         <CheckCircle2 className="mt-0.5 shrink-0 text-pk-leaf" size={18} aria-hidden />
-        <div className="text-sm leading-relaxed text-pk-leaf">
-          <p className="font-medium">{FORM_META.confirmationMessage}</p>
-          <p className="mt-1 text-[13px] text-pk-leaf/80">
-            In this demo, the matches are ready now.
-          </p>
-        </div>
+        <p className="text-sm leading-relaxed font-medium text-pk-leaf">
+          {FORM_META.confirmationMessage}
+        </p>
       </div>
 
       <section className="mt-6 rounded-2xl border border-pk-line bg-pk-sand p-6">
