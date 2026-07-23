@@ -1,3 +1,27 @@
+# Questionnaire-driven columns (user's keep/drop verdicts)
+
+User's calls, applied 2026-07-23: keep only what the Find Support
+questionnaire (or WCN operations) actually produce.
+
+- [x] Clients: Name | Agreement Date (form submission date) | Locality |
+      Funding (new, from the questionnaire's funding answer, carried onto
+      created clients) | Services. No Status (no way to know a match
+      happened), no Custom ID/DOB/postcode/AA/deprivation.
+- [x] MPs: Name | Start Date | Locality | Areas Covered (new — with "All";
+      matching now hard-filters on it intersecting the client's locality) |
+      Services | Availability | Email (the Draft email address) |
+      DBS Expiry | Public Liability Expiry.
+- [x] Volunteers: Name | Role | Locality | Email | DBS Expiry.
+- [x] Dropped fields stay in the model + detail modals; forms trimmed to
+      match (dropped fields pass through untouched on edit); provider and
+      client forms gained Areas Covered / Funding pickers.
+- [x] Verified: table headers on all three pages, funding short labels,
+      "All" areas render, Iris's Pilton request now matches 3 providers
+      (Tom Vickery correctly excluded by area), trimmed form field sets,
+      Tom's edit form pre-checks his six areas. Build green per commit.
+
+Left out per verdicts: Volunteering Since (was optional, not requested).
+
 # Port Paddock CRUD surface: dropdowns, view modals, forms, toaster
 
 Follow-up to the table alignment. Port from ~/Projects/paddock: row-action
