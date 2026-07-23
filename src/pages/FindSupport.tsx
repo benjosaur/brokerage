@@ -1,7 +1,7 @@
 import { ArrowLeft, ArrowRight, RotateCcw } from "lucide-react";
 import { useRef, useState } from "react";
 import { Link, useNavigate } from "react-router";
-import { Eyebrow } from "../components/badges";
+import wcnLogo from "../assets/wcn-logo.png";
 import { FormattedText, QuestionCard } from "../components/questionnaire/QuestionCard";
 import SectionHeader from "../components/questionnaire/SectionHeader";
 import {
@@ -483,8 +483,12 @@ export default function FindSupport() {
     return (
       <Page>
         <div className="max-w-xl animate-rise">
-          <Eyebrow>Wells Community Network</Eyebrow>
-          <h1 className="mt-3 font-display text-3xl font-bold tracking-tight text-balance">
+          <img
+            src={wcnLogo}
+            alt="Wells Community Network — Working Together, Supporting Each Other"
+            className="h-24 w-auto"
+          />
+          <h1 className="mt-6 font-display text-3xl font-bold tracking-tight text-balance">
             {FORM_META.title}
           </h1>
           <FormattedText
