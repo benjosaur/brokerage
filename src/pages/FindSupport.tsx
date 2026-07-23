@@ -148,6 +148,14 @@ function validateSection(index: number, form: FormState): Errors {
   for (const item of FORM_SECTIONS[index].items) {
     if (item.kind === "note") continue;
     const key = item.key;
+    if (key === "petDetails") {
+      // Optional in the upstream form, but the app only reveals it on a
+      // "Yes" pets answer — required whenever it is visible.
+      if (!petDetailsHidden(form) && form.petDetails.trim() === "") {
+        found.petDetails = REQUIRED_MESSAGE;
+      }
+      continue;
+    }
     if (key === "email") {
       if (!/^\S+@\S+\.\S+$/.test(form.email.trim())) {
         found.email = form.email.trim() === "" ? REQUIRED_MESSAGE : "Enter a valid email address.";
@@ -296,6 +304,8 @@ export default function FindSupport() {
   const renderQuestion = (question: FormQuestion) => {
     const key = question.key;
     if (key === "petDetails" && petDetailsHidden(form)) return null;
+    // petDetails is optional upstream but required once revealed (see validateSection).
+    const required = question.required || key === "petDetails";
     const error = errors[key];
     const labelId = `${key}-label`;
     const descriptionId = question.description ? `${key}-desc` : undefined;
@@ -315,7 +325,7 @@ export default function FindSupport() {
           key={key}
           title={question.title}
           description={question.description}
-          required={question.required}
+          required={required}
           labelId={labelId}
           descriptionId={descriptionId}
           error={error}
@@ -329,7 +339,7 @@ export default function FindSupport() {
             layout={inline ? "inline" : "stack"}
             labelledBy={labelId}
             describedBy={describedBy}
-            required={question.required}
+            required={required}
             invalid={Boolean(error)}
             otherValue={key === "heardAbout" ? form.heardAboutOther : undefined}
             onOtherChange={
@@ -359,7 +369,7 @@ export default function FindSupport() {
           key={key}
           title={question.title}
           description={question.description}
-          required={question.required}
+          required={required}
           labelId={labelId}
           descriptionId={descriptionId}
           error={error}
@@ -379,7 +389,7 @@ export default function FindSupport() {
             }}
             labelledBy={labelId}
             describedBy={describedBy}
-            required={question.required}
+            required={required}
             invalid={Boolean(error)}
             otherChecked={key === "services" ? form.servicesOtherChecked : undefined}
             onOtherToggle={
@@ -405,7 +415,7 @@ export default function FindSupport() {
           key={key}
           title={question.title}
           description={question.description}
-          required={question.required}
+          required={required}
           htmlFor={key}
           descriptionId={descriptionId}
           error={error}
@@ -438,7 +448,7 @@ export default function FindSupport() {
         key={key}
         title={question.title}
         description={question.description}
-        required={question.required}
+        required={required}
         htmlFor={key}
         descriptionId={descriptionId}
         error={error}
