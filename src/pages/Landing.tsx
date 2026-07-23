@@ -2,11 +2,10 @@ import { ArrowRight, HeartHandshake, ShieldCheck } from "lucide-react";
 import { Link } from "react-router";
 import DemoRibbon from "../components/DemoRibbon";
 import { Eyebrow } from "../components/badges";
-import { useDemoData, useSignedIn } from "../lib/store";
+import { useDemoData } from "../lib/store";
 
 export default function Landing() {
   const { providers } = useDemoData();
-  const signedIn = useSignedIn();
 
   return (
     <div className="flex min-h-full flex-col">
@@ -47,7 +46,7 @@ export default function Landing() {
           </Link>
 
           <Link
-            to={signedIn ? "/coordinator" : "/coordinator/login"}
+            to="/coordinator"
             className="group rounded-2xl border border-pk-line bg-white p-6 shadow-[0_12px_30px_rgba(28,39,51,0.05)] transition-colors hover:border-pk-blue/50"
           >
             <ShieldCheck className="text-pk-leaf" size={26} aria-hidden />
@@ -59,7 +58,7 @@ export default function Landing() {
               volunteers and compliance.
             </p>
             <span className="mt-4 inline-flex items-center gap-1.5 text-sm font-medium text-pk-blue group-hover:text-pk-blue-deep">
-              {signedIn ? "Open coordinator view" : "Coordinator sign in"}
+              Open coordinator view
               <ArrowRight size={15} aria-hidden />
             </span>
           </Link>

@@ -24,3 +24,10 @@ submit → 6 correctly-ranked matches → GDPR-safe mailto), rejection branch,
 localStorage persistence across reload, coordinator pages (Edith flows into
 requests + clients, compliance sorts Josh Parkin's expired insurance first),
 mobile layout. `bun run build` clean on every commit.
+
+# Remove login + bare landing page (2026-07-23)
+
+- [ ] 1. Remove login: delete Login page/route, auth state in store, sign-in
+      gate — `/coordinator` opens directly; Shell gets an exit link home
+- [ ] 2. Landing: strip to the two entry cards (lucide icon + title only)
+- [ ] 3. Verify: `bun run build` clean + Playwright smoke (landing → both flows)
