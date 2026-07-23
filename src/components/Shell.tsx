@@ -58,7 +58,7 @@ export default function Shell() {
   };
 
   const handleReset = () => {
-    if (window.confirm("Clear every request and client created in this demo?")) {
+    if (window.confirm("Clear everything created or edited in this demo?")) {
       resetDemo();
     }
   };
