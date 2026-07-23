@@ -18,7 +18,6 @@ import type {
 // seed entries live in the edits maps; created entries are stored whole.
 
 const DATA_KEY = "wcn-demo:data:v1";
-const SESSION_KEY = "wcn-demo:session:v1";
 
 interface DemoData {
   requests: SupportRequest[];
@@ -70,7 +69,6 @@ function loadData(): DemoData {
 }
 
 let data = loadData();
-let signedIn = localStorage.getItem(SESSION_KEY) !== null;
 
 const listeners = new Set<() => void>();
 
@@ -201,22 +199,6 @@ export function resetDemo() {
   localStorage.removeItem(DATA_KEY);
   data = emptyData();
   emit();
-}
-
-export function signIn() {
-  localStorage.setItem(SESSION_KEY, new Date().toISOString());
-  signedIn = true;
-  emit();
-}
-
-export function signOut() {
-  localStorage.removeItem(SESSION_KEY);
-  signedIn = false;
-  emit();
-}
-
-export function useSignedIn(): boolean {
-  return useSyncExternalStore(subscribe, () => signedIn);
 }
 
 function applyEdits<T extends { id: string }>(

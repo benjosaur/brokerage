@@ -14,9 +14,9 @@ phone numbers, example.org emails), all data lives in the browser
 
 - **I'm looking for a micro-provider**: the public form → screening gate
   (with the real rejection branch) → matched providers → `mailto:` drafts.
-- **I'm a WCN coordinator**: sign in as `wells` (any password) for the
-  management view: requests, clients, micro-providers, volunteers, and the
-  DBS, public liability and training record pages.
+- **I'm a WCN coordinator**: the management view (no sign-in) with
+  requests, clients, micro-providers, volunteers, and the DBS, public
+  liability and training record pages.
 
 ## Develop
 

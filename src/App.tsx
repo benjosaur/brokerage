@@ -2,14 +2,12 @@ import { Navigate, Route, Routes } from "react-router";
 import PublicShell from "./components/PublicShell";
 import Shell from "./components/Shell";
 import { Toaster } from "./components/Toaster";
-import { useSignedIn } from "./lib/store";
 import ClientForm from "./pages/ClientForm";
 import Clients from "./pages/Clients";
 import CoordinatorHome from "./pages/CoordinatorHome";
 import Dbs from "./pages/Dbs";
 import FindSupport from "./pages/FindSupport";
 import Landing from "./pages/Landing";
-import Login from "./pages/Login";
 import ProviderForm from "./pages/ProviderForm";
 import Providers from "./pages/Providers";
 import PublicLiability from "./pages/PublicLiability";
@@ -18,34 +16,21 @@ import Results from "./pages/Results";
 import VolunteerForm from "./pages/VolunteerForm";
 import Volunteers from "./pages/Volunteers";
 
-function Coordinator() {
-  const signedIn = useSignedIn();
-  if (!signedIn) return <Navigate to="/coordinator/login" replace />;
-  return <Shell />;
-}
-
 export default function App() {
-  const signedIn = useSignedIn();
-
   return (
     <>
       <Toaster />
       <Routes>
         <Route path="/" element={<Landing />} />
+        {/* The questionnaire renders chromeless: no ribbon or app header. */}
+        <Route path="/find-support" element={<FindSupport />} />
         <Route element={<PublicShell />}>
-          <Route path="/find-support" element={<FindSupport />} />
           <Route
             path="/find-support/results/:requestId"
             element={<Results />}
           />
         </Route>
-        <Route
-          path="/coordinator/login"
-          element={
-            signedIn ? <Navigate to="/coordinator" replace /> : <Login />
-          }
-        />
-        <Route path="/coordinator" element={<Coordinator />}>
+        <Route path="/coordinator" element={<Shell />}>
           <Route index element={<CoordinatorHome />} />
           <Route path="clients" element={<Clients />} />
           <Route path="clients/create" element={<ClientForm />} />

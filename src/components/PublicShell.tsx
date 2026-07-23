@@ -1,10 +1,8 @@
 import { Link, Outlet } from "react-router";
 import DemoRibbon from "./DemoRibbon";
-import { useSignedIn } from "../lib/store";
 
 /** Slim chrome for the public support-seeker flow (form + results). */
 export default function PublicShell() {
-  const signedIn = useSignedIn();
   return (
     <div className="flex min-h-full flex-col">
       <DemoRibbon />
@@ -19,10 +17,10 @@ export default function PublicShell() {
             </span>
           </Link>
           <Link
-            to={signedIn ? "/coordinator" : "/coordinator/login"}
+            to="/coordinator"
             className="text-xs text-pk-slate hover:text-pk-ink"
           >
-            {signedIn ? "Coordinator view" : "Coordinator sign in"}
+            Coordinator view
           </Link>
         </div>
       </header>

@@ -51,6 +51,11 @@
     outline: 2px solid var(--color-pk-blue);
     outline-offset: 2px;
   }
+
+  /* Tailwind v4 preflight leaves buttons on cursor: default. */
+  button:not(:disabled) {
+    cursor: pointer;
+  }
 }
 
 @keyframes rise {
