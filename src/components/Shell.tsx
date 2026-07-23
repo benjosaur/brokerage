@@ -1,7 +1,7 @@
 import { LogOut, Menu, RotateCcw, X } from "lucide-react";
 import { useEffect, useState } from "react";
-import { Link, Outlet, useLocation, useNavigate } from "react-router";
-import { resetDemo, signOut } from "../lib/store";
+import { Link, Outlet, useLocation } from "react-router";
+import { resetDemo } from "../lib/store";
 import DemoRibbon from "./DemoRibbon";
 
 // Coordinator chrome mirrors the live Paddock app shell
@@ -29,7 +29,6 @@ function Brand() {
 }
 
 export default function Shell() {
-  const navigate = useNavigate();
   const location = useLocation();
   const [mobileOpen, setMobileOpen] = useState(false);
 
@@ -45,11 +44,6 @@ export default function Shell() {
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
   }, [mobileOpen]);
-
-  const handleSignOut = () => {
-    signOut();
-    navigate("/");
-  };
 
   const handleReset = () => {
     if (window.confirm("Clear every request and client created in this demo?")) {
@@ -94,13 +88,13 @@ export default function Shell() {
         <RotateCcw className="h-4 w-4" />
         <span>Reset demo data</span>
       </button>
-      <button
-        onClick={handleSignOut}
-        className="mt-1 flex w-full cursor-pointer items-center space-x-2 rounded-md border-t border-gray-200/60 px-3 pt-4 pb-2.5 text-sm text-gray-600 transition-colors duration-150 ease-in-out hover:text-gray-800"
+      <Link
+        to="/"
+        className="mt-1 flex w-full items-center space-x-2 rounded-md border-t border-gray-200/60 px-3 pt-4 pb-2.5 text-sm text-gray-600 transition-colors duration-150 ease-in-out hover:text-gray-800"
       >
         <LogOut className="h-4 w-4" />
-        <span>Sign Out</span>
-      </button>
+        <span>Exit coordinator view</span>
+      </Link>
     </>
   );
 
