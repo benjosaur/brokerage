@@ -65,3 +65,24 @@ arrow keys move radio selection → disclaimer (liability paragraph present)
 Other chip, 4 ranked matches with GDPR-safe mailto; record persists across
 reload; no horizontal overflow at 375px. `form:check`, `tsc -b` and
 `vite build` clean on every commit.
+
+## Feedback round (2026-07-23)
+
+Per user review of the new questionnaire:
+
+- [x] /find-support renders chromeless (no demo ribbon, Paddock header or
+      eyebrow); Results keeps the shell
+- [x] WCN logo (cropped via ImageMagick to mark + name + tagline,
+      transparent PNG in src/assets) replaces the intro's small text
+- [x] Removed the mono "Section n of m · x of y answered" line and switched
+      the 255 counter off IBM Plex Mono
+- [x] Base rule `button:not(:disabled) { cursor: pointer }` (Tailwind v4
+      preflight default); current section pill now disabled so only
+      clickable pills invite a click
+- [x] Sticky section header made fully opaque (no content ghosting);
+      heading focus uses preventScroll
+- [x] Page title → "Find a Microprovider"
+
+Verified via Playwright: intro (logo + title only), screening at 400px
+scroll shows no bleed-through, pills/radios/buttons all report
+cursor=pointer, Results route still resolves inside PublicShell.
