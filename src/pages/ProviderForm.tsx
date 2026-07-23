@@ -54,6 +54,7 @@ export default function ProviderForm() {
     const provider: Omit<MicroProvider, "id"> = {
       name: form.name,
       locality: form.locality,
+      areasCovered: existing?.areasCovered ?? [],
       // The public results cards only ever show the outward code.
       outwardPostcode: form.postCode.trim().split(/\s+/)[0].toUpperCase(),
       postCode: form.postCode,

@@ -6,10 +6,17 @@ export interface Match {
   sameLocality: boolean;
 }
 
+function coversLocality(provider: MicroProvider, locality: string): boolean {
+  return (provider.areasCovered ?? []).some(
+    (area) => area === "All" || area === locality,
+  );
+}
+
 /**
- * Providers offering at least one requested service (all providers when no
- * services were selected), ranked: same town/village first, then most
- * overlapping services, then name.
+ * Providers whose covered areas include the client's locality and who offer
+ * at least one requested service (any service when none were selected),
+ * ranked: same town/village first, then most overlapping services, then
+ * name.
  */
 export function matchProviders(
   providers: MicroProvider[],
@@ -23,7 +30,11 @@ export function matchProviders(
       ),
       sameLocality: provider.locality === request.locality,
     }))
-    .filter((match) => request.services.length === 0 || match.overlap.length > 0)
+    .filter(
+      (match) =>
+        coversLocality(match.provider, request.locality) &&
+        (request.services.length === 0 || match.overlap.length > 0),
+    )
     .sort(
       (a, b) =>
         Number(b.sameLocality) - Number(a.sameLocality) ||

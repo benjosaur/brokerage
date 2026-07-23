@@ -178,6 +178,7 @@ export function submitRequest(
     name: input.name,
     locality: input.locality,
     services: input.services,
+    funding: input.funding,
     onboarded: new Date().toISOString(),
     status: "New request",
     headline: input.headline,

@@ -46,6 +46,10 @@ export const LOCALITIES = [
   "Easton",
   "Dulcote",
 ] as const;
+export type Locality = (typeof LOCALITIES)[number];
+
+/** "All" means the provider covers the whole WCN patch. */
+export type AreaCovered = Locality | "All";
 
 export interface TrainingRecord {
   name: string;
@@ -68,6 +72,7 @@ export interface MicroProvider {
   id: string;
   name: string;
   locality: string;
+  areasCovered: AreaCovered[]; // must intersect a client's locality to match
   outwardPostcode: string; // e.g. "BA5" — used on public pages
   postCode: string; // fictional full postcode (unused ZZ inward codes)
   dateOfBirth?: string; // ISO date; absent renders "Unknown"
@@ -93,6 +98,7 @@ export interface Client {
   locality: string;
   postCode?: string;
   services: Service[];
+  funding?: string[]; // FUNDING_OPTIONS values from the questionnaire
   onboarded: string; // agreement date, ISO date
   status: "Active" | "Matched" | "New request";
   attendanceAllowance?: AttendanceAllowanceStatus;
