@@ -1,26 +1,40 @@
-# WCN brokerage demo — build plan
+# Align coordinator tables with the live Paddock app
 
-Frontend-only SPA (Vite + React + TS + Tailwind v4), hardcoded in-browser data,
-deployed on Vercel. Full plan: ~/.claude/plans/structured-splashing-spring.md
+Make every coordinator table identical to Paddock (columns, headers,
+rendering), keeping the coloured pills for services and expiry dates but
+with pill text as just the date (no "expires"/"valid to" prefix). User will
+decide later what to exclude for the WCN context.
 
-- [x] 1. Scaffold: Vite/React/TS/Tailwind, pk-* tokens, vercel.json SPA rewrite
-- [x] 2. Data layer: types, WCN seed dataset, localStorage store + reset
-- [x] 3. Shell: mock login (wells), sidebar nav, demo ribbon
-- [x] 4. Find Support wizard: 6 sections, screening branch, rejection + success
-- [x] 5. Results: matching, provider cards, mailto email drafts
-- [x] 6. Browse pages: providers, clients, volunteers, compliance
-- [x] 7. Verify: build clean + Playwright e2e (happy path, rejection, persistence)
-- [x] 8. Deploy: Vercel — live at brokerage-benjosaurs-projects.vercel.app
+Paddock reference: ~/Projects/paddock (routes/*.tsx, components/tables/DataTable.tsx).
 
-## Review
+- [ ] 1. Data: extend types + seed with Paddock fields — client customId /
+      dateOfBirth / postCode / attendanceAllowance / deprivation; volunteer
+      dateOfBirth / postCode / dbsNumber / publicLiability* / training;
+      provider dateOfBirth / postCode / dbsNumber / publicLiabilityNumber /
+      feePaymentDate; rename liabilityExpiry → publicLiabilityExpiry;
+      canonical core training names + coreCompletion() helper;
+      formatYmdToDmy() (DD-MM-YYYY like Paddock)
+- [ ] 2. UI: port Paddock DataTable (title + Total pill, search, sortable
+      headers with arrow icons, per-column filter row, empty-values-last
+      sort) minus CRUD/permissions; minimal Tabs; ExpiryChip renders
+      date-only text (label prefix stays for Results cards)
+- [ ] 3. Rewrite Clients / Volunteers / Micro-providers pages on DataTable
+      with Paddock's exact columns + headers (Services pills kept as the
+      last column on Clients + Micro-providers)
+- [ ] 4. Replace Compliance with Paddock's three pages: DBS ("DBS
+      Records"), Public Liability ("Insurance Records"), Records ("Training
+      Records") — each with MPs | Volunteers tabs; nav + routes updated,
+      /coordinator/compliance redirects to /coordinator/dbs
+- [ ] 5. Verify: bun run build clean; Playwright pass over all coordinator
+      pages + Results; commit atomically as work lands
 
-Shipped as 8 commits on main (pushed). Mid-build pivots from user feedback:
-top level split into two entry points (public seeker flow, no login vs
-coordinator sign-in as wells) and form wording tightened to match the live
-Google Form verbatim (email note, pets option, newsletter labels).
+## Decisions taken (flag to user)
 
-Verified via Playwright: full happy path (screening → 6-section form →
-submit → 6 correctly-ranked matches → GDPR-safe mailto), rejection branch,
-localStorage persistence across reload, coordinator pages (Edith flows into
-requests + clients, compliance sorts Josh Parkin's expired insurance first),
-mobile layout. `bun run build` clean on every commit.
+- Dates in tables use Paddock's DD-MM-YYYY everywhere, including inside
+  expiry pills ("just the date"). Can switch pills back to "14 Mar 2026"
+  format if preferred.
+- Fee Date renders raw ISO / "Unpaid" exactly as Paddock does.
+- Services column kept (pills) appended after Paddock's columns; extra
+  WCN-only columns (Contact, Availability, Status, headline) dropped from
+  tables — data stays in the model.
+- No Add New / row-action menus / Show Ended: demo data is read-only seed.

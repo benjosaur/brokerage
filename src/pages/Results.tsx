@@ -136,7 +136,7 @@ export default function Results() {
                     <ExpiryChip label="DBS" date={provider.dbsExpiry} />
                     <ExpiryChip
                       label="Insurance"
-                      date={provider.liabilityExpiry}
+                      date={provider.publicLiabilityExpiry}
                     />
                   </div>
                   {canEmail ? (

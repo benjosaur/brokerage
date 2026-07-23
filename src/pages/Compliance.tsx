@@ -36,7 +36,7 @@ export default function Compliance() {
       const nextTraining = soonestTraining(provider.training);
       const dates = [
         provider.dbsExpiry,
-        provider.liabilityExpiry,
+        provider.publicLiabilityExpiry,
         ...(nextTraining ? [nextTraining.expiry] : []),
       ];
       return {
@@ -44,7 +44,7 @@ export default function Compliance() {
         name: provider.name,
         kind: "Micro-provider" as const,
         dbsExpiry: provider.dbsExpiry,
-        liabilityExpiry: provider.liabilityExpiry,
+        liabilityExpiry: provider.publicLiabilityExpiry,
         nextTraining,
         urgency: Math.min(...dates.map(daysUntil)),
       };

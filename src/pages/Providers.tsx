@@ -84,7 +84,7 @@ export default function Providers() {
                   <td className={`${tdEl} whitespace-nowrap`}>
                     <ExpiryChip
                       
-                      date={provider.liabilityExpiry}
+                      date={provider.publicLiabilityExpiry}
                     />
                   </td>
                 </tr>

@@ -53,29 +53,50 @@ export interface TrainingRecord {
   expiry: string; // ISO date
 }
 
+// Paddock's attendance allowance statuses (shared/const.ts).
+export const ATTENDANCE_ALLOWANCE_STATUSES = [
+  "None",
+  "Unsent",
+  "Pending",
+  "Low",
+  "High",
+] as const;
+export type AttendanceAllowanceStatus =
+  (typeof ATTENDANCE_ALLOWANCE_STATUSES)[number];
+
 export interface MicroProvider {
   id: string;
   name: string;
   locality: string;
-  outwardPostcode: string; // e.g. "BA5" — never a full address
+  outwardPostcode: string; // e.g. "BA5" — used on public pages
+  postCode: string; // fictional full postcode (unused ZZ inward codes)
+  dateOfBirth?: string; // ISO date; absent renders "Unknown"
   services: Service[];
   bio: string;
   availability: string;
   email: string;
   phone: string;
   startDate: string; // accredited since, ISO date
+  dbsNumber: string;
   dbsExpiry: string; // ISO date
-  liabilityExpiry: string; // public liability insurance, ISO date
+  publicLiabilityNumber: string;
+  publicLiabilityExpiry: string; // public liability insurance, ISO date
+  feePaymentDate: string; // ISO date, or "unpaid"
   training: TrainingRecord[];
 }
 
 export interface Client {
   id: string;
+  customId?: string; // WCN's own reference; absent for self-onboarded clients
   name: string;
+  dateOfBirth?: string; // ISO date
   locality: string;
+  postCode?: string;
   services: Service[];
-  onboarded: string; // ISO date
+  onboarded: string; // agreement date, ISO date
   status: "Active" | "Matched" | "New request";
+  attendanceAllowance?: AttendanceAllowanceStatus;
+  deprivation?: { income: boolean; health: boolean };
   headline: string;
 }
 
@@ -83,11 +104,17 @@ export interface Volunteer {
   id: string;
   name: string;
   role: string;
+  dateOfBirth?: string; // ISO date; absent renders "Unknown"
   locality: string;
+  postCode: string;
   email: string;
   phone: string;
   since: string; // ISO date
+  dbsNumber: string;
   dbsExpiry: string; // ISO date
+  publicLiabilityNumber?: string;
+  publicLiabilityExpiry?: string; // most volunteers carry no PL insurance
+  training: TrainingRecord[];
 }
 
 /** One submission of the "Support Near You" form. */
