@@ -27,7 +27,21 @@ mobile layout. `bun run build` clean on every commit.
 
 # Remove login + bare landing page (2026-07-23)
 
-- [ ] 1. Remove login: delete Login page/route, auth state in store, sign-in
+- [x] 1. Remove login: delete Login page/route, auth state in store, sign-in
       gate — `/coordinator` opens directly; Shell gets an exit link home
-- [ ] 2. Landing: strip to the two entry cards (lucide icon + title only)
-- [ ] 3. Verify: `bun run build` clean + Playwright smoke (landing → both flows)
+- [x] 2. Landing: strip to the two entry cards (lucide icon + title only)
+- [x] 3. Verify: `bun run build` clean + Playwright smoke (landing → both flows)
+
+## Review
+
+Two commits: e8e6c99 (remove sign-in gate) and 2709dab (bare landing).
+Login page, `/coordinator/login` route and store auth (signIn/signOut/
+useSignedIn, session key) are gone; PublicShell header links straight to
+/coordinator and the sidebar's Sign Out became an "Exit coordinator view"
+link. Landing is now just the demo ribbon plus the two cards (lucide icon
++ title, no other copy).
+
+Verified with Playwright: landing renders only the two cards; the
+coordinator card opens the dashboard directly (no redirect); the stale
+/coordinator/login URL falls through the wildcard back to /. Build clean
+on both commits.
