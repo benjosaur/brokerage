@@ -173,6 +173,11 @@ const submitButton =
 
 type View = "intro" | "form" | "rejected";
 
+/** Chromeless page container — the questionnaire renders without the app shell. */
+function Page({ children }: { children: React.ReactNode }) {
+  return <div className="mx-auto max-w-3xl px-4 py-8 md:py-10">{children}</div>;
+}
+
 export default function FindSupport() {
   const navigate = useNavigate();
   const [view, setView] = useState<View>("intro");
@@ -476,60 +481,63 @@ export default function FindSupport() {
 
   if (view === "intro") {
     return (
-      <div className="max-w-xl animate-rise">
-        <Eyebrow>Wells Community Network</Eyebrow>
-        <h1 className="mt-3 font-display text-3xl font-bold tracking-tight text-balance">
-          {FORM_META.title}
-        </h1>
-        <FormattedText
-          text={FORM_META.description}
-          className="mt-5 space-y-3 text-[15px] leading-relaxed text-pk-slate"
-        />
-        <div className="mt-8 flex items-center gap-4">
-          <button type="button" onClick={() => setView("form")} className={primaryButton}>
-            Start <ArrowRight size={15} aria-hidden />
-          </button>
-          <Link to="/" className="text-sm text-pk-slate hover:text-pk-ink">
-            Cancel
-          </Link>
+      <Page>
+        <div className="max-w-xl animate-rise">
+          <Eyebrow>Wells Community Network</Eyebrow>
+          <h1 className="mt-3 font-display text-3xl font-bold tracking-tight text-balance">
+            {FORM_META.title}
+          </h1>
+          <FormattedText
+            text={FORM_META.description}
+            className="mt-5 space-y-3 text-[15px] leading-relaxed text-pk-slate"
+          />
+          <div className="mt-8 flex items-center gap-4">
+            <button type="button" onClick={() => setView("form")} className={primaryButton}>
+              Start <ArrowRight size={15} aria-hidden />
+            </button>
+            <Link to="/" className="text-sm text-pk-slate hover:text-pk-ink">
+              Cancel
+            </Link>
+          </div>
         </div>
-      </div>
+      </Page>
     );
   }
 
   if (view === "rejected") {
     return (
-      <div className="max-w-xl animate-rise">
-        <Eyebrow>{FORM_META.title}</Eyebrow>
-        <h1 className="mt-3 font-display text-3xl font-bold tracking-tight text-balance">
-          {FORM_META.rejection.title}
-        </h1>
-        <FormattedText
-          text={FORM_META.rejection.description}
-          className="mt-5 space-y-3 text-[15px] leading-relaxed text-pk-slate"
-        />
-        <div className="mt-7 flex flex-wrap gap-3">
-          <button
-            type="button"
-            onClick={() => {
-              setView("form");
-              setForm((prev) => ({
-                ...prev,
-                confirmConsent: "",
-                confirmAssess: "",
-                confirmCoordinate: "",
-                confirmCommunicate: "",
-              }));
-            }}
-            className={primaryButton}
-          >
-            <RotateCcw size={15} aria-hidden /> Start again
-          </button>
-          <Link to="/" className={outlineButton}>
-            Back to home
-          </Link>
+      <Page>
+        <div className="max-w-xl animate-rise">
+          <h1 className="font-display text-3xl font-bold tracking-tight text-balance">
+            {FORM_META.rejection.title}
+          </h1>
+          <FormattedText
+            text={FORM_META.rejection.description}
+            className="mt-5 space-y-3 text-[15px] leading-relaxed text-pk-slate"
+          />
+          <div className="mt-7 flex flex-wrap gap-3">
+            <button
+              type="button"
+              onClick={() => {
+                setView("form");
+                setForm((prev) => ({
+                  ...prev,
+                  confirmConsent: "",
+                  confirmAssess: "",
+                  confirmCoordinate: "",
+                  confirmCommunicate: "",
+                }));
+              }}
+              className={primaryButton}
+            >
+              <RotateCcw size={15} aria-hidden /> Start again
+            </button>
+            <Link to="/" className={outlineButton}>
+              Back to home
+            </Link>
+          </div>
         </div>
-      </div>
+      </Page>
     );
   }
 
@@ -538,9 +546,8 @@ export default function FindSupport() {
   const isLast = step === FORM_SECTIONS.length - 1;
 
   return (
-    <div key={section.id} className="animate-rise">
-      <Eyebrow>{FORM_META.title}</Eyebrow>
-      <div className="mt-3">
+    <Page>
+      <div key={section.id} className="animate-rise">
         <SectionHeader
           sections={FORM_SECTIONS}
           currentIndex={step}
@@ -549,31 +556,31 @@ export default function FindSupport() {
           answered={answered}
           total={total}
         />
+        {section.description && (
+          <FormattedText
+            text={section.description}
+            className="mt-5 space-y-2.5 text-[15px] leading-relaxed text-pk-slate"
+          />
+        )}
+        <form
+          noValidate
+          onSubmit={(event) => {
+            event.preventDefault();
+            handleContinue();
+          }}
+        >
+          <div className="mt-6 space-y-4">{section.items.map(renderItem)}</div>
+          <div className="mt-9 flex items-center justify-between gap-3 border-t border-pk-line pt-5">
+            <button type="button" onClick={handleBack} className={outlineButton}>
+              <ArrowLeft size={15} aria-hidden /> Back
+            </button>
+            <button type="submit" className={isLast ? submitButton : primaryButton}>
+              {isLast ? "Submit request" : "Continue"}
+              <ArrowRight size={15} aria-hidden />
+            </button>
+          </div>
+        </form>
       </div>
-      {section.description && (
-        <FormattedText
-          text={section.description}
-          className="mt-5 space-y-2.5 text-[15px] leading-relaxed text-pk-slate"
-        />
-      )}
-      <form
-        noValidate
-        onSubmit={(event) => {
-          event.preventDefault();
-          handleContinue();
-        }}
-      >
-        <div className="mt-6 space-y-4">{section.items.map(renderItem)}</div>
-        <div className="mt-9 flex items-center justify-between gap-3 border-t border-pk-line pt-5">
-          <button type="button" onClick={handleBack} className={outlineButton}>
-            <ArrowLeft size={15} aria-hidden /> Back
-          </button>
-          <button type="submit" className={isLast ? submitButton : primaryButton}>
-            {isLast ? "Submit request" : "Continue"}
-            <ArrowRight size={15} aria-hidden />
-          </button>
-        </div>
-      </form>
-    </div>
+    </Page>
   );
 }
