@@ -76,9 +76,6 @@ export default function SectionHeader({
       >
         {title}
       </h1>
-      <p className="mt-1 font-plex text-[11px] text-pk-slate">
-        Section {currentIndex + 1} of {sections.length} · {answered} of {total} answered
-      </p>
     </div>
   );
 }

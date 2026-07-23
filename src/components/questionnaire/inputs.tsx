@@ -267,7 +267,7 @@ export function TextField({
     <>
       {kind === "textarea" ? <textarea rows={rows} {...shared} /> : <input type={type} {...shared} />}
       {showCounter && maxLength !== undefined && (
-        <p className="mt-1 text-right font-plex text-[11px] text-pk-slate">
+        <p className="mt-1 text-right text-xs text-pk-slate">
           {value.length}/{maxLength}
         </p>
       )}
