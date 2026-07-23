@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useNavigate } from "react-router";
 import { ServiceBadgeList } from "../components/badges";
 import { DataTable, type TableColumn } from "../components/DataTable";
 import { ClientDetailModal } from "../components/modals/ClientDetailModal";
@@ -68,8 +69,12 @@ const clientColumns: TableColumn<Client>[] = [
 ];
 
 export default function Clients() {
+  const navigate = useNavigate();
   const { clients } = useDemoData();
   const [selectedClientId, setSelectedClientId] = useState<string | null>(null);
+
+  const handleEdit = (id: string) =>
+    navigate(`/coordinator/clients/edit/${encodeURIComponent(id)}`);
 
   return (
     <>
@@ -80,12 +85,15 @@ export default function Clients() {
         columns={clientColumns}
         defaultSortKey="name"
         onViewItem={setSelectedClientId}
+        onEdit={handleEdit}
+        onCreate={() => navigate("/coordinator/clients/create")}
       />
       {selectedClientId && (
         <ClientDetailModal
           clientId={selectedClientId}
           isOpen={Boolean(selectedClientId)}
           onClose={() => setSelectedClientId(null)}
+          onEdit={handleEdit}
         />
       )}
     </>

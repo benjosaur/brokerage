@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useNavigate } from "react-router";
 import { ExpiryChip, ServiceBadgeList } from "../components/badges";
 import { DataTable, type TableColumn } from "../components/DataTable";
 import { ProviderDetailModal } from "../components/modals/ProviderDetailModal";
@@ -66,10 +67,14 @@ const providerColumns: TableColumn<MicroProvider>[] = [
 ];
 
 export default function Providers() {
+  const navigate = useNavigate();
   const { providers } = useDemoData();
   const [selectedProviderId, setSelectedProviderId] = useState<string | null>(
     null,
   );
+
+  const handleEdit = (id: string) =>
+    navigate(`/coordinator/providers/edit/${encodeURIComponent(id)}`);
 
   return (
     <>
@@ -80,12 +85,15 @@ export default function Providers() {
         columns={providerColumns}
         defaultSortKey="name"
         onViewItem={setSelectedProviderId}
+        onEdit={handleEdit}
+        onCreate={() => navigate("/coordinator/providers/create")}
       />
       {selectedProviderId && (
         <ProviderDetailModal
           providerId={selectedProviderId}
           isOpen={Boolean(selectedProviderId)}
           onClose={() => setSelectedProviderId(null)}
+          onEdit={handleEdit}
         />
       )}
     </>

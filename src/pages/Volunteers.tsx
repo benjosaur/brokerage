@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useNavigate } from "react-router";
 import { ExpiryChip } from "../components/badges";
 import { DataTable, type TableColumn } from "../components/DataTable";
 import { VolunteerDetailModal } from "../components/modals/VolunteerDetailModal";
@@ -51,10 +52,14 @@ const volunteerColumns: TableColumn<Volunteer>[] = [
 ];
 
 export default function Volunteers() {
+  const navigate = useNavigate();
   const { volunteers } = useDemoData();
   const [selectedVolunteerId, setSelectedVolunteerId] = useState<string | null>(
     null,
   );
+
+  const handleEdit = (id: string) =>
+    navigate(`/coordinator/volunteers/edit/${encodeURIComponent(id)}`);
 
   return (
     <>
@@ -65,12 +70,15 @@ export default function Volunteers() {
         columns={volunteerColumns}
         defaultSortKey="name"
         onViewItem={setSelectedVolunteerId}
+        onEdit={handleEdit}
+        onCreate={() => navigate("/coordinator/volunteers/create")}
       />
       {selectedVolunteerId && (
         <VolunteerDetailModal
           volunteerId={selectedVolunteerId}
           isOpen={Boolean(selectedVolunteerId)}
           onClose={() => setSelectedVolunteerId(null)}
+          onEdit={handleEdit}
         />
       )}
     </>

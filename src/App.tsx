@@ -3,16 +3,19 @@ import PublicShell from "./components/PublicShell";
 import Shell from "./components/Shell";
 import { Toaster } from "./components/Toaster";
 import { useSignedIn } from "./lib/store";
+import ClientForm from "./pages/ClientForm";
 import Clients from "./pages/Clients";
 import CoordinatorHome from "./pages/CoordinatorHome";
 import Dbs from "./pages/Dbs";
 import FindSupport from "./pages/FindSupport";
 import Landing from "./pages/Landing";
 import Login from "./pages/Login";
+import ProviderForm from "./pages/ProviderForm";
 import Providers from "./pages/Providers";
 import PublicLiability from "./pages/PublicLiability";
 import Records from "./pages/Records";
 import Results from "./pages/Results";
+import VolunteerForm from "./pages/VolunteerForm";
 import Volunteers from "./pages/Volunteers";
 
 function Coordinator() {
@@ -45,8 +48,14 @@ export default function App() {
         <Route path="/coordinator" element={<Coordinator />}>
           <Route index element={<CoordinatorHome />} />
           <Route path="clients" element={<Clients />} />
+          <Route path="clients/create" element={<ClientForm />} />
+          <Route path="clients/edit/:id" element={<ClientForm />} />
           <Route path="providers" element={<Providers />} />
+          <Route path="providers/create" element={<ProviderForm />} />
+          <Route path="providers/edit/:id" element={<ProviderForm />} />
           <Route path="volunteers" element={<Volunteers />} />
+          <Route path="volunteers/create" element={<VolunteerForm />} />
+          <Route path="volunteers/edit/:id" element={<VolunteerForm />} />
           <Route path="dbs" element={<Dbs />} />
           <Route path="public-liability" element={<PublicLiability />} />
           <Route path="records" element={<Records />} />
