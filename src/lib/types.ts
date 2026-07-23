@@ -99,6 +99,7 @@ export interface SupportRequest {
   completedBy: string;
   // Section 2 — support needs
   services: Service[];
+  servicesOther?: string; // free text from the "Other" checkbox
   funding: string[];
   // Section 3 — about you
   name: string;
@@ -116,5 +117,6 @@ export interface SupportRequest {
   consentOtherNetworks: boolean;
   // Section 5 — staying in touch
   heardAbout: string;
+  heardAboutOther?: string; // free text when heardAbout is "Other"
   newsletter: boolean;
 }
