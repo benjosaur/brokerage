@@ -1,8 +1,8 @@
-# Wells Community Network — Brokerage Demo
+# Wells Community Network Brokerage Demo
 
 A frontend-only demo of a micro-provider brokerage tool for Wells Community
 Network (Wells & Shepton Mallet, Somerset), styled as "Paddock for WCN".
-It replicates WCN's real "Support Near You – Find a Micro-provider"
+It replicates WCN's real "Support Near You - Find a Micro-provider"
 onboarding form, then matches the request against sample micro-providers
 and drafts a GDPR-safe email to each match.
 
@@ -12,11 +12,11 @@ phone numbers, example.org emails), all data lives in the browser
 
 ## Two entry points
 
-- **I'm looking for a micro-provider** — the public form → screening gate
+- **I'm looking for a micro-provider**: the public form → screening gate
   (with the real rejection branch) → matched providers → `mailto:` drafts.
-- **I'm a WCN coordinator** — the management view (no sign-in):
-  requests, micro-providers, clients, volunteers, and a
-  DBS/insurance/training compliance board.
+- **I'm a WCN coordinator**: the management view (no sign-in) with
+  requests, clients, micro-providers, volunteers, and the DBS, public
+  liability and training record pages.
 
 ## Develop
 
@@ -28,6 +28,6 @@ bun run build    # type-check + production build to dist/
 
 ## Deploy
 
-Static Vite SPA on Vercel — `vercel.json` rewrites all routes to
+Static Vite SPA on Vercel; `vercel.json` rewrites all routes to
 `index.html`. Deploy with `vercel --prod`, or import the GitHub repo in
 the Vercel dashboard for auto-deploys on push.

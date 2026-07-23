@@ -21,7 +21,7 @@ import { submitRequest } from "../lib/store";
 import { LOCALITIES, SERVICES, type Service } from "../lib/types";
 
 // All question/section/option copy comes verbatim from src/lib/formContent.ts
-// (generated from the live Google Form) — nothing user-facing is reworded here.
+// (generated from the live Google Form); nothing user-facing is reworded here.
 
 interface FormState {
   completedBy: string;
@@ -150,7 +150,7 @@ function validateSection(index: number, form: FormState): Errors {
     const key = item.key;
     if (key === "petDetails") {
       // Optional in the upstream form, but the app only reveals it on a
-      // "Yes" pets answer — required whenever it is visible.
+      // "Yes" pets answer, required whenever it is visible.
       if (!petDetailsHidden(form) && form.petDetails.trim() === "") {
         found.petDetails = REQUIRED_MESSAGE;
       }
@@ -181,7 +181,7 @@ const submitButton =
 
 type View = "intro" | "form" | "rejected";
 
-/** Chromeless page container — the questionnaire renders without the app shell. */
+/** Chromeless page container; the questionnaire renders without the app shell. */
 function Page({ children }: { children: React.ReactNode }) {
   return <div className="mx-auto max-w-3xl px-4 py-8 md:py-10">{children}</div>;
 }
@@ -495,7 +495,7 @@ export default function FindSupport() {
         <div className="max-w-xl animate-rise">
           <img
             src={wcnLogo}
-            alt="Wells Community Network — Working Together, Supporting Each Other"
+            alt="Wells Community Network: Working Together, Supporting Each Other"
             className="h-24 w-auto"
           />
           <h1 className="mt-6 font-display text-3xl font-bold tracking-tight text-balance">

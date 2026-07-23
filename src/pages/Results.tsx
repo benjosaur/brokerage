@@ -146,7 +146,7 @@ export default function Results() {
                     <ComplianceTick label="DBS" date={provider.dbsExpiry} />
                     <ComplianceTick
                       label="Insurance"
-                      date={provider.liabilityExpiry}
+                      date={provider.publicLiabilityExpiry}
                     />
                   </div>
                   {canEmail ? (

@@ -1,4 +1,4 @@
-import { expiryStatus, formatDate } from "../lib/dates";
+import { expiryStatus, formatDate, formatYmdToDmy } from "../lib/dates";
 import type { Service } from "../lib/types";
 
 const serviceStyles: Record<Service, string> = {
@@ -41,21 +41,21 @@ const expiryStyles = {
 
 export function ExpiryChip({ label, date }: { label?: string; date: string }) {
   const status = expiryStatus(date);
-  const prefix = label ? `${label} ` : "";
+  // The chip shows just the date (plus an identifying label on cards);
+  // the status wording lives in the colour and the tooltip.
+  const text = [label, formatYmdToDmy(date)].filter(Boolean).join(" ");
   const wording =
     status === "expired"
-      ? `${prefix}expired ${formatDate(date)}`
+      ? `Expired ${formatDate(date)}`
       : status === "expiring"
-        ? `${prefix}expires ${formatDate(date)}`
-        : label
-          ? `${label} to ${formatDate(date)}`
-          : `valid to ${formatDate(date)}`;
+        ? `Expires ${formatDate(date)}`
+        : `Valid to ${formatDate(date)}`;
   return (
     <span
       className={`inline-flex items-center rounded-full px-2.5 py-0.5 font-plex text-[11px] whitespace-nowrap ${expiryStyles[status]}`}
       title={wording}
     >
-      {wording}
+      {text}
     </span>
   );
 }

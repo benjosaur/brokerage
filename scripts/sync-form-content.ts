@@ -6,7 +6,7 @@
  *   bun scripts/sync-form-content.ts --check            verify the repo matches the live form (exit 1 on drift)
  *   bun scripts/sync-form-content.ts --check --from f   use a saved FB_PUBLIC_LOAD_DATA_ JSON payload (offline)
  *
- * Wording policy: strings are byte-exact apart from normalize() — per-line
+ * Wording policy: strings are byte-exact apart from normalize(); per-line
  * trailing whitespace and outer blank space are trimmed, nothing else. Typos,
  * double spaces, en dashes and curly quotes in the live form are significant.
  *
@@ -30,7 +30,7 @@ const OUT_PATH = join(
 // ---------------------------------------------------------------- app map
 
 // FormState key per Google entry ID. An unmapped entry ID in the live payload
-// means the form changed shape — hard error rather than silent drift.
+// means the form changed shape: hard error rather than silent drift.
 const FIELD_BY_ENTRY: Record<number, string> = {
   1081703792: "completedBy",
   603369162: "confirmConsent",
@@ -58,7 +58,7 @@ const FIELD_BY_ENTRY: Record<number, string> = {
 };
 
 // Wizard section per Google section-item ID, with the short pill label shown
-// in the step header (app chrome — the verbatim title is the page heading).
+// in the step header (app chrome; the verbatim title is the page heading).
 const SECTION_BY_ITEM: Record<number, { id: string; pillLabel: string }> = {
   697967720: { id: "screening", pillLabel: "Screening" },
   1893235879: { id: "needs", pillLabel: "Your needs" },
@@ -104,35 +104,35 @@ interface Override {
 
 const OVERRIDES: Override[] = [
   {
-    label: "intro — matches are shown instantly, WCN no longer calls back",
+    label: "intro: matches are shown instantly, WCN no longer calls back",
     target: { type: "meta", field: "description" },
     find: "When you fill in this form we will share your details with Wells Community Network approved Micro-providers near you. We will then contact you with details of all the Micro-providers who are available to support you, leaving you to choose the right support for you.",
     replace:
       "After you fill in this form you will see a list of Microproviders that fit your needs, approved by Wells Community Network. You then can choose who to follow up with using their email.",
   },
   {
-    label: "email help — the mail-merge step is gone",
+    label: "email help: the mail-merge step is gone",
     target: { type: "question", entryId: 30066852, field: "description" },
     find: "*Please make sure your email is accurate, so we can contact you with local care options. Only enter an actual email address within this field, do not type any other text, for example, (this is my work email)\nTyping anything other than just an email address will cause the brokerage tool to fail and your care request will be unsuccessful.",
     replace:
       "*Please make sure your email is accurate, as we may need to follow up based on your request.",
   },
   {
-    label: "headline — forwarding note precedes the ask",
+    label: "headline: forwarding note precedes the ask",
     target: { type: "question", entryId: 1791923969, field: "title" },
     find: "Give your request for support a headline",
     replace:
       "We may forward your enquiry to other networks. To aid us in this give your request for support a headline",
   },
   {
-    label: "consent intro — sharing happens when forwarding to other networks",
+    label: "consent intro: sharing happens when forwarding to other networks",
     target: { type: "section", id: "consent", field: "description" },
     find: "To help us identify suitable micro-providers, we may need to share some",
     replace:
       "We may forward your enquiry to other microprovider networks. As part of this we may need to share some",
   },
   {
-    label: "confirmation — matches are instant, keep only the enquiries line",
+    label: "confirmation: matches are instant, keep only the enquiries line",
     target: { type: "meta", field: "confirmationMessage" },
     find: "Thank you for applying for support, we will process your request within three working days.   If you have any other enquiries please contact the WCN Helpline 01749 467079",
     replace:
@@ -228,7 +228,7 @@ function parseForm(payload: Raw): ParsedForm {
       }
       const config = SECTION_BY_ITEM[itemId];
       if (!config) {
-        throw new Error(`Unmapped section item ${itemId} ("${title}") — the live form changed.`);
+        throw new Error(`Unmapped section item ${itemId} ("${title}"): the live form changed.`);
       }
       current = { ...config, title, description, items: [] };
       sections.push(current);
@@ -255,7 +255,7 @@ function parseForm(payload: Raw): ParsedForm {
     const entryId: number = entry[0];
     const key = FIELD_BY_ENTRY[entryId];
     if (!key) {
-      throw new Error(`Unmapped entry ${entryId} ("${title}") — the live form changed.`);
+      throw new Error(`Unmapped entry ${entryId} ("${title}"): the live form changed.`);
     }
 
     const parsed: ParsedItem = {
@@ -333,7 +333,7 @@ function applyOverrides(form: ParsedForm): void {
     const parts = current.split(override.find);
     if (parts.length !== 2) {
       throw new Error(
-        `Override "${override.label}": the pinned upstream text no longer occurs exactly once — the live form changed; re-review this override.`,
+        `Override "${override.label}": the pinned upstream text no longer occurs exactly once: the live form changed; re-review this override.`,
       );
     }
     writeTarget(form, override.target, parts.join(override.replace));
@@ -373,12 +373,12 @@ function generate(form: ParsedForm): string {
     return `  ${key}: [${labels.map((l) => JSON.stringify(l)).join(", ")}] as const satisfies typeof ${constName},`;
   });
 
-  return `// Generated by scripts/sync-form-content.ts — DO NOT EDIT.
+  return `// Generated by scripts/sync-form-content.ts: DO NOT EDIT.
 // Content of the live "Support Near You" Google Form:
 // ${FORM_URL}
 // Regenerate with \`bun run form:sync\`; verify with \`bun run form:check\`.
-// Strings are byte-exact apart from trimmed trailing/outer whitespace — the
-// typos, double spaces, en dashes and curly quotes are the form's own —
+// Strings are byte-exact apart from trimmed trailing/outer whitespace; the
+// typos, double spaces, en dashes and curly quotes are the form's own,
 // except ${OVERRIDES.length} passages deliberately rewritten for the automatching
 // pipeline; see OVERRIDES in the sync script.
 import type {

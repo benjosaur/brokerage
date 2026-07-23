@@ -8,6 +8,14 @@ export function formatDate(iso: string): string {
   return formatter.format(new Date(iso));
 }
 
+// Converts YYYY-MM-DD to DD-MM-YYYY, Paddock's table dialect
+// (client/src/utils/date.ts). Leaves other inputs unchanged.
+export function formatYmdToDmy(value?: string | null): string {
+  if (!value) return "";
+  const match = /^(\d{4})-(\d{2})-(\d{2})$/.exec(value);
+  return match ? `${match[3]}-${match[2]}-${match[1]}` : value;
+}
+
 export function daysUntil(iso: string): number {
   const ms = new Date(iso).getTime() - Date.now();
   return Math.ceil(ms / 86_400_000);

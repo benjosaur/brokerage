@@ -15,7 +15,7 @@ export default function CoordinatorHome() {
   ].filter((date) => expiryStatus(date) !== "valid").length;
 
   const liabilityDue = providers
-    .map((provider) => provider.liabilityExpiry)
+    .map((provider) => provider.publicLiabilityExpiry)
     .filter((date) => expiryStatus(date) !== "valid").length;
 
   const newThisWeek = clients.filter((client) =>

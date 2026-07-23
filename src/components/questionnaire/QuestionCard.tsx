@@ -2,7 +2,7 @@ type Block = { kind: "p"; text: string } | { kind: "ul"; items: string[] };
 
 /**
  * Renders verbatim multi-line form text: each line becomes a paragraph and
- * consecutive `- ` lines group into a bullet list. Wording is untouched —
+ * consecutive `- ` lines group into a bullet list. Wording is untouched;
  * only the layout is interpreted.
  */
 export function FormattedText({ text, className }: { text: string; className?: string }) {

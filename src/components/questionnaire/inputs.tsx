@@ -45,7 +45,7 @@ function OtherInput({
         onChange(event.target.value);
       }}
       onFocus={onActivate}
-      aria-label="Other — please specify"
+      aria-label="Other: please specify"
       className={`${textFieldClass} ${fieldBorder(invalid)} max-w-xs min-w-40 flex-1`}
     />
   );
