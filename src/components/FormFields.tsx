@@ -135,6 +135,41 @@ export function CheckboxField({
   );
 }
 
+export function CheckboxGroupField({
+  label,
+  options,
+  value,
+  onChange,
+}: {
+  label: string;
+  options: readonly string[];
+  value: string[];
+  onChange: (next: string[]) => void;
+}) {
+  const toggle = (option: string, checked: boolean) => {
+    onChange(
+      checked ? [...value, option] : value.filter((entry) => entry !== option),
+    );
+  };
+
+  return (
+    <div>
+      <span className={fieldLabel}>{label}</span>
+      <div className="space-y-2">
+        {options.map((option) => (
+          <CheckboxField
+            key={option}
+            id={`${label}-${option}`}
+            label={option}
+            checked={value.includes(option)}
+            onChange={(checked) => toggle(option, checked)}
+          />
+        ))}
+      </div>
+    </div>
+  );
+}
+
 export function ServicesField({
   value,
   onChange,
@@ -142,28 +177,12 @@ export function ServicesField({
   value: Service[];
   onChange: (services: Service[]) => void;
 }) {
-  const toggle = (service: Service, checked: boolean) => {
-    onChange(
-      checked
-        ? [...value, service]
-        : value.filter((entry) => entry !== service),
-    );
-  };
-
   return (
-    <div>
-      <span className={fieldLabel}>Services</span>
-      <div className="space-y-2">
-        {SERVICES.map((service) => (
-          <CheckboxField
-            key={service}
-            id={`service-${service}`}
-            label={service}
-            checked={value.includes(service)}
-            onChange={(checked) => toggle(service, checked)}
-          />
-        ))}
-      </div>
-    </div>
+    <CheckboxGroupField
+      label="Services"
+      options={SERVICES}
+      value={value}
+      onChange={(next) => onChange(next as Service[])}
+    />
   );
 }

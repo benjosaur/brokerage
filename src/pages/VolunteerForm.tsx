@@ -20,9 +20,7 @@ export default function VolunteerForm() {
   const [form, setForm] = useState(() => ({
     name: existing?.name ?? "",
     role: existing?.role ?? "",
-    dateOfBirth: existing?.dateOfBirth ?? "",
     locality: existing?.locality ?? "",
-    postCode: existing?.postCode ?? "",
     phone: existing?.phone ?? "",
     email: existing?.email ?? "",
     since: existing?.since ?? "",
@@ -42,9 +40,9 @@ export default function VolunteerForm() {
     const volunteer: Omit<Volunteer, "id"> = {
       name: form.name,
       role: form.role,
-      dateOfBirth: form.dateOfBirth || undefined,
+      dateOfBirth: existing?.dateOfBirth,
       locality: form.locality,
-      postCode: form.postCode,
+      postCode: existing?.postCode ?? "",
       email: form.email,
       phone: form.phone,
       since: form.since,
@@ -92,13 +90,6 @@ export default function VolunteerForm() {
                 value={form.role}
                 onChange={(value) => set("role", value)}
               />
-              <TextField
-                id="dob"
-                label="Date of Birth"
-                type="date"
-                value={form.dateOfBirth}
-                onChange={(value) => set("dateOfBirth", value)}
-              />
               <SelectField
                 id="locality"
                 label="Locality"
@@ -107,12 +98,6 @@ export default function VolunteerForm() {
                 options={LOCALITIES}
                 placeholder="Select locality..."
                 onChange={(value) => set("locality", value)}
-              />
-              <TextField
-                id="postCode"
-                label="Post Code"
-                value={form.postCode}
-                onChange={(value) => set("postCode", value)}
               />
               <TextField
                 id="phone"

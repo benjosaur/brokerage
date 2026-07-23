@@ -3,6 +3,7 @@ import toast from "react-hot-toast";
 import { useNavigate, useParams } from "react-router";
 import { Button } from "../components/Button";
 import {
+  CheckboxGroupField,
   SelectField,
   ServicesField,
   TextAreaField,
@@ -10,10 +11,15 @@ import {
 } from "../components/FormFields";
 import { pageTitle } from "../components/tableStyles";
 import { createProvider, updateProvider, useDemoData } from "../lib/store";
-import { LOCALITIES, type MicroProvider, type Service } from "../lib/types";
+import {
+  LOCALITIES,
+  type AreaCovered,
+  type MicroProvider,
+  type Service,
+} from "../lib/types";
 
-// Create/edit form following Paddock's MpForm page layout, including its
-// empty-fee-date-means-unpaid behaviour.
+// Create/edit form limited to what WCN vets and matches on. Fields the
+// table dropped (DOB, fee date) stay on the record untouched.
 export default function ProviderForm() {
   const navigate = useNavigate();
   const { id } = useParams<{ id: string }>();
@@ -25,8 +31,8 @@ export default function ProviderForm() {
 
   const [form, setForm] = useState(() => ({
     name: existing?.name ?? "",
-    dateOfBirth: existing?.dateOfBirth ?? "",
     locality: existing?.locality ?? "",
+    areasCovered: (existing?.areasCovered ?? []) as string[],
     postCode: existing?.postCode ?? "",
     phone: existing?.phone ?? "",
     email: existing?.email ?? "",
@@ -35,10 +41,6 @@ export default function ProviderForm() {
     dbsExpiry: existing?.dbsExpiry ?? "",
     publicLiabilityNumber: existing?.publicLiabilityNumber ?? "",
     publicLiabilityExpiry: existing?.publicLiabilityExpiry ?? "",
-    feePaymentDate:
-      existing && existing.feePaymentDate !== "unpaid"
-        ? existing.feePaymentDate
-        : "",
     services: existing?.services ?? ([] as Service[]),
     availability: existing?.availability ?? "",
     bio: existing?.bio ?? "",
@@ -54,11 +56,11 @@ export default function ProviderForm() {
     const provider: Omit<MicroProvider, "id"> = {
       name: form.name,
       locality: form.locality,
-      areasCovered: existing?.areasCovered ?? [],
+      areasCovered: form.areasCovered as AreaCovered[],
       // The public results cards only ever show the outward code.
       outwardPostcode: form.postCode.trim().split(/\s+/)[0].toUpperCase(),
       postCode: form.postCode,
-      dateOfBirth: form.dateOfBirth || undefined,
+      dateOfBirth: existing?.dateOfBirth,
       services: form.services,
       bio: form.bio,
       availability: form.availability,
@@ -69,7 +71,7 @@ export default function ProviderForm() {
       dbsExpiry: form.dbsExpiry,
       publicLiabilityNumber: form.publicLiabilityNumber,
       publicLiabilityExpiry: form.publicLiabilityExpiry,
-      feePaymentDate: form.feePaymentDate || "unpaid",
+      feePaymentDate: existing?.feePaymentDate ?? "unpaid",
       training: existing?.training ?? [],
     };
     if (isEditing && existing) {
@@ -103,13 +105,6 @@ export default function ProviderForm() {
                 value={form.name}
                 onChange={(value) => set("name", value)}
               />
-              <TextField
-                id="dob"
-                label="Date of Birth"
-                type="date"
-                value={form.dateOfBirth}
-                onChange={(value) => set("dateOfBirth", value)}
-              />
               <SelectField
                 id="locality"
                 label="Locality"
@@ -118,6 +113,12 @@ export default function ProviderForm() {
                 options={LOCALITIES}
                 placeholder="Select locality..."
                 onChange={(value) => set("locality", value)}
+              />
+              <CheckboxGroupField
+                label="Areas Covered"
+                options={["All", ...LOCALITIES]}
+                value={form.areasCovered}
+                onChange={(areas) => set("areasCovered", areas)}
               />
               <TextField
                 id="postCode"
@@ -172,13 +173,6 @@ export default function ProviderForm() {
                 type="date"
                 value={form.publicLiabilityExpiry}
                 onChange={(value) => set("publicLiabilityExpiry", value)}
-              />
-              <TextField
-                id="feePaymentDate"
-                label="Fee Payment Date"
-                type="date"
-                value={form.feePaymentDate}
-                onChange={(value) => set("feePaymentDate", value)}
               />
               <ServicesField
                 value={form.services}

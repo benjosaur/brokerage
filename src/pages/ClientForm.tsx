@@ -3,7 +3,7 @@ import toast from "react-hot-toast";
 import { useNavigate, useParams } from "react-router";
 import { Button } from "../components/Button";
 import {
-  CheckboxField,
+  CheckboxGroupField,
   SelectField,
   ServicesField,
   TextAreaField,
@@ -12,16 +12,15 @@ import {
 import { pageTitle } from "../components/tableStyles";
 import { createClient, updateClient, useDemoData } from "../lib/store";
 import {
-  ATTENDANCE_ALLOWANCE_STATUSES,
+  FUNDING_OPTIONS,
   LOCALITIES,
-  type AttendanceAllowanceStatus,
   type Client,
   type Service,
 } from "../lib/types";
 
-const STATUSES = ["Active", "Matched", "New request"] as const;
-
-// Create/edit form following Paddock's ClientForm page layout.
+// Create/edit form limited to what the questionnaire captures. Fields the
+// table dropped (custom ID, DOB, postcode, AA, deprivation, status) stay
+// on the record untouched.
 export default function ClientForm() {
   const navigate = useNavigate();
   const { id } = useParams<{ id: string }>();
@@ -32,17 +31,10 @@ export default function ClientForm() {
     : undefined;
 
   const [form, setForm] = useState(() => ({
-    customId: existing?.customId ?? "",
     name: existing?.name ?? "",
-    dateOfBirth: existing?.dateOfBirth ?? "",
     locality: existing?.locality ?? "",
-    postCode: existing?.postCode ?? "",
     onboarded: existing?.onboarded.slice(0, 10) ?? "",
-    status: existing?.status ?? ("New request" as Client["status"]),
-    attendanceAllowance:
-      existing?.attendanceAllowance ?? ("None" as AttendanceAllowanceStatus),
-    depIncome: existing?.deprivation?.income ?? false,
-    depHealth: existing?.deprivation?.health ?? false,
+    funding: existing?.funding ?? ([] as string[]),
     services: existing?.services ?? ([] as Service[]),
     headline: existing?.headline ?? "",
   }));
@@ -55,16 +47,17 @@ export default function ClientForm() {
   const handleSubmit = (event: React.FormEvent) => {
     event.preventDefault();
     const client: Omit<Client, "id"> = {
-      customId: form.customId || undefined,
+      customId: existing?.customId,
+      dateOfBirth: existing?.dateOfBirth,
+      postCode: existing?.postCode,
+      attendanceAllowance: existing?.attendanceAllowance,
+      deprivation: existing?.deprivation,
+      status: existing?.status ?? "Active",
       name: form.name,
-      dateOfBirth: form.dateOfBirth || undefined,
       locality: form.locality,
-      postCode: form.postCode || undefined,
-      services: form.services,
       onboarded: form.onboarded,
-      status: form.status,
-      attendanceAllowance: form.attendanceAllowance,
-      deprivation: { income: form.depIncome, health: form.depHealth },
+      funding: form.funding,
+      services: form.services,
       headline: form.headline,
     };
     if (isEditing && existing) {
@@ -92,24 +85,11 @@ export default function ClientForm() {
                 General Information
               </h3>
               <TextField
-                id="customId"
-                label="Custom ID"
-                value={form.customId}
-                onChange={(value) => set("customId", value)}
-              />
-              <TextField
                 id="name"
                 label="Name"
                 required
                 value={form.name}
                 onChange={(value) => set("name", value)}
-              />
-              <TextField
-                id="dob"
-                label="Date of Birth"
-                type="date"
-                value={form.dateOfBirth}
-                onChange={(value) => set("dateOfBirth", value)}
               />
               <SelectField
                 id="locality"
@@ -121,12 +101,6 @@ export default function ClientForm() {
                 onChange={(value) => set("locality", value)}
               />
               <TextField
-                id="postCode"
-                label="Post Code"
-                value={form.postCode}
-                onChange={(value) => set("postCode", value)}
-              />
-              <TextField
                 id="agreementDate"
                 label="Agreement Date"
                 type="date"
@@ -134,44 +108,12 @@ export default function ClientForm() {
                 value={form.onboarded}
                 onChange={(value) => set("onboarded", value)}
               />
-              <SelectField
-                id="status"
-                label="Status"
-                value={form.status}
-                options={STATUSES}
-                onChange={(value) => set("status", value as Client["status"])}
+              <CheckboxGroupField
+                label="Funding"
+                options={FUNDING_OPTIONS}
+                value={form.funding}
+                onChange={(funding) => set("funding", funding)}
               />
-              <SelectField
-                id="attendanceAllowance"
-                label="AA Status"
-                value={form.attendanceAllowance}
-                options={ATTENDANCE_ALLOWANCE_STATUSES}
-                onChange={(value) =>
-                  set(
-                    "attendanceAllowance",
-                    value as AttendanceAllowanceStatus,
-                  )
-                }
-              />
-              <div>
-                <span className="mb-1 block text-sm font-medium text-gray-700">
-                  Deprivation Flags
-                </span>
-                <div className="space-y-2">
-                  <CheckboxField
-                    id="depIncome"
-                    label="Income deprivation"
-                    checked={form.depIncome}
-                    onChange={(checked) => set("depIncome", checked)}
-                  />
-                  <CheckboxField
-                    id="depHealth"
-                    label="Health deprivation"
-                    checked={form.depHealth}
-                    onChange={(checked) => set("depHealth", checked)}
-                  />
-                </div>
-              </div>
               <ServicesField
                 value={form.services}
                 onChange={(services) => set("services", services)}
