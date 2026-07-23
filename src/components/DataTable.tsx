@@ -1,6 +1,7 @@
 import { ArrowDown, ArrowUp, ArrowUpDown, Search } from "lucide-react";
 import { useMemo, useState } from "react";
 import {
+  inputEl,
   pageTitle,
   tableCard,
   tableEl,
@@ -49,9 +50,6 @@ function isEmptyValue(v: unknown): boolean {
     return true;
   return false;
 }
-
-const inputEl =
-  "flex h-10 w-full rounded-lg border border-gray-200/70 bg-white/80 backdrop-blur-sm px-3 py-2 text-sm transition-all duration-200 ease-in-out placeholder:text-gray-400 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500/20 focus-visible:ring-offset-1 focus-visible:border-blue-300/60 hover:border-gray-300/80";
 
 const thSortable =
   "px-6 py-4 text-left text-sm font-semibold text-gray-800 whitespace-nowrap cursor-pointer select-none hover:bg-gray-100/50 transition-colors duration-150";

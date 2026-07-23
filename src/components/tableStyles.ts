@@ -14,6 +14,12 @@ export const pageTitle =
 export const totalPill =
   "text-sm select-none text-gray-500 bg-gray-100/60 px-3 py-1 rounded-full border border-gray-200/50";
 
+// Paddock's Input styling (components/ui/input.tsx).
+export const inputEl =
+  "flex h-10 w-full rounded-lg border border-gray-200/70 bg-white/80 backdrop-blur-sm px-3 py-2 text-sm transition-all duration-200 ease-in-out placeholder:text-gray-400 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500/20 focus-visible:ring-offset-1 focus-visible:border-blue-300/60 hover:border-gray-300/80";
+
+export const fieldLabel = "block text-sm font-medium text-gray-700 mb-1";
+
 export const primaryButton =
   "inline-flex items-center gap-2 rounded-xl bg-gradient-to-r from-blue-600 to-blue-700 px-4 py-2 text-sm font-medium text-white shadow-sm shadow-blue-500/20 transition-all hover:from-blue-700 hover:to-blue-800 hover:shadow-md hover:shadow-blue-500/30";
 

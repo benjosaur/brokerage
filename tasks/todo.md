@@ -1,3 +1,25 @@
+# Port Paddock CRUD surface: dropdowns, view modals, forms, toaster
+
+Follow-up to the table alignment. Port from ~/Projects/paddock: row-action
+dropdown on DataTable rows (View/Edit), Add New button, the entity detail
+modals (minus requests/packages/notes/attachments tabs), create + edit
+forms, and the react-hot-toast Toaster ("Operation completed successfully"
+on save). Edits/creates persist in frontend state (localStorage) only.
+
+- [ ] 1. Primitives: Button (default/outline/destructive), Dialog,
+      DropdownMenu (port), Toaster + react-hot-toast dep, mount in App
+- [ ] 2. Store: createdProviders/createdVolunteers + seed-override edits
+      map; create/update mutations for all three entities
+- [ ] 3. DataTable: actions column with ⋯ dropdown (View/Edit) and the
+      Add New button, rendered only when handlers are passed
+- [ ] 4. View modals: Client (Contact Info | Services & Needs), MP and
+      Volunteer (General Info | Training Records), TrainingRecordDetail on
+      Records page; TrainingRecordsTable; wire dropdowns on pages
+- [ ] 5. Forms: Client/Provider/Volunteer create + edit pages (Paddock
+      card layout), routes, success toasts
+- [ ] 6. Verify (build + Playwright: view, edit persists, create, toast,
+      reset) and commit as work lands
+
 # Align coordinator tables with the live Paddock app
 
 Make every coordinator table identical to Paddock (columns, headers,

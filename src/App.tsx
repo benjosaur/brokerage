@@ -1,6 +1,7 @@
 import { Navigate, Route, Routes } from "react-router";
 import PublicShell from "./components/PublicShell";
 import Shell from "./components/Shell";
+import { Toaster } from "./components/Toaster";
 import { useSignedIn } from "./lib/store";
 import Clients from "./pages/Clients";
 import CoordinatorHome from "./pages/CoordinatorHome";
@@ -24,33 +25,38 @@ export default function App() {
   const signedIn = useSignedIn();
 
   return (
-    <Routes>
-      <Route path="/" element={<Landing />} />
-      <Route element={<PublicShell />}>
-        <Route path="/find-support" element={<FindSupport />} />
+    <>
+      <Toaster />
+      <Routes>
+        <Route path="/" element={<Landing />} />
+        <Route element={<PublicShell />}>
+          <Route path="/find-support" element={<FindSupport />} />
+          <Route
+            path="/find-support/results/:requestId"
+            element={<Results />}
+          />
+        </Route>
         <Route
-          path="/find-support/results/:requestId"
-          element={<Results />}
+          path="/coordinator/login"
+          element={
+            signedIn ? <Navigate to="/coordinator" replace /> : <Login />
+          }
         />
-      </Route>
-      <Route
-        path="/coordinator/login"
-        element={signedIn ? <Navigate to="/coordinator" replace /> : <Login />}
-      />
-      <Route path="/coordinator" element={<Coordinator />}>
-        <Route index element={<CoordinatorHome />} />
-        <Route path="clients" element={<Clients />} />
-        <Route path="providers" element={<Providers />} />
-        <Route path="volunteers" element={<Volunteers />} />
-        <Route path="dbs" element={<Dbs />} />
-        <Route path="public-liability" element={<PublicLiability />} />
-        <Route path="records" element={<Records />} />
-        <Route
-          path="compliance"
-          element={<Navigate to="/coordinator/dbs" replace />}
-        />
-      </Route>
-      <Route path="*" element={<Navigate to="/" replace />} />
-    </Routes>
+        <Route path="/coordinator" element={<Coordinator />}>
+          <Route index element={<CoordinatorHome />} />
+          <Route path="clients" element={<Clients />} />
+          <Route path="providers" element={<Providers />} />
+          <Route path="volunteers" element={<Volunteers />} />
+          <Route path="dbs" element={<Dbs />} />
+          <Route path="public-liability" element={<PublicLiability />} />
+          <Route path="records" element={<Records />} />
+          <Route
+            path="compliance"
+            element={<Navigate to="/coordinator/dbs" replace />}
+          />
+        </Route>
+        <Route path="*" element={<Navigate to="/" replace />} />
+      </Routes>
+    </>
   );
 }
