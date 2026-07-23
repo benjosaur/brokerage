@@ -86,3 +86,28 @@ Per user review of the new questionnaire:
 Verified via Playwright: intro (logo + title only), screening at 400px
 scroll shows no bleed-through, pills/radios/buttons all report
 cursor=pointer, Results route still resolves inside PublicShell.
+
+## Automatching copy overrides (2026-07-23)
+
+Five passages described the old hand-processed pipeline; user supplied
+replacement wording, applied word-for-word via an OVERRIDES layer in
+scripts/sync-form-content.ts (not by editing the generated file). Each
+override pins the exact upstream text it replaces: `find` must occur
+exactly once in the live form or --write/--check hard-error, so WCN
+editing an overridden passage forces a review; all other text is still
+proven byte-exact by form:check.
+
+Overridden: intro "we will contact you" paragraph; email help (mail-merge
+warning dropped); headline title (forwarding sentence prefixed); consent
+section intro (forwarding framing, rest verbatim); confirmation message
+(enquiries line only — Results banner also drops the demo aside so the
+page leads with matches). Kept unchanged by user decision: the second
+consent question (other networks — now load-bearing for forwarding), the
+circumstances help line, the withdraw-consent note, the phone note.
+
+Verified via Playwright: new intro paragraph (old one absent, paras 1+3
+verbatim), new email help + headline on About, new consent intro with
+verbatim paras 2-3, Results banner shows only the enquiries line with
+matches below. Negative test: bogus override pin → hard error naming the
+override. form:check green ("5 documented overrides applied"), tsc -b +
+vite build clean.
