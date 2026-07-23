@@ -1,5 +1,21 @@
-import { ArrowDown, ArrowUp, ArrowUpDown, Search } from "lucide-react";
+import {
+  ArrowDown,
+  ArrowUp,
+  ArrowUpDown,
+  Edit,
+  Eye,
+  MoreHorizontal,
+  Plus,
+  Search,
+} from "lucide-react";
 import { useMemo, useState } from "react";
+import { Button } from "./Button";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "./DropdownMenu";
 import {
   inputEl,
   pageTitle,
@@ -33,6 +49,9 @@ interface DataTableProps<T> {
   customActions?: React.ReactNode;
   defaultSortKey?: string;
   defaultSortDirection?: "asc" | "desc";
+  onViewItem?: (id: string) => void;
+  onEdit?: (id: string) => void;
+  onCreate?: () => void;
 }
 
 const EMPTY_VALUES = new Set([
@@ -62,6 +81,9 @@ export function DataTable<T extends { id: string }>({
   customActions,
   defaultSortKey,
   defaultSortDirection = "asc",
+  onViewItem,
+  onEdit,
+  onCreate,
 }: DataTableProps<T>) {
   const [searchTerm, setSearchTerm] = useState("");
   const [columnFilters, setColumnFilters] = useState<Record<string, string>>(
@@ -147,6 +169,8 @@ export function DataTable<T extends { id: string }>({
     });
   }, [filteredData, sortKey, sortDirection, columns]);
 
+  const hasActions = Boolean(onViewItem || onEdit);
+
   return (
     <div className="animate-in space-y-6">
       <div className="flex items-center justify-between">
@@ -165,6 +189,12 @@ export function DataTable<T extends { id: string }>({
             />
           </div>
           {customActions}
+          {onCreate && (
+            <Button className="shadow-sm" onClick={onCreate}>
+              <Plus className="mr-2 h-4 w-4" />
+              Add New
+            </Button>
+          )}
         </div>
       </div>
 
@@ -183,7 +213,9 @@ export function DataTable<T extends { id: string }>({
                       : undefined
                   }
                   className={`${thSortable} ${index === 0 ? "rounded-tl-xl" : ""} ${
-                    index === columns.length - 1 ? "rounded-tr-xl" : ""
+                    !hasActions && index === columns.length - 1
+                      ? "rounded-tr-xl"
+                      : ""
                   }`}
                   onClick={() => handleSort(col.key)}
                 >
@@ -201,6 +233,9 @@ export function DataTable<T extends { id: string }>({
                   </div>
                 </th>
               ))}
+              {hasActions && (
+                <th className="rounded-tr-xl px-6 py-4 text-center text-sm font-semibold text-gray-800"></th>
+              )}
             </tr>
             <tr className="bg-white/70">
               {columns.map((col) => (
@@ -218,6 +253,7 @@ export function DataTable<T extends { id: string }>({
                   />
                 </th>
               ))}
+              {hasActions && <th className="px-6 py-2"></th>}
             </tr>
           </thead>
           <tbody className={tbodyEl}>
@@ -235,6 +271,7 @@ export function DataTable<T extends { id: string }>({
                         : ""
                     } ${
                       index === sortedData.length - 1 &&
+                      !hasActions &&
                       colIndex === columns.length - 1
                         ? "rounded-br-xl"
                         : ""
@@ -243,6 +280,33 @@ export function DataTable<T extends { id: string }>({
                     {col.render(item)}
                   </td>
                 ))}
+                {hasActions && (
+                  <td
+                    className={`px-6 py-4 text-right ${
+                      index === sortedData.length - 1 ? "rounded-br-xl" : ""
+                    }`}
+                  >
+                    <DropdownMenu>
+                      <DropdownMenuTrigger>
+                        <MoreHorizontal className="h-4 w-4" />
+                      </DropdownMenuTrigger>
+                      <DropdownMenuContent>
+                        {onViewItem && (
+                          <DropdownMenuItem onClick={() => onViewItem(item.id)}>
+                            <Eye className="mr-2 h-4 w-4" />
+                            View
+                          </DropdownMenuItem>
+                        )}
+                        {onEdit && (
+                          <DropdownMenuItem onClick={() => onEdit(item.id)}>
+                            <Edit className="mr-2 h-4 w-4" />
+                            Edit
+                          </DropdownMenuItem>
+                        )}
+                      </DropdownMenuContent>
+                    </DropdownMenu>
+                  </td>
+                )}
               </tr>
             ))}
           </tbody>
