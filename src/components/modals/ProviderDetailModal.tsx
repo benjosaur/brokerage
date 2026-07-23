@@ -4,6 +4,7 @@ import { Tabs } from "../Tabs";
 import { TrainingRecordsTable } from "../TrainingRecordsTable";
 import { ServiceBadgeList } from "../badges";
 import { formatYmdToDmy } from "../../lib/dates";
+import { areasCoveredText } from "../../lib/format";
 import { useDemoData } from "../../lib/store";
 import { DetailItem } from "./DetailItem";
 import { tabPanel } from "./tabPanel";
@@ -46,6 +47,10 @@ export function ProviderDetailModal({
                   <DetailItem label="ID" value={provider.id} />
                   <DetailItem label="Name" value={provider.name} />
                   <DetailItem label="Locality" value={provider.locality} />
+                  <DetailItem
+                    label="Areas Covered"
+                    value={areasCoveredText(provider.areasCovered)}
+                  />
                   <DetailItem label="Post Code" value={provider.postCode} />
                   <DetailItem label="Phone" value={provider.phone} />
                   <DetailItem label="Email" value={provider.email} />

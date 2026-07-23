@@ -7,7 +7,7 @@ import { formatYmdToDmy } from "../lib/dates";
 import { useDemoData } from "../lib/store";
 import type { Volunteer } from "../lib/types";
 
-// Paddock's volunteer columns (routes/VolunteersRoutes.tsx).
+// Name, role, patch, the email Draft email would use, and safeguarding.
 const volunteerColumns: TableColumn<Volunteer>[] = [
   {
     key: "name",
@@ -22,23 +22,16 @@ const volunteerColumns: TableColumn<Volunteer>[] = [
     sortValue: (volunteer) => volunteer.role,
   },
   {
-    key: "dob",
-    header: "Date of Birth",
-    render: (volunteer) =>
-      volunteer.dateOfBirth ? formatYmdToDmy(volunteer.dateOfBirth) : "Unknown",
-    sortValue: (volunteer) => volunteer.dateOfBirth || null,
-  },
-  {
     key: "locality",
     header: "Locality",
     render: (volunteer) => volunteer.locality,
     sortValue: (volunteer) => volunteer.locality,
   },
   {
-    key: "postCode",
-    header: "Post Code",
-    render: (volunteer) => volunteer.postCode,
-    sortValue: (volunteer) => volunteer.postCode,
+    key: "email",
+    header: "Email",
+    render: (volunteer) => volunteer.email,
+    sortValue: (volunteer) => volunteer.email || null,
   },
   {
     key: "dbsExpiry",

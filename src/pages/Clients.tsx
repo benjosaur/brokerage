@@ -4,30 +4,19 @@ import { ServiceBadgeList } from "../components/badges";
 import { DataTable, type TableColumn } from "../components/DataTable";
 import { ClientDetailModal } from "../components/modals/ClientDetailModal";
 import { formatYmdToDmy } from "../lib/dates";
-import { deprivationFlags } from "../lib/format";
+import { fundingShort } from "../lib/format";
 import { useDemoData } from "../lib/store";
 import type { Client } from "../lib/types";
 
-// Paddock's client columns (routes/ClientsRoutes.tsx), plus the WCN
-// services pills as a trailing column.
+// The columns the questionnaire actually feeds: agreement date is the
+// form submission date and funding is its "how will your care be funded?"
+// answer.
 const clientColumns: TableColumn<Client>[] = [
-  {
-    key: "customId",
-    header: "Custom ID",
-    render: (client) => client.customId || "",
-    sortValue: (client) => client.customId || null,
-  },
   {
     key: "name",
     header: "Name",
     render: (client) => client.name,
     sortValue: (client) => client.name,
-  },
-  {
-    key: "dob",
-    header: "Date of Birth",
-    render: (client) => formatYmdToDmy(client.dateOfBirth || ""),
-    sortValue: (client) => client.dateOfBirth || null,
   },
   {
     key: "startDate",
@@ -42,22 +31,10 @@ const clientColumns: TableColumn<Client>[] = [
     sortValue: (client) => client.locality,
   },
   {
-    key: "postCode",
-    header: "Post Code",
-    render: (client) => client.postCode || "",
-    sortValue: (client) => client.postCode || null,
-  },
-  {
-    key: "attendanceAllowance",
-    header: "AA Status",
-    render: (client) => client.attendanceAllowance ?? "None",
-    sortValue: (client) => client.attendanceAllowance ?? "None",
-  },
-  {
-    key: "deprivationFlags",
-    header: "Deprivation Flags",
-    render: deprivationFlags,
-    sortValue: deprivationFlags,
+    key: "funding",
+    header: "Funding",
+    render: (client) => fundingShort(client.funding),
+    sortValue: (client) => fundingShort(client.funding) || null,
   },
   {
     key: "services",

@@ -4,24 +4,19 @@ import { ExpiryChip, ServiceBadgeList } from "../components/badges";
 import { DataTable, type TableColumn } from "../components/DataTable";
 import { ProviderDetailModal } from "../components/modals/ProviderDetailModal";
 import { formatYmdToDmy } from "../lib/dates";
+import { areasCoveredText } from "../lib/format";
 import { useDemoData } from "../lib/store";
 import type { MicroProvider } from "../lib/types";
 
-// Paddock's MP columns (routes/MpsRoutes.tsx), plus the WCN services pills
-// as a trailing column.
+// The columns matching and vetting actually run on: areas covered drives
+// the locality filter, email is where Draft email goes, and the two
+// expiries are the accreditation promise.
 const providerColumns: TableColumn<MicroProvider>[] = [
   {
     key: "name",
     header: "Name",
     render: (provider) => provider.name,
     sortValue: (provider) => provider.name,
-  },
-  {
-    key: "dob",
-    header: "Date of Birth",
-    render: (provider) =>
-      provider.dateOfBirth ? formatYmdToDmy(provider.dateOfBirth) : "Unknown",
-    sortValue: (provider) => provider.dateOfBirth || null,
   },
   {
     key: "startDate",
@@ -36,10 +31,29 @@ const providerColumns: TableColumn<MicroProvider>[] = [
     sortValue: (provider) => provider.locality,
   },
   {
-    key: "postCode",
-    header: "Post Code",
-    render: (provider) => provider.postCode,
-    sortValue: (provider) => provider.postCode,
+    key: "areasCovered",
+    header: "Areas Covered",
+    render: (provider) => areasCoveredText(provider.areasCovered),
+    sortValue: (provider) => areasCoveredText(provider.areasCovered) || null,
+  },
+  {
+    key: "services",
+    header: "Services",
+    render: (provider) => <ServiceBadgeList services={provider.services} />,
+    text: (provider) => provider.services.join(", "),
+    sortValue: (provider) => provider.services.join(", "),
+  },
+  {
+    key: "availability",
+    header: "Availability",
+    render: (provider) => provider.availability,
+    sortValue: (provider) => provider.availability || null,
+  },
+  {
+    key: "email",
+    header: "Email",
+    render: (provider) => provider.email,
+    sortValue: (provider) => provider.email || null,
   },
   {
     key: "dbsExpiry",
@@ -51,18 +65,19 @@ const providerColumns: TableColumn<MicroProvider>[] = [
     sortValue: (provider) => provider.dbsExpiry || null,
   },
   {
-    key: "feePaymentDate",
-    header: "Fee Date",
+    key: "publicLiabilityExpiry",
+    header: "Public Liability Expiry",
     render: (provider) =>
-      provider.feePaymentDate === "unpaid" ? "Unpaid" : provider.feePaymentDate,
-    sortValue: (provider) => provider.feePaymentDate || null,
-  },
-  {
-    key: "services",
-    header: "Services",
-    render: (provider) => <ServiceBadgeList services={provider.services} />,
-    text: (provider) => provider.services.join(", "),
-    sortValue: (provider) => provider.services.join(", "),
+      provider.publicLiabilityExpiry ? (
+        <ExpiryChip date={provider.publicLiabilityExpiry} />
+      ) : (
+        "No Public Liability"
+      ),
+    text: (provider) =>
+      provider.publicLiabilityExpiry
+        ? formatYmdToDmy(provider.publicLiabilityExpiry)
+        : "No Public Liability",
+    sortValue: (provider) => provider.publicLiabilityExpiry || null,
   },
 ];
 

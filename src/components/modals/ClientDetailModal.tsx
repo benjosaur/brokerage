@@ -3,7 +3,7 @@ import { Dialog, DialogFooter, DialogTitle } from "../Dialog";
 import { Tabs } from "../Tabs";
 import { ServiceBadgeList } from "../badges";
 import { formatYmdToDmy } from "../../lib/dates";
-import { deprivationFlags } from "../../lib/format";
+import { deprivationFlags, fundingShort } from "../../lib/format";
 import { useDemoData } from "../../lib/store";
 import { DetailItem } from "./DetailItem";
 import { tabPanel } from "./tabPanel";
@@ -76,6 +76,10 @@ export function ClientDetailModal({
                       <ServiceBadgeList services={client.services} />
                     </span>
                   </DetailItem>
+                  <DetailItem
+                    label="Funding"
+                    value={fundingShort(client.funding)}
+                  />
                   <DetailItem
                     label="AA Status"
                     value={client.attendanceAllowance ?? "None"}
