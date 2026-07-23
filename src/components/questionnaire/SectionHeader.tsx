@@ -27,11 +27,12 @@ export default function SectionHeader({
   const headingRef = useRef<HTMLHeadingElement>(null);
 
   useEffect(() => {
-    headingRef.current?.focus();
+    // The page scrolls itself on section change; focus is announcement-only.
+    headingRef.current?.focus({ preventScroll: true });
   }, [currentIndex]);
 
   return (
-    <div className="sticky top-0 z-10 -mx-4 border-b border-pk-line bg-pk-paper/95 px-4 pt-4 pb-3 backdrop-blur">
+    <div className="sticky top-0 z-10 -mx-4 border-b border-pk-line bg-pk-paper px-4 pt-4 pb-3">
       <nav aria-label="Form sections" className="flex flex-wrap gap-1.5">
         {sections.map((section, index) => {
           const state =
