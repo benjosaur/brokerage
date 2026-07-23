@@ -14,8 +14,9 @@ export default function App() {
   return (
     <Routes>
       <Route path="/" element={<Landing />} />
+      {/* The questionnaire renders chromeless — no ribbon or app header. */}
+      <Route path="/find-support" element={<FindSupport />} />
       <Route element={<PublicShell />}>
-        <Route path="/find-support" element={<FindSupport />} />
         <Route
           path="/find-support/results/:requestId"
           element={<Results />}

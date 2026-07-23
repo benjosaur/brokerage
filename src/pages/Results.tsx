@@ -1,10 +1,32 @@
-import { CheckCircle2, Info, Mail, MapPin } from "lucide-react";
+import { Check, CheckCircle2, Clock, Info, Mail, MapPin, X } from "lucide-react";
 import { Link, useParams } from "react-router";
-import { Eyebrow, ExpiryChip, ServiceBadgeList } from "../components/badges";
-import { formatDate } from "../lib/dates";
+import { ServiceBadgeList } from "../components/badges";
+import { expiryStatus } from "../lib/dates";
+import { FORM_META } from "../lib/formContent";
 import { buildMailto } from "../lib/mailto";
 import { matchProviders } from "../lib/matching";
 import { useDemoData } from "../lib/store";
+
+const pillClass =
+  "inline-flex items-center rounded-full bg-pk-fog px-2.5 py-0.5 text-xs font-medium whitespace-nowrap text-pk-slate";
+
+/** Minimal compliance marker: a tick while in date, a cross once expired. */
+function ComplianceTick({ label, date }: { label: string; date: string }) {
+  const expired = expiryStatus(date) === "expired";
+  return (
+    <span
+      className="inline-flex items-center gap-1 text-xs font-medium text-pk-slate"
+      aria-label={`${label} ${expired ? "expired" : "valid"}`}
+    >
+      {expired ? (
+        <X size={14} className="text-pk-clay" aria-hidden />
+      ) : (
+        <Check size={14} className="text-pk-leaf" aria-hidden />
+      )}
+      {label}
+    </span>
+  );
+}
 
 export default function Results() {
   const { requestId } = useParams<{ requestId: string }>();
@@ -35,37 +57,33 @@ export default function Results() {
     <div>
       <div className="flex items-start gap-3 rounded-2xl border border-pk-leaf/25 bg-pk-leaf-soft p-4">
         <CheckCircle2 className="mt-0.5 shrink-0 text-pk-leaf" size={18} aria-hidden />
-        <p className="text-sm leading-relaxed text-pk-leaf">
-          <span className="font-semibold">Request received.</span> In the live
-          service WCN processes requests within three working days — in this
-          demo, the matches are ready now.
+        <p className="text-sm leading-relaxed font-medium text-pk-leaf">
+          {FORM_META.confirmationMessage}
         </p>
       </div>
 
       <section className="mt-6 rounded-2xl border border-pk-line bg-pk-sand p-6">
-        <div className="flex flex-wrap items-baseline justify-between gap-2">
-          <Eyebrow>
-            Support notice · {request.locality} · {formatDate(request.createdAt)}
-          </Eyebrow>
-          <span className="font-plex text-[11px] text-pk-slate">
-            ref {request.id}
-          </span>
-        </div>
-        <blockquote className="mt-3 font-display text-2xl font-bold tracking-tight text-balance">
+        <p className="text-sm font-medium text-pk-slate">Your request</p>
+        <blockquote className="mt-2 font-display text-2xl font-bold tracking-tight text-balance">
           “{request.headline}”
         </blockquote>
+        <div className="mt-4 space-y-2 text-sm text-pk-ink">
+          <p className="flex items-start gap-2">
+            <MapPin size={15} className="mt-0.5 shrink-0 text-pk-slate" aria-hidden />
+            {request.locality}
+          </p>
+          <p className="flex items-start gap-2">
+            <Clock size={15} className="mt-0.5 shrink-0 text-pk-slate" aria-hidden />
+            {request.schedule}
+          </p>
+        </div>
         <div className="mt-4 flex flex-wrap items-center gap-2">
           <ServiceBadgeList services={request.services} />
-          {request.hasPets && (
-            <span className="rounded-full bg-pk-fog px-2.5 py-0.5 text-xs text-pk-slate">
-              Pets at home
-            </span>
+          {request.servicesOther && (
+            <span className={pillClass}>Other: {request.servicesOther}</span>
           )}
+          <span className={pillClass}>{request.hasPets ? "Pets at home" : "No pets"}</span>
         </div>
-        <p className="mt-3 text-sm text-pk-slate">
-          <span className="font-medium text-pk-ink">When:</span>{" "}
-          {request.schedule}
-        </p>
       </section>
 
       {!canEmail && (
@@ -95,46 +113,38 @@ export default function Results() {
           </div>
         ) : (
           <ul className="mt-4 space-y-4">
-            {matches.map(({ provider, overlap, sameLocality }, index) => (
+            {matches.map(({ provider, sameLocality }, index) => (
               <li
                 key={provider.id}
                 className="animate-rise rounded-2xl border border-pk-line bg-white p-5 shadow-[0_8px_24px_rgba(28,39,51,0.04)]"
                 style={{ animationDelay: `${index * 60}ms` }}
               >
-                <div className="flex flex-wrap items-start justify-between gap-3">
-                  <div>
-                    <h3 className="font-display text-lg font-bold">
-                      {provider.name}
-                    </h3>
-                    <p className="mt-0.5 flex items-center gap-1 font-plex text-[12px] text-pk-slate">
-                      <MapPin size={12} aria-hidden />
-                      {provider.locality} · {provider.outwardPostcode}
-                      {sameLocality && (
-                        <span className="ml-1.5 rounded-full bg-pk-blue-soft px-2 py-0.5 text-[11px] font-medium text-pk-blue-deep">
-                          Same area
-                        </span>
-                      )}
-                    </p>
-                  </div>
-                  {request.services.length > 0 && (
-                    <span className="font-plex text-[11px] text-pk-slate">
-                      {overlap.length} of {request.services.length} services
+                <h3 className="font-display text-lg font-bold">
+                  {provider.name}
+                </h3>
+                <p className="mt-1 flex items-center gap-1.5 text-sm text-pk-slate">
+                  <MapPin size={14} className="shrink-0" aria-hidden />
+                  {provider.locality} · {provider.outwardPostcode}
+                  {sameLocality && (
+                    <span className="ml-1 rounded-full bg-pk-blue-soft px-2 py-0.5 text-[11px] font-medium whitespace-nowrap text-pk-blue-deep">
+                      Same area
                     </span>
                   )}
-                </div>
+                </p>
                 <p className="mt-3 text-sm leading-relaxed text-pk-slate">
                   {provider.bio}
                 </p>
-                <p className="mt-2 font-plex text-[12px] text-pk-slate">
+                <p className="mt-2 flex items-center gap-1.5 text-sm text-pk-slate">
+                  <Clock size={14} className="shrink-0" aria-hidden />
                   {provider.availability}
                 </p>
                 <div className="mt-3 flex flex-wrap items-center gap-1.5">
                   <ServiceBadgeList services={provider.services} />
                 </div>
                 <div className="mt-4 flex flex-wrap items-center justify-between gap-3 border-t border-pk-line pt-4">
-                  <div className="flex flex-wrap gap-1.5">
-                    <ExpiryChip label="DBS" date={provider.dbsExpiry} />
-                    <ExpiryChip
+                  <div className="flex flex-wrap items-center gap-3">
+                    <ComplianceTick label="DBS" date={provider.dbsExpiry} />
+                    <ComplianceTick
                       label="Insurance"
                       date={provider.liabilityExpiry}
                     />

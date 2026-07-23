@@ -6,7 +6,10 @@
   "scripts": {
     "dev": "vite",
     "build": "tsc -b && vite build",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "typecheck": "tsc -b",
+    "form:sync": "bun scripts/sync-form-content.ts --write",
+    "form:check": "bun scripts/sync-form-content.ts --check"
   },
   "dependencies": {
     "lucide-react": "^1.25.0",
