@@ -116,3 +116,11 @@ Follow-up: petDetails is optional upstream (Google can't make it
 conditional) but the app reveals it only on a "Yes" pets answer — now
 required whenever visible (asterisk + required message; hidden path
 unaffected). Verified via Playwright both ways.
+
+Follow-up: minimal results page. Request card is now "Your request"
+(headline quote, MapPin + locality row, Clock + schedule row, service
+pills + Other pill + "Pets at home"/"No pets" pill; date/ref/mono type
+removed). Provider cards get the same icon rows, lose the services
+overlap counter, and show DBS/Insurance as ticks (clay cross when
+expired — verified against Josh Parkin's expired insurance). No
+font-plex remains on the page.
