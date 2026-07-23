@@ -1,5 +1,10 @@
 import { useSyncExternalStore } from "react";
-import { seedClients, seedProviders, seedVolunteers } from "./seed";
+import {
+  seedClients,
+  seedProviders,
+  seedRequests,
+  seedVolunteers,
+} from "./seed";
 import type { Client, SupportRequest } from "./types";
 
 // All demo state lives in the browser. Seed data is compiled in; anything
@@ -104,10 +109,12 @@ export function useDemoData() {
     providers: seedProviders,
     volunteers: seedVolunteers,
     clients: [...snapshot.createdClients, ...seedClients],
-    requests: snapshot.requests,
+    requests: [...snapshot.requests, ...seedRequests],
   };
 }
 
 export function getRequest(id: string): SupportRequest | undefined {
-  return data.requests.find((request) => request.id === id);
+  return [...data.requests, ...seedRequests].find(
+    (request) => request.id === id,
+  );
 }

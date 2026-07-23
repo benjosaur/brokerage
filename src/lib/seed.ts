@@ -1,4 +1,4 @@
-import type { Client, MicroProvider, Volunteer } from "./types";
+import type { Client, MicroProvider, SupportRequest, Volunteer } from "./types";
 
 // Every person below is fictional. Phone numbers use the Ofcom-reserved
 // drama range (01632 960xxx), emails use example.org and postcodes use
@@ -327,5 +327,33 @@ export const seedVolunteers: Volunteer[] = [
     training: [
       { name: "Safeguarding Adults", completed: "2025-08-20", expiry: "2027-08-20" },
     ],
+  },
+];
+
+// Iris Quick's open request (client c-06, status "New request"), so the
+// dashboard and results view have content before anyone uses the form.
+export const seedRequests: SupportRequest[] = [
+  {
+    id: "req-01",
+    createdAt: "2026-07-01T10:24:00Z",
+    clientId: "c-06",
+    completedBy: "I am looking for support myself",
+    services: ["Help in the Home or Garden"],
+    funding: ["I will be funding my care and support with my own money"],
+    name: "Iris Quick",
+    email: "iris.quick@example.org",
+    phone: "01632 960301",
+    headline: "Pilton smallholder, 76, after help with the orchard and log store",
+    locality: "Pilton",
+    personSought: "Someone practical and local who doesn't mind proper outdoor work",
+    circumstances:
+      "Managing well in the farmhouse, but the orchard, log store and heavier garden jobs have got beyond me since last winter.",
+    hasPets: true,
+    petDetails: "Two cats and a dozen hens",
+    schedule: "Weekday mornings, flexible",
+    consentWcnNetwork: true,
+    consentOtherNetworks: false,
+    heardAbout: "WCN Helpline",
+    newsletter: false,
   },
 ];
