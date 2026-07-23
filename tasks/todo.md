@@ -45,3 +45,7 @@ Verified with Playwright: landing renders only the two cards; the
 coordinator card opens the dashboard directly (no redirect); the stale
 /coordinator/login URL falls through the wildcard back to /. Build clean
 on both commits.
+
+Follow-up: demo ribbon dropped from the landing page too (still shown on
+the public form/results and coordinator pages). Screenshot-verified the
+cards stay vertically centered.
