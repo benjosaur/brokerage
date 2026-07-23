@@ -6,19 +6,37 @@ modals (minus requests/packages/notes/attachments tabs), create + edit
 forms, and the react-hot-toast Toaster ("Operation completed successfully"
 on save). Edits/creates persist in frontend state (localStorage) only.
 
-- [ ] 1. Primitives: Button (default/outline/destructive), Dialog,
+- [x] 1. Primitives: Button (default/outline/destructive), Dialog,
       DropdownMenu (port), Toaster + react-hot-toast dep, mount in App
-- [ ] 2. Store: createdProviders/createdVolunteers + seed-override edits
+- [x] 2. Store: createdProviders/createdVolunteers + seed-override edits
       map; create/update mutations for all three entities
-- [ ] 3. DataTable: actions column with ⋯ dropdown (View/Edit) and the
+- [x] 3. DataTable: actions column with ⋯ dropdown (View/Edit) and the
       Add New button, rendered only when handlers are passed
-- [ ] 4. View modals: Client (Contact Info | Services & Needs), MP and
+- [x] 4. View modals: Client (Contact Info | Services & Needs), MP and
       Volunteer (General Info | Training Records), TrainingRecordDetail on
       Records page; TrainingRecordsTable; wire dropdowns on pages
-- [ ] 5. Forms: Client/Provider/Volunteer create + edit pages (Paddock
+- [x] 5. Forms: Client/Provider/Volunteer create + edit pages (Paddock
       card layout), routes, success toasts
-- [ ] 6. Verify (build + Playwright: view, edit persists, create, toast,
+- [x] 6. Verify (build + Playwright: view, edit persists, create, toast,
       reset) and commit as work lands
+
+## CRUD-port review
+
+Landed as five commits (primitives → store → DataTable actions → modals →
+forms), build clean on each. Verified via Playwright on the dev server:
+row ⋯ menu opens View/Edit; the Micro-provider modal shows General Info
+rows, services pills and the Training Records tab table; modal Edit lands
+on the pre-filled form; saving an edit updates the table (Deb & Ian's DBS
+pill → 25-12-2026) and writes a seed override to localStorage; Add New
+creates a volunteer that appears in the table (Total: 4); the save toast
+shows Paddock's "Operation completed successfully"; the Records page View
+opens "Training Records Josh Parkin".
+
+Intentionally not ported (flag for user): Delete / End / Archive /
+Attachments row actions, Notes + Attachments modal tabs, requests and
+packages tabs (per instruction), Paddock's FieldEditModal name-change
+confirmation, Show Ended/Archived toggles, and training-record add/edit
+(records display read-only in modals).
 
 # Align coordinator tables with the live Paddock app
 
