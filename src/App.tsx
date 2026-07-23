@@ -3,12 +3,14 @@ import PublicShell from "./components/PublicShell";
 import Shell from "./components/Shell";
 import { useSignedIn } from "./lib/store";
 import Clients from "./pages/Clients";
-import Compliance from "./pages/Compliance";
 import CoordinatorHome from "./pages/CoordinatorHome";
+import Dbs from "./pages/Dbs";
 import FindSupport from "./pages/FindSupport";
 import Landing from "./pages/Landing";
 import Login from "./pages/Login";
 import Providers from "./pages/Providers";
+import PublicLiability from "./pages/PublicLiability";
+import Records from "./pages/Records";
 import Results from "./pages/Results";
 import Volunteers from "./pages/Volunteers";
 
@@ -37,10 +39,16 @@ export default function App() {
       />
       <Route path="/coordinator" element={<Coordinator />}>
         <Route index element={<CoordinatorHome />} />
-        <Route path="providers" element={<Providers />} />
         <Route path="clients" element={<Clients />} />
+        <Route path="providers" element={<Providers />} />
         <Route path="volunteers" element={<Volunteers />} />
-        <Route path="compliance" element={<Compliance />} />
+        <Route path="dbs" element={<Dbs />} />
+        <Route path="public-liability" element={<PublicLiability />} />
+        <Route path="records" element={<Records />} />
+        <Route
+          path="compliance"
+          element={<Navigate to="/coordinator/dbs" replace />}
+        />
       </Route>
       <Route path="*" element={<Navigate to="/" replace />} />
     </Routes>

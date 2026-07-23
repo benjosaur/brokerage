@@ -55,8 +55,8 @@ export default function Landing() {
               I’m a WCN coordinator
             </h2>
             <p className="mt-2 text-sm leading-relaxed text-pk-slate">
-              Review incoming requests and manage micro-providers, clients,
-              volunteers and compliance.
+              Review incoming requests and manage clients, micro-providers,
+              volunteers, DBS, insurance and training records.
             </p>
             <span className="mt-4 inline-flex items-center gap-1.5 text-sm font-medium text-pk-blue group-hover:text-pk-blue-deep">
               {signedIn ? "Open coordinator view" : "Coordinator sign in"}

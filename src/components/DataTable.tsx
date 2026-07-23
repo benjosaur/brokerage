@@ -7,6 +7,7 @@ import {
   tbodyEl,
   tdEl,
   theadEl,
+  totalPill,
 } from "./tableStyles";
 
 // Read-only port of Paddock's DataTable
@@ -153,9 +154,7 @@ export function DataTable<T extends { id: string }>({
       <div className="flex items-center justify-between">
         <div className="flex items-center space-x-3">
           <h1 className={pageTitle}>{title}</h1>
-          <span className="rounded-full border border-gray-200/50 bg-gray-100/60 px-3 py-1 text-sm text-gray-500 select-none">
-            Total: {filteredData.length}
-          </span>
+          <span className={totalPill}>Total: {filteredData.length}</span>
         </div>
         <div className="flex items-center space-x-3">
           <div className="group relative select-none">

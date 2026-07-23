@@ -8,10 +8,16 @@ import DemoRibbon from "./DemoRibbon";
 // (client/src/App.tsx + components/Sidebar.tsx).
 const menuItems = [
   { key: "overview", label: "Dashboard", path: "/coordinator" },
-  { key: "providers", label: "Micro-providers", path: "/coordinator/providers" },
   { key: "clients", label: "Clients", path: "/coordinator/clients" },
+  { key: "providers", label: "Micro-providers", path: "/coordinator/providers" },
   { key: "volunteers", label: "Volunteers", path: "/coordinator/volunteers" },
-  { key: "compliance", label: "Compliance", path: "/coordinator/compliance" },
+  { key: "dbs", label: "DBS", path: "/coordinator/dbs" },
+  {
+    key: "public-liability",
+    label: "Public Liability",
+    path: "/coordinator/public-liability",
+  },
+  { key: "records", label: "Records", path: "/coordinator/records" },
 ];
 
 function Brand() {
