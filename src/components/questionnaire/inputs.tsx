@@ -125,7 +125,7 @@ export function RadioOptions({
             tabIndex={selectedIndex === -1 ? (index === 0 ? 0 : -1) : selected ? 0 : -1}
             onClick={() => onChange(optionValue)}
             onKeyDown={(event) => handleKeyDown(event, index)}
-            className="group flex cursor-pointer items-start gap-3 text-left"
+            className="group flex items-start gap-3 text-left"
           >
             <Dot selected={selected} />
             <span className={optionLabelClass(selected)}>
@@ -199,7 +199,7 @@ export function CheckOptions({
             aria-required={required || undefined}
             aria-invalid={invalid || undefined}
             onClick={() => (option.isOther ? onOtherToggle?.() : onToggle(option.label))}
-            className="group flex cursor-pointer items-start gap-3 text-left"
+            className="group flex items-start gap-3 text-left"
           >
             <Dot selected={checked} square />
             <span className={optionLabelClass(checked)}>

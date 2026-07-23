@@ -40,14 +40,14 @@ export default function SectionHeader({
             <button
               key={section.id}
               type="button"
-              disabled={state === "todo"}
+              disabled={state !== "done"}
               aria-current={state === "current" ? "step" : undefined}
               onClick={() => state === "done" && onJump(index)}
               className={`grow rounded-full px-3 py-1 text-xs font-medium whitespace-nowrap transition-colors ${
                 state === "current"
                   ? "bg-pk-blue text-white"
                   : state === "done"
-                    ? "cursor-pointer bg-pk-blue-soft text-pk-blue-deep hover:bg-pk-blue/15"
+                    ? "bg-pk-blue-soft text-pk-blue-deep hover:bg-pk-blue/15"
                     : "bg-pk-fog text-pk-slate"
               }`}
             >

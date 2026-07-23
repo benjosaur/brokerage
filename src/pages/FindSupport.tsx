@@ -165,11 +165,11 @@ function validateSection(index: number, form: FormState): Errors {
 }
 
 const primaryButton =
-  "inline-flex cursor-pointer items-center gap-2 rounded-[10px] bg-pk-blue px-5 py-2.5 text-sm font-medium text-white transition-colors hover:bg-pk-blue-deep";
+  "inline-flex items-center gap-2 rounded-[10px] bg-pk-blue px-5 py-2.5 text-sm font-medium text-white transition-colors hover:bg-pk-blue-deep";
 const outlineButton =
-  "inline-flex cursor-pointer items-center gap-1.5 rounded-[10px] border border-pk-line bg-white px-4 py-2.5 text-sm font-medium text-pk-ink transition-colors hover:border-pk-slate/40";
+  "inline-flex items-center gap-1.5 rounded-[10px] border border-pk-line bg-white px-4 py-2.5 text-sm font-medium text-pk-ink transition-colors hover:border-pk-slate/40";
 const submitButton =
-  "inline-flex cursor-pointer items-center gap-2 rounded-[10px] bg-pk-blue px-6 py-3 text-[15px] font-medium text-white shadow-md ring-2 ring-pk-blue/30 ring-offset-2 ring-offset-pk-paper transition-colors hover:bg-pk-blue-deep";
+  "inline-flex items-center gap-2 rounded-[10px] bg-pk-blue px-6 py-3 text-[15px] font-medium text-white shadow-md ring-2 ring-pk-blue/30 ring-offset-2 ring-offset-pk-paper transition-colors hover:bg-pk-blue-deep";
 
 type View = "intro" | "form" | "rejected";
 
