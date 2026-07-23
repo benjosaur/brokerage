@@ -1,5 +1,7 @@
+import { useState } from "react";
 import { ExpiryChip } from "../components/badges";
 import { DataTable, type TableColumn } from "../components/DataTable";
+import { VolunteerDetailModal } from "../components/modals/VolunteerDetailModal";
 import { formatYmdToDmy } from "../lib/dates";
 import { useDemoData } from "../lib/store";
 import type { Volunteer } from "../lib/types";
@@ -50,14 +52,27 @@ const volunteerColumns: TableColumn<Volunteer>[] = [
 
 export default function Volunteers() {
   const { volunteers } = useDemoData();
+  const [selectedVolunteerId, setSelectedVolunteerId] = useState<string | null>(
+    null,
+  );
 
   return (
-    <DataTable
-      title="Volunteers"
-      searchPlaceholder="Search volunteers..."
-      data={volunteers}
-      columns={volunteerColumns}
-      defaultSortKey="name"
-    />
+    <>
+      <DataTable
+        title="Volunteers"
+        searchPlaceholder="Search volunteers..."
+        data={volunteers}
+        columns={volunteerColumns}
+        defaultSortKey="name"
+        onViewItem={setSelectedVolunteerId}
+      />
+      {selectedVolunteerId && (
+        <VolunteerDetailModal
+          volunteerId={selectedVolunteerId}
+          isOpen={Boolean(selectedVolunteerId)}
+          onClose={() => setSelectedVolunteerId(null)}
+        />
+      )}
+    </>
   );
 }

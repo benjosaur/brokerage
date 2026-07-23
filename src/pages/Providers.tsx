@@ -1,5 +1,7 @@
+import { useState } from "react";
 import { ExpiryChip, ServiceBadgeList } from "../components/badges";
 import { DataTable, type TableColumn } from "../components/DataTable";
+import { ProviderDetailModal } from "../components/modals/ProviderDetailModal";
 import { formatYmdToDmy } from "../lib/dates";
 import { useDemoData } from "../lib/store";
 import type { MicroProvider } from "../lib/types";
@@ -65,14 +67,27 @@ const providerColumns: TableColumn<MicroProvider>[] = [
 
 export default function Providers() {
   const { providers } = useDemoData();
+  const [selectedProviderId, setSelectedProviderId] = useState<string | null>(
+    null,
+  );
 
   return (
-    <DataTable
-      title="Micro-providers"
-      searchPlaceholder="Search micro-providers..."
-      data={providers}
-      columns={providerColumns}
-      defaultSortKey="name"
-    />
+    <>
+      <DataTable
+        title="Micro-providers"
+        searchPlaceholder="Search micro-providers..."
+        data={providers}
+        columns={providerColumns}
+        defaultSortKey="name"
+        onViewItem={setSelectedProviderId}
+      />
+      {selectedProviderId && (
+        <ProviderDetailModal
+          providerId={selectedProviderId}
+          isOpen={Boolean(selectedProviderId)}
+          onClose={() => setSelectedProviderId(null)}
+        />
+      )}
+    </>
   );
 }

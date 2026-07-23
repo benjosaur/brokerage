@@ -1,15 +1,11 @@
+import { useState } from "react";
 import { ServiceBadgeList } from "../components/badges";
 import { DataTable, type TableColumn } from "../components/DataTable";
+import { ClientDetailModal } from "../components/modals/ClientDetailModal";
 import { formatYmdToDmy } from "../lib/dates";
+import { deprivationFlags } from "../lib/format";
 import { useDemoData } from "../lib/store";
 import type { Client } from "../lib/types";
-
-function deprivationFlags(client: Client): string {
-  if (client.deprivation?.income && client.deprivation?.health) return "Both";
-  if (client.deprivation?.income) return "Income";
-  if (client.deprivation?.health) return "Health";
-  return "None";
-}
 
 // Paddock's client columns (routes/ClientsRoutes.tsx), plus the WCN
 // services pills as a trailing column.
@@ -73,14 +69,25 @@ const clientColumns: TableColumn<Client>[] = [
 
 export default function Clients() {
   const { clients } = useDemoData();
+  const [selectedClientId, setSelectedClientId] = useState<string | null>(null);
 
   return (
-    <DataTable
-      title="Clients"
-      searchPlaceholder="Search clients..."
-      data={clients}
-      columns={clientColumns}
-      defaultSortKey="name"
-    />
+    <>
+      <DataTable
+        title="Clients"
+        searchPlaceholder="Search clients..."
+        data={clients}
+        columns={clientColumns}
+        defaultSortKey="name"
+        onViewItem={setSelectedClientId}
+      />
+      {selectedClientId && (
+        <ClientDetailModal
+          clientId={selectedClientId}
+          isOpen={Boolean(selectedClientId)}
+          onClose={() => setSelectedClientId(null)}
+        />
+      )}
+    </>
   );
 }

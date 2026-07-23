@@ -4,8 +4,10 @@ import { useState } from "react";
 // matching its full-width segmented look.
 export function Tabs({
   tabs,
+  contentClassName = "mt-6",
 }: {
   tabs: { label: string; content: React.ReactNode }[];
+  contentClassName?: string;
 }) {
   const [active, setActive] = useState(0);
 
@@ -34,7 +36,7 @@ export function Tabs({
           </button>
         ))}
       </div>
-      <div className="mt-6">{tabs[active]?.content}</div>
+      <div className={contentClassName}>{tabs[active]?.content}</div>
     </div>
   );
 }

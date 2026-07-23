@@ -33,7 +33,7 @@ export function Dialog({ open, onClose, children, className = "" }: DialogProps)
       <div
         role="dialog"
         aria-modal="true"
-        className={`fixed top-[50%] left-[50%] z-50 grid w-full max-w-[calc(100%-2rem)] translate-x-[-50%] translate-y-[-50%] gap-4 rounded-lg border border-gray-200/60 bg-white p-6 shadow-lg ${className}`}
+        className={`fixed top-[50%] left-[50%] z-50 w-full max-w-[calc(100%-2rem)] translate-x-[-50%] translate-y-[-50%] rounded-lg border border-gray-200/60 bg-white p-6 shadow-lg ${className}`}
       >
         {children}
         <button

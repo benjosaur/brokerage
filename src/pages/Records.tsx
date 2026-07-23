@@ -1,5 +1,7 @@
+import { useState } from "react";
 import { ExpiryChip } from "../components/badges";
 import { DataTable, type TableColumn } from "../components/DataTable";
+import { TrainingRecordDetailModal } from "../components/modals/TrainingRecordDetailModal";
 import { Tabs } from "../components/Tabs";
 import { pageTitle, totalPill } from "../components/tableStyles";
 import { formatYmdToDmy } from "../lib/dates";
@@ -50,6 +52,7 @@ function toRows(
 
 export default function Records() {
   const { providers, volunteers } = useDemoData();
+  const [selectedCarerId, setSelectedCarerId] = useState<string | null>(null);
 
   const providerRows = toRows(providers);
   const volunteerRows = toRows(volunteers);
@@ -74,6 +77,7 @@ export default function Records() {
                 data={providerRows}
                 columns={aggregateColumns}
                 defaultSortKey="earliest"
+                onViewItem={setSelectedCarerId}
               />
             ),
           },
@@ -86,11 +90,19 @@ export default function Records() {
                 data={volunteerRows}
                 columns={aggregateColumns}
                 defaultSortKey="earliest"
+                onViewItem={setSelectedCarerId}
               />
             ),
           },
         ]}
       />
+      {selectedCarerId && (
+        <TrainingRecordDetailModal
+          carerId={selectedCarerId}
+          isOpen={Boolean(selectedCarerId)}
+          onClose={() => setSelectedCarerId(null)}
+        />
+      )}
     </div>
   );
 }
