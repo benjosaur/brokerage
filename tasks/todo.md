@@ -111,3 +111,8 @@ verbatim paras 2-3, Results banner shows only the enquiries line with
 matches below. Negative test: bogus override pin → hard error naming the
 override. form:check green ("5 documented overrides applied"), tsc -b +
 vite build clean.
+
+Follow-up: petDetails is optional upstream (Google can't make it
+conditional) but the app reveals it only on a "Yes" pets answer — now
+required whenever visible (asterisk + required message; hidden path
+unaffected). Verified via Playwright both ways.
