@@ -1,3 +1,42 @@
+# Match info modal + compliance filters (2026-07-23)
+
+Results page: explain how matching works via a small info link + modal,
+and tighten matching so only compliant providers appear (user request:
+filter should also require in-date DBS and in-date liability insurance).
+
+- [x] 1. matching.ts: exclude providers whose DBS check or public
+      liability insurance has expired ("expiring" within 90 days still
+      counts as in date); update the doc comment
+- [x] 2. Results.tsx: "How matches work" link beside the matches heading
+      opening a Dialog that lists the four conditions (area coverage,
+      service overlap, DBS in date, insurance in date) plus the ranking
+- [x] 3. Verify: bun run build clean; Playwright on /results/req-01
+      (Iris's Pilton request drops 3 -> 2 matches, Josh Parkin excluded
+      by his expired insurance; modal opens, reads right, closes)
+
+## Review
+
+Two commits: e990129 (matching filter) and 8971c63 (info modal). The
+filter reuses expiryStatus, so only "expired" excludes; a provider in
+the 90-day renewal window still matches. Modal copy mirrors the code's
+four conditions and the ranking, with the leaf-green tick rows echoing
+the DBS/Insurance ticks on the provider cards; on the public page it
+uses a font-display heading, not Paddock's gradient DialogTitle.
+
+Verified via Playwright on the dev server: /find-support/results/req-01
+now shows "2 matching micro-providers" (Josh Parkin dropped, insurance
+expired 30-06-2026; Deb & Ian Coombes and Martin Hobbs remain), the
+link opens the modal with all four checks plus the ranking line, and
+Escape closes it. Modal panel is 448px (sm:max-w-md; a plain w-[28rem]
+loses to the Dialog base's w-full in Tailwind's output order, so the
+override is breakpoint-scoped, keeping near-full width on phones).
+Backdrop dim pixel-verified (page bg #7E7E7C under the overlay).
+bun run build clean on both commits.
+
+Side effect worth knowing: the DBS/Insurance ticks on Results cards can
+now only ever render green, since non-compliant providers are filtered
+out before display. Left the ticks in place as reassurance.
+
 # Questionnaire-driven columns (user's keep/drop verdicts)
 
 User's calls, applied 2026-07-23: keep only what the Find Support

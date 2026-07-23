@@ -1,5 +1,7 @@
 import { Check, CheckCircle2, Clock, Info, Mail, MapPin, X } from "lucide-react";
+import { useState } from "react";
 import { Link, useParams } from "react-router";
+import { Dialog } from "../components/Dialog";
 import { ServiceBadgeList } from "../components/badges";
 import { expiryStatus } from "../lib/dates";
 import { FORM_META } from "../lib/formContent";
@@ -28,9 +30,22 @@ function ComplianceTick({ label, date }: { label: string; date: string }) {
   );
 }
 
+/** One condition row in the "How matches work" modal. */
+function MatchCheck({ title, detail }: { title: string; detail: string }) {
+  return (
+    <li className="flex items-start gap-2.5 text-sm leading-relaxed">
+      <Check size={15} className="mt-0.5 shrink-0 text-pk-leaf" aria-hidden />
+      <span className="text-pk-slate">
+        <span className="font-semibold text-pk-ink">{title}:</span> {detail}
+      </span>
+    </li>
+  );
+}
+
 export default function Results() {
   const { requestId } = useParams<{ requestId: string }>();
   const { providers, requests } = useDemoData();
+  const [showMatchInfo, setShowMatchInfo] = useState(false);
   const request = requests.find((entry) => entry.id === requestId);
 
   if (!request) {
@@ -98,11 +113,21 @@ export default function Results() {
       )}
 
       <section className="mt-8">
-        <h2 className="font-display text-xl font-bold">
-          {matches.length === 0
-            ? "No matching micro-providers right now"
-            : `${matches.length} matching micro-provider${matches.length === 1 ? "" : "s"}`}
-        </h2>
+        <div className="flex flex-wrap items-baseline justify-between gap-x-4 gap-y-1">
+          <h2 className="font-display text-xl font-bold">
+            {matches.length === 0
+              ? "No matching micro-providers right now"
+              : `${matches.length} matching micro-provider${matches.length === 1 ? "" : "s"}`}
+          </h2>
+          <button
+            type="button"
+            onClick={() => setShowMatchInfo(true)}
+            className="inline-flex items-center gap-1 text-sm font-medium text-pk-slate transition-colors hover:text-pk-ink"
+          >
+            <Info size={14} aria-hidden />
+            How matches work
+          </button>
+        </div>
         {matches.length === 0 ? (
           <div className="mt-3 rounded-2xl border border-dashed border-pk-line bg-pk-sand px-6 py-8">
             <p className="text-sm leading-relaxed text-pk-slate">
@@ -172,6 +197,40 @@ export default function Results() {
           </ul>
         )}
       </section>
+
+      <Dialog
+        open={showMatchInfo}
+        onClose={() => setShowMatchInfo(false)}
+        className="sm:max-w-md"
+      >
+        <h2 className="font-display text-xl font-bold">How matches work</h2>
+        <p className="mt-3 text-sm leading-relaxed text-pk-slate">
+          Your results only include micro-providers approved by Wells
+          Community Network who pass all of these checks:
+        </p>
+        <ul className="mt-4 space-y-3">
+          <MatchCheck
+            title="Covers your area"
+            detail="the areas they work in include your town or village."
+          />
+          <MatchCheck
+            title="Offers a service you need"
+            detail="they offer at least one of the services you selected, or any service when none were selected."
+          />
+          <MatchCheck
+            title="DBS check in date"
+            detail="their DBS check has not expired."
+          />
+          <MatchCheck
+            title="Insurance in date"
+            detail="their public liability insurance has not expired."
+          />
+        </ul>
+        <p className="mt-4 border-t border-pk-line pt-4 text-sm leading-relaxed text-pk-slate">
+          Closest matches come first: micro-providers based in your own town
+          or village, then those offering more of the services you asked for.
+        </p>
+      </Dialog>
 
       <div className="mt-8 flex flex-wrap gap-3 border-t border-pk-line pt-6">
         <Link
