@@ -82,6 +82,64 @@ const DRIFT_GUARDS: Record<string, string> = {
   heardAbout: "HEARD_ABOUT_OPTIONS",
 };
 
+// ------------------------------------------------------------- overrides
+
+// Deliberate rewrites for the app's automatching pipeline (results appear
+// instantly instead of WCN processing requests by hand). Each override is
+// pinned to the exact upstream text it replaces: `find` must occur exactly
+// once in the target's normalized live text or generation hard-errors, so
+// an upstream edit by WCN forces a review here instead of being silently
+// overridden. Everything not listed stays byte-exact from the live form.
+type OverrideTarget =
+  | { type: "meta"; field: "description" | "confirmationMessage" }
+  | { type: "section"; id: string; field: "description" }
+  | { type: "question"; entryId: number; field: "title" | "description" };
+
+interface Override {
+  label: string;
+  target: OverrideTarget;
+  find: string;
+  replace: string;
+}
+
+const OVERRIDES: Override[] = [
+  {
+    label: "intro — matches are shown instantly, WCN no longer calls back",
+    target: { type: "meta", field: "description" },
+    find: "When you fill in this form we will share your details with Wells Community Network approved Micro-providers near you. We will then contact you with details of all the Micro-providers who are available to support you, leaving you to choose the right support for you.",
+    replace:
+      "After you fill in this form you will see a list of Microproviders that fit your needs, approved by Wells Community Network. You then can choose who to follow up with using their email.",
+  },
+  {
+    label: "email help — the mail-merge step is gone",
+    target: { type: "question", entryId: 30066852, field: "description" },
+    find: "*Please make sure your email is accurate, so we can contact you with local care options. Only enter an actual email address within this field, do not type any other text, for example, (this is my work email)\nTyping anything other than just an email address will cause the brokerage tool to fail and your care request will be unsuccessful.",
+    replace:
+      "*Please make sure your email is accurate, as we may need to follow up based on your request.",
+  },
+  {
+    label: "headline — forwarding note precedes the ask",
+    target: { type: "question", entryId: 1791923969, field: "title" },
+    find: "Give your request for support a headline",
+    replace:
+      "We may forward your enquiry to other networks. To aid us in this give your request for support a headline",
+  },
+  {
+    label: "consent intro — sharing happens when forwarding to other networks",
+    target: { type: "section", id: "consent", field: "description" },
+    find: "To help us identify suitable micro-providers, we may need to share some",
+    replace:
+      "We may forward your enquiry to other microprovider networks. As part of this we may need to share some",
+  },
+  {
+    label: "confirmation — matches are instant, keep only the enquiries line",
+    target: { type: "meta", field: "confirmationMessage" },
+    find: "Thank you for applying for support, we will process your request within three working days.   If you have any other enquiries please contact the WCN Helpline 01749 467079",
+    replace:
+      "If you have any other enquiries please contact the WCN Helpline 01749 467079",
+  },
+];
+
 // ------------------------------------------------------------------ parse
 
 // FB_PUBLIC_LOAD_DATA_ shapes (reverse-engineered, stable for years):
@@ -240,6 +298,48 @@ function parseForm(payload: Raw): ParsedForm {
   };
 }
 
+function readTarget(form: ParsedForm, target: OverrideTarget): string | undefined {
+  if (target.type === "meta") return form.meta[target.field];
+  if (target.type === "section") {
+    return form.sections.find((section) => section.id === target.id)?.[target.field];
+  }
+  return form.sections
+    .flatMap((section) => section.items)
+    .find((item) => item.entryId === target.entryId)?.[target.field];
+}
+
+function writeTarget(form: ParsedForm, target: OverrideTarget, value: string): void {
+  if (target.type === "meta") {
+    form.meta[target.field] = value;
+    return;
+  }
+  if (target.type === "section") {
+    const section = form.sections.find((entry) => entry.id === target.id);
+    if (section) section[target.field] = value;
+    return;
+  }
+  const question = form.sections
+    .flatMap((section) => section.items)
+    .find((item) => item.entryId === target.entryId);
+  if (question) question[target.field] = value;
+}
+
+function applyOverrides(form: ParsedForm): void {
+  for (const override of OVERRIDES) {
+    const current = readTarget(form, override.target);
+    if (current === undefined) {
+      throw new Error(`Override "${override.label}": target not found in the live form.`);
+    }
+    const parts = current.split(override.find);
+    if (parts.length !== 2) {
+      throw new Error(
+        `Override "${override.label}": the pinned upstream text no longer occurs exactly once — the live form changed; re-review this override.`,
+      );
+    }
+    writeTarget(form, override.target, parts.join(override.replace));
+  }
+}
+
 // ------------------------------------------------------------------- emit
 
 function lit(value: unknown, indent: string): string {
@@ -274,11 +374,13 @@ function generate(form: ParsedForm): string {
   });
 
   return `// Generated by scripts/sync-form-content.ts — DO NOT EDIT.
-// Verbatim content of the live "Support Near You" Google Form:
+// Content of the live "Support Near You" Google Form:
 // ${FORM_URL}
 // Regenerate with \`bun run form:sync\`; verify with \`bun run form:check\`.
 // Strings are byte-exact apart from trimmed trailing/outer whitespace — the
-// typos, double spaces, en dashes and curly quotes are the form's own.
+// typos, double spaces, en dashes and curly quotes are the form's own —
+// except ${OVERRIDES.length} passages deliberately rewritten for the automatching
+// pipeline; see OVERRIDES in the sync script.
 import type {
   COMPLETED_BY_OPTIONS,
   FUNDING_OPTIONS,
@@ -382,7 +484,9 @@ async function main() {
     process.exit(2);
   }
 
-  const generated = generate(parseForm(await loadPayload(fromFile)));
+  const form = parseForm(await loadPayload(fromFile));
+  applyOverrides(form);
+  const generated = generate(form);
 
   if (write) {
     writeFileSync(OUT_PATH, generated);
@@ -392,7 +496,9 @@ async function main() {
 
   const existing = readFileSync(OUT_PATH, "utf8");
   if (existing === generated) {
-    console.log("formContent.ts matches the live form.");
+    console.log(
+      `formContent.ts matches the live form (${OVERRIDES.length} documented overrides applied).`,
+    );
     return;
   }
   const expected = generated.split("\n");
