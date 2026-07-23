@@ -24,7 +24,7 @@ export default function Landing() {
         </h1>
         <p className="mt-3 max-w-xl text-[15px] leading-relaxed text-pk-slate">
           Connecting residents of Wells, Shepton Mallet and the surrounding
-          villages with {providers.length} accredited local micro-providers —
+          villages with {providers.length} accredited local micro-providers:
           self-employed carers offering support at home and in the community.
         </p>
 
@@ -39,7 +39,7 @@ export default function Landing() {
             </h2>
             <p className="mt-2 text-sm leading-relaxed text-pk-slate">
               Tell us about the support you need and see matched local
-              carers. Takes about two minutes — no account needed.
+              carers. Takes about two minutes, no account needed.
             </p>
             <span className="mt-4 inline-flex items-center gap-1.5 text-sm font-medium text-pk-blue group-hover:text-pk-blue-deep">
               Find support <ArrowRight size={15} aria-hidden />

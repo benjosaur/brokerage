@@ -96,7 +96,7 @@ const SCREENING_QUESTIONS = [
     title:
       "They are willing and able to co-ordinate and manage their care on an ongoing basis.",
     detail:
-      "Using a micro-provider puts the person receiving care in full control — flexible and personal, but the family is responsible for finding, assessing and managing any micro-provider(s), sometimes more than one to cover different tasks and times.",
+      "Using a micro-provider puts the person receiving care in full control: flexible and personal, but the family is responsible for finding, assessing and managing any micro-provider(s), sometimes more than one to cover different tasks and times.",
   },
   {
     field: "confirmCommunicate" as const,
@@ -231,7 +231,7 @@ export default function FindSupport() {
       if (!form.personSought.trim())
         found.personSought = "Describe the kind of person or service you're looking for.";
       if (!form.circumstances.trim())
-        found.circumstances = "Add a little about the situation — it helps the match.";
+        found.circumstances = "Add a little about the situation; it helps the match.";
       if (!form.pets) found.pets = "Answer Yes or No.";
       if (!form.schedule.trim())
         found.schedule = "Say which days, times and hours you have in mind.";
@@ -311,7 +311,7 @@ export default function FindSupport() {
         <div className="mt-5 space-y-3 text-[15px] leading-relaxed text-pk-slate">
           <p>
             Based on these answers, a micro-provider may not be the most
-            suitable option — this model asks individuals or families to
+            suitable option: this model asks individuals or families to
             manage and co-ordinate care independently.
           </p>
           <p>
@@ -360,7 +360,7 @@ export default function FindSupport() {
 
   return (
     <div className="max-w-xl">
-      <Eyebrow>Support Near You — find a micro-provider</Eyebrow>
+      <Eyebrow>Support Near You - find a micro-provider</Eyebrow>
       <h1 className="mt-3 font-display text-3xl font-bold tracking-tight">
         {STEPS[step]}
       </h1>
@@ -382,7 +382,7 @@ export default function FindSupport() {
             <p className="text-sm leading-relaxed text-pk-slate">
               A few questions first, to make sure micro-providers are right
               for you. Most micro-providers don’t meet the criteria to be
-              regulated by the Care Quality Commission — that doesn’t make
+              regulated by the Care Quality Commission; that doesn’t make
               them unsafe or low quality, but it does mean they suit people
               who want control over who supports them, when and how.
             </p>
@@ -429,7 +429,7 @@ export default function FindSupport() {
         {step === 1 && (
           <>
             <p className="text-sm leading-relaxed text-pk-slate">
-              Great news — it sounds like a micro-provider could be the right
+              Great news: it sounds like a micro-provider could be the right
               option. Tell us what kind of support you’re looking for.
             </p>
             <div>
@@ -482,7 +482,7 @@ export default function FindSupport() {
                 Email address
               </label>
               <HelpText>
-                Please make sure your email is accurate — WCN will contact
+                Please make sure your email is accurate; WCN will contact
                 you here with local care options.
               </HelpText>
               <input
@@ -513,7 +513,7 @@ export default function FindSupport() {
                 Give your request a one-sentence headline
               </label>
               <HelpText>
-                Think along the lines of a recruitment ad — it attracts more
+                Think along the lines of a recruitment ad; it attracts more
                 interest from micro-providers. For example: “Wells-based
                 former teacher and nature enthusiast, 82, looking for help
                 around the home.”
@@ -536,7 +536,7 @@ export default function FindSupport() {
                 Where is support required?
               </label>
               <HelpText>
-                The nearest town or village — please don’t include an exact
+                The nearest town or village; please don’t include an exact
                 address.
               </HelpText>
               <select
@@ -562,7 +562,7 @@ export default function FindSupport() {
                 for?
               </label>
               <HelpText>
-                Specific skills or experience, values and background — perhaps
+                Specific skills or experience, values and background; perhaps
                 someone bubbly and outgoing with moving-and-handling
                 experience, or calm and patient with experience in dementia.
               </HelpText>
@@ -602,7 +602,7 @@ export default function FindSupport() {
                 name="pets"
                 value={form.pets}
                 onChange={(next) => set("pets", next)}
-                labels={{ Yes: "Yes — please indicate how many and what sort" }}
+                labels={{ Yes: "Yes, please indicate how many and what sort" }}
               />
               <FieldError message={errors.pets} />
               {form.pets === "Yes" && (
@@ -647,7 +647,7 @@ export default function FindSupport() {
           <>
             <p className="text-sm leading-relaxed text-pk-slate">
               To find suitable micro-providers, WCN may share some
-              non-personal information from this form — the type of support
+              non-personal information from this form: the type of support
               needed, or general availability. Personal details like your
               name, contact details or address are never shared without your
               explicit permission.
@@ -677,7 +677,7 @@ export default function FindSupport() {
               <FieldError message={errors.consentOther} />
             </div>
             <p className="text-[13px] text-pk-slate">
-              You can change or withdraw consent at any time — email
+              You can change or withdraw consent at any time; email
               wcnmicroproviders@gmail.com or call the WCN Helpline on 01749
               467079.
             </p>
@@ -737,7 +737,7 @@ export default function FindSupport() {
                 does not assess, recommend, endorse, employ or monitor any
                 provider listed. Any decision to contact or engage a provider
                 is made entirely at the individual’s or family’s own
-                discretion — please carry out your own checks, including
+                discretion; please carry out your own checks, including
                 suitability, qualifications, references, safeguarding,
                 insurance and any regulatory requirements, before entering
                 into any agreement.

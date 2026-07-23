@@ -7,7 +7,7 @@ questionnaire (or WCN operations) actually produce.
       Funding (new, from the questionnaire's funding answer, carried onto
       created clients) | Services. No Status (no way to know a match
       happened), no Custom ID/DOB/postcode/AA/deprivation.
-- [x] MPs: Name | Start Date | Locality | Areas Covered (new — with "All";
+- [x] MPs: Name | Start Date | Locality | Areas Covered (new, with "All";
       matching now hard-filters on it intersecting the client's locality) |
       Services | Availability | Email (the Draft email address) |
       DBS Expiry | Public Liability Expiry.
@@ -71,7 +71,7 @@ decide later what to exclude for the WCN context.
 
 Paddock reference: ~/Projects/paddock (routes/*.tsx, components/tables/DataTable.tsx).
 
-- [x] 1. Data: extend types + seed with Paddock fields — client customId /
+- [x] 1. Data: extend types + seed with Paddock fields: client customId /
       dateOfBirth / postCode / attendanceAllowance / deprivation; volunteer
       dateOfBirth / postCode / dbsNumber / publicLiability* / training;
       provider dateOfBirth / postCode / dbsNumber / publicLiabilityNumber /
@@ -87,7 +87,7 @@ Paddock reference: ~/Projects/paddock (routes/*.tsx, components/tables/DataTable
       last column on Clients + Micro-providers)
 - [x] 4. Replace Compliance with Paddock's three pages: DBS ("DBS
       Records"), Public Liability ("Insurance Records"), Records ("Training
-      Records") — each with MPs | Volunteers tabs; nav + routes updated,
+      Records"), each with MPs | Volunteers tabs; nav + routes updated,
       /coordinator/compliance redirects to /coordinator/dbs
 - [x] 5. Verify: bun run build clean; Playwright pass over all coordinator
       pages + Results; commit atomically as work lands
@@ -100,7 +100,7 @@ Paddock reference: ~/Projects/paddock (routes/*.tsx, components/tables/DataTable
 - Fee Date renders raw ISO / "Unpaid" exactly as Paddock does.
 - Services column kept (pills) appended after Paddock's columns; extra
   WCN-only columns (Contact, Availability, Status, headline) dropped from
-  tables — data stays in the model.
+  tables; data stays in the model.
 - No Add New / row-action menus / Show Ended: demo data is read-only seed.
 
 ## Review

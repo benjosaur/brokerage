@@ -73,7 +73,7 @@ export interface MicroProvider {
   name: string;
   locality: string;
   areasCovered: AreaCovered[]; // must intersect a client's locality to match
-  outwardPostcode: string; // e.g. "BA5" — used on public pages
+  outwardPostcode: string; // e.g. "BA5", used on public pages
   postCode: string; // fictional full postcode (unused ZZ inward codes)
   dateOfBirth?: string; // ISO date; absent renders "Unknown"
   services: Service[];
@@ -128,12 +128,12 @@ export interface SupportRequest {
   id: string;
   createdAt: string; // ISO datetime
   clientId: string;
-  // Section 1 — screening
+  // Section 1: screening
   completedBy: string;
-  // Section 2 — support needs
+  // Section 2: support needs
   services: Service[];
   funding: string[];
-  // Section 3 — about you
+  // Section 3: about you
   name: string;
   email: string;
   phone: string;
@@ -144,10 +144,10 @@ export interface SupportRequest {
   hasPets: boolean;
   petDetails: string;
   schedule: string;
-  // Section 4 — consent
+  // Section 4: consent
   consentWcnNetwork: boolean;
   consentOtherNetworks: boolean;
-  // Section 5 — staying in touch
+  // Section 5: staying in touch
   heardAbout: string;
   newsletter: boolean;
 }

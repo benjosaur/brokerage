@@ -37,7 +37,7 @@ export default function Results() {
         <CheckCircle2 className="mt-0.5 shrink-0 text-pk-leaf" size={18} aria-hidden />
         <p className="text-sm leading-relaxed text-pk-leaf">
           <span className="font-semibold">Request received.</span> In the live
-          service WCN processes requests within three working days — in this
+          service WCN processes requests within three working days; in this
           demo, the matches are ready now.
         </p>
       </div>

@@ -2,7 +2,7 @@ import type { MicroProvider, SupportRequest } from "./types";
 
 /**
  * Draft an email to a micro-provider about a request. Deliberately contains
- * no personal contact details — like WCN's real process, only the
+ * no personal contact details; like WCN's real process, only the
  * non-personal request summary is shared, and replies go via WCN.
  */
 export function buildMailto(
@@ -10,7 +10,7 @@ export function buildMailto(
   request: SupportRequest,
 ): string {
   const firstName = provider.name.split(" ")[0];
-  const subject = `New support request via Wells Community Network — ${request.headline}`;
+  const subject = `New support request via Wells Community Network: ${request.headline}`;
   const lines = [
     `Hello ${firstName},`,
     "",
@@ -19,7 +19,7 @@ export function buildMailto(
     `"${request.headline}"`,
     "",
     `Area: ${request.locality}`,
-    `Support needed: ${request.services.join(", ") || "General support — see request"}`,
+    `Support needed: ${request.services.join(", ") || "General support (see request)"}`,
     `Days and times: ${request.schedule}`,
   ];
   if (request.hasPets) {

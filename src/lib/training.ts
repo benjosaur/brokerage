@@ -1,7 +1,7 @@
 import type { TrainingRecord } from "./types";
 
 // WCN's core course list, mirroring Paddock's coreTrainingRecordTypes
-// (shared/const.ts) — record names must match these exactly to count.
+// (shared/const.ts); record names must match these exactly to count.
 export const CORE_TRAINING = [
   "Safeguarding Adults",
   "Moving & Handling",
@@ -10,7 +10,7 @@ export const CORE_TRAINING = [
 
 export interface CoreCompletion {
   earliestCoreExpiryDate: string; // "" when no core records exist
-  coreCompletionRate: number; // 0–100
+  coreCompletionRate: number; // 0-100
 }
 
 // Paddock's core-completion metric (server/db/mp/service.ts): per core

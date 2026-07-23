@@ -14,11 +14,11 @@ export default function Login() {
   const handleSubmit = (event: React.FormEvent) => {
     event.preventDefault();
     if (username.trim().toLowerCase() !== "wells") {
-      setError("This demo signs in as “wells” — try that username.");
+      setError("This demo signs in as “wells”. Try that username.");
       return;
     }
     if (!password) {
-      setError("Enter any password — it isn’t checked in the demo.");
+      setError("Enter any password; it isn’t checked in the demo.");
       return;
     }
     signIn();
