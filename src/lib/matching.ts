@@ -1,3 +1,4 @@
+import { expiryStatus } from "./dates";
 import type { MicroProvider, Service, SupportRequest } from "./types";
 
 export interface Match {
@@ -12,9 +13,18 @@ function coversLocality(provider: MicroProvider, locality: string): boolean {
   );
 }
 
+/** In date means not expired; "expiring" (within 90 days) still matches. */
+function isCompliant(provider: MicroProvider): boolean {
+  return (
+    expiryStatus(provider.dbsExpiry) !== "expired" &&
+    expiryStatus(provider.publicLiabilityExpiry) !== "expired"
+  );
+}
+
 /**
- * Providers whose covered areas include the client's locality and who offer
- * at least one requested service (any service when none were selected),
+ * Providers whose covered areas include the client's locality, who offer
+ * at least one requested service (any service when none were selected)
+ * and whose DBS check and public liability insurance are in date,
  * ranked: same town/village first, then most overlapping services, then
  * name.
  */
@@ -33,6 +43,7 @@ export function matchProviders(
     .filter(
       (match) =>
         coversLocality(match.provider, request.locality) &&
+        isCompliant(match.provider) &&
         (request.services.length === 0 || match.overlap.length > 0),
     )
     .sort(
