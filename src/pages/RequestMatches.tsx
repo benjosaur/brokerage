@@ -12,7 +12,6 @@ import {
 } from "../components/tableStyles";
 import { formatDate } from "../lib/dates";
 import { fundingShort } from "../lib/format";
-import { buildMailto } from "../lib/mailto";
 import { matchProviders } from "../lib/matching";
 import { useDemoData } from "../lib/store";
 
@@ -173,9 +172,12 @@ export default function RequestMatches() {
                     />
                   </div>
                   {canEmail ? (
-                    <a href={buildMailto(provider, request)} className={primaryButton}>
+                    <a
+                      href={`mailto:${provider.email}`}
+                      className={primaryButton}
+                    >
                       <Mail size={15} aria-hidden />
-                      Draft email
+                      Email
                     </a>
                   ) : (
                     <span
@@ -183,7 +185,7 @@ export default function RequestMatches() {
                       title="No sharing consent on this request"
                     >
                       <Mail size={15} aria-hidden />
-                      Draft email
+                      Email
                     </span>
                   )}
                 </div>
