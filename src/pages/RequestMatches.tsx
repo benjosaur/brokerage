@@ -1,6 +1,8 @@
-import { ArrowLeft, Clock, Info, Mail, MapPin } from "lucide-react";
+import { ArrowLeft, Check, Clock, Info, Mail, MapPin } from "lucide-react";
+import { useState } from "react";
 import { Link, useParams } from "react-router";
 import { ServiceBadgeList, ExpiryChip } from "../components/badges";
+import { Dialog, DialogTitle } from "../components/Dialog";
 import { DetailItem } from "../components/modals/DetailItem";
 import {
   pageTitle,
@@ -17,12 +19,25 @@ import { useDemoData } from "../lib/store";
 const card =
   "rounded-xl border border-gray-200/60 bg-white/80 shadow-sm backdrop-blur-sm";
 
+/** One condition row in the "How matches work" modal (Results.tsx dialect). */
+function MatchCheck({ title, detail }: { title: string; detail: string }) {
+  return (
+    <li className="flex items-start gap-2.5 text-sm leading-relaxed">
+      <Check size={15} className="mt-0.5 shrink-0 text-green-600" aria-hidden />
+      <span className="text-gray-600">
+        <span className="font-semibold text-gray-700">{title}:</span> {detail}
+      </span>
+    </li>
+  );
+}
+
 // Coordinator's view of one support request and its matches. The public
 // results page (Results.tsx) stays requester-facing; this one lives in the
 // dashboard shell and shows the contact details the public page withholds.
 export default function RequestMatches() {
   const { requestId } = useParams<{ requestId: string }>();
   const { providers, requests } = useDemoData();
+  const [showMatchInfo, setShowMatchInfo] = useState(false);
   const request = requests.find((entry) => entry.id === requestId);
 
   if (!request) {
@@ -100,11 +115,21 @@ export default function RequestMatches() {
       )}
 
       <section>
-        <h2 className="text-xl font-semibold text-gray-800">
-          {matches.length === 0
-            ? "No matching micro-providers right now"
-            : "Matching micro-providers"}
-        </h2>
+        <div className="flex flex-wrap items-baseline justify-between gap-x-4 gap-y-1">
+          <h2 className="text-xl font-semibold text-gray-800">
+            {matches.length === 0
+              ? "No matching micro-providers right now"
+              : "Matching micro-providers"}
+          </h2>
+          <button
+            type="button"
+            onClick={() => setShowMatchInfo(true)}
+            className="inline-flex items-center gap-1 text-sm font-medium text-gray-500 transition-colors hover:text-gray-700"
+          >
+            <Info size={14} aria-hidden />
+            How matches work
+          </button>
+        </div>
         {matches.length === 0 ? (
           <div className={`${card} mt-3 p-6`}>
             <p className="text-sm text-gray-600">
@@ -167,6 +192,41 @@ export default function RequestMatches() {
           </ul>
         )}
       </section>
+
+      <Dialog
+        open={showMatchInfo}
+        onClose={() => setShowMatchInfo(false)}
+        className="sm:max-w-md"
+      >
+        <DialogTitle>How matches work</DialogTitle>
+        <p className="mt-3 text-sm leading-relaxed text-gray-600">
+          Matches only include micro-providers approved by Wells Community
+          Network who pass all of these checks:
+        </p>
+        <ul className="mt-4 space-y-3">
+          <MatchCheck
+            title="Covers the client’s area"
+            detail="the areas they work in include the client’s town or village."
+          />
+          <MatchCheck
+            title="Offers a requested service"
+            detail="they offer at least one of the services requested, or any service when none were selected."
+          />
+          <MatchCheck
+            title="DBS check in date"
+            detail="their DBS check has not expired."
+          />
+          <MatchCheck
+            title="Insurance in date"
+            detail="their public liability insurance has not expired."
+          />
+        </ul>
+        <p className="mt-4 border-t border-gray-200/60 pt-4 text-sm leading-relaxed text-gray-600">
+          Closest matches come first: micro-providers based in the client’s
+          own town or village, then those offering more of the requested
+          services.
+        </p>
+      </Dialog>
     </div>
   );
 }

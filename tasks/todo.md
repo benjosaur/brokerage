@@ -33,8 +33,12 @@ switched off" note and the disabled gray Draft email button; the public
 results page still renders in PublicShell with tick-style compliance.
 typecheck + build clean.
 
-Follow-up candidate (flag for user): the public page's new "How matches
-work" modal could also sit beside the coordinator page's matches heading.
+Follow-up (user approved): the public page's "How matches work" modal now
+also sits beside the coordinator matches heading, restated in the
+dashboard dialect (gradient DialogTitle, green check rows, gray body)
+with third-person copy (the client's area, requested services) instead
+of the public page's "your". Verified via Playwright: opens from the
+info link, Escape closes; typecheck + build clean.
 
 # Match info modal + compliance filters (2026-07-23)
 
