@@ -1,3 +1,45 @@
+# Coordinator request match view in dashboard style (2026-07-24)
+
+Recent Requests on the dashboard linked to the public results page, which
+drops the coordinator into public chrome with no way back but Home. Give
+coordinators their own match view inside the Shell, styled like the rest
+of the dashboard. Plan: ~/.claude/plans/functional-growing-harbor.md
+
+- [x] 1. RequestMatches page: dashboard-dialect request card (DetailItem
+      grid, contact + questionnaire fields) + match cards (ExpiryChip
+      compliance, Draft email respecting consent), Back to dashboard link
+- [x] 2. Route /coordinator/requests/:requestId in Shell; dashboard cards
+      link there instead of the public results page
+- [x] 3. Verify: typecheck + build + Playwright (nav both ways, consent-off
+      state, public flow untouched); commit
+
+## Review
+
+New RequestMatches page renders inside the coordinator Shell in the
+dashboard dialect (gradient pageTitle + "Matches: N" pill, form-card
+surfaces, DetailItem rows, labelled date ExpiryChips, primaryButton
+mailto). It shows what the public page withholds from the requester's
+own view: contact details, completed-by, funding, person sought,
+circumstances and pet details (DetailItem skips empties). Results.tsx and
+the post-questionnaire flow are untouched.
+
+Verified via Playwright on the dev server, re-run after rebasing onto
+origin/main's compliance filter: dashboard card for Iris Quick links to
+/coordinator/requests/req-01 with 2 ranked matches (Josh Parkin excluded
+upstream by his expired insurance, so coordinator chips only ever show
+green or amber renewal-window dates); Back to dashboard returns to
+/coordinator; an injected consent-off request shows the amber "emails
+switched off" note and the disabled gray Draft email button; the public
+results page still renders in PublicShell with tick-style compliance.
+typecheck + build clean.
+
+Follow-up (user approved): the public page's "How matches work" modal now
+also sits beside the coordinator matches heading, restated in the
+dashboard dialect (gradient DialogTitle, green check rows, gray body)
+with third-person copy (the client's area, requested services) instead
+of the public page's "your". Verified via Playwright: opens from the
+info link, Escape closes; typecheck + build clean.
+
 # Match info modal + compliance filters (2026-07-23)
 
 Results page: explain how matching works via a small info link + modal,

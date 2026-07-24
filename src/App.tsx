@@ -12,6 +12,7 @@ import ProviderForm from "./pages/ProviderForm";
 import Providers from "./pages/Providers";
 import PublicLiability from "./pages/PublicLiability";
 import Records from "./pages/Records";
+import RequestMatches from "./pages/RequestMatches";
 import Results from "./pages/Results";
 import VolunteerForm from "./pages/VolunteerForm";
 import Volunteers from "./pages/Volunteers";
@@ -44,6 +45,7 @@ export default function App() {
           <Route path="dbs" element={<Dbs />} />
           <Route path="public-liability" element={<PublicLiability />} />
           <Route path="records" element={<Records />} />
+          <Route path="requests/:requestId" element={<RequestMatches />} />
           <Route
             path="compliance"
             element={<Navigate to="/coordinator/dbs" replace />}

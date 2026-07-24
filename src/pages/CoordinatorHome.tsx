@@ -71,7 +71,7 @@ export default function CoordinatorHome() {
             {requests.map((request) => (
               <li key={request.id}>
                 <Link
-                  to={`/find-support/results/${request.id}`}
+                  to={`/coordinator/requests/${request.id}`}
                   className="group block rounded-lg border border-gray-200 bg-white p-6 shadow-md transition-shadow hover:shadow-lg"
                 >
                   <div className="flex items-baseline justify-between gap-4">
