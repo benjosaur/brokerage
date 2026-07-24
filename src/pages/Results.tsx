@@ -5,7 +5,6 @@ import { Dialog } from "../components/Dialog";
 import { ServiceBadgeList } from "../components/badges";
 import { expiryStatus } from "../lib/dates";
 import { FORM_META } from "../lib/formContent";
-import { buildMailto } from "../lib/mailto";
 import { matchProviders } from "../lib/matching";
 import { useDemoData } from "../lib/store";
 
@@ -176,11 +175,11 @@ export default function Results() {
                   </div>
                   {canEmail ? (
                     <a
-                      href={buildMailto(provider, request)}
+                      href={`mailto:${provider.email}`}
                       className="inline-flex items-center gap-2 rounded-[10px] bg-pk-blue px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-pk-blue-deep"
                     >
                       <Mail size={15} aria-hidden />
-                      Draft email
+                      Email
                     </a>
                   ) : (
                     <span
@@ -188,7 +187,7 @@ export default function Results() {
                       title="No sharing consent on this request"
                     >
                       <Mail size={15} aria-hidden />
-                      Draft email
+                      Email
                     </span>
                   )}
                 </div>
