@@ -9,7 +9,7 @@ import { useDemoData } from "../lib/store";
 import type { MicroProvider } from "../lib/types";
 
 // The columns matching and vetting actually run on: areas covered drives
-// the locality filter, email is where Draft email goes, and the two
+// the locality filter, email is where the Email button goes, and the two
 // expiries are the accreditation promise.
 const providerColumns: TableColumn<MicroProvider>[] = [
   {

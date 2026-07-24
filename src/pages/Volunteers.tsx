@@ -7,7 +7,7 @@ import { formatYmdToDmy } from "../lib/dates";
 import { useDemoData } from "../lib/store";
 import type { Volunteer } from "../lib/types";
 
-// Name, role, patch, the email Draft email would use, and safeguarding.
+// Name, role, patch, the email the Email button would use, and safeguarding.
 const volunteerColumns: TableColumn<Volunteer>[] = [
   {
     key: "name",
