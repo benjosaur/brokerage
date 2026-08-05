@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router";
 import { ExpiryChip, ServiceBadgeList } from "../components/badges";
+import { feePaidColumn } from "../components/columns";
 import { DataTable, type TableColumn } from "../components/DataTable";
 import { ProviderDetailModal } from "../components/modals/ProviderDetailModal";
 import { formatYmdToDmy } from "../lib/dates";
@@ -9,8 +10,9 @@ import { useDemoData } from "../lib/store";
 import type { MicroProvider } from "../lib/types";
 
 // The columns matching and vetting actually run on: areas covered drives
-// the locality filter, email is where the Email button goes, and the two
-// expiries are the accreditation promise.
+// the locality filter, email is where the Email button goes, the two
+// expiries are the accreditation promise, and Fee Paid is the annual
+// accreditation fee.
 const providerColumns: TableColumn<MicroProvider>[] = [
   {
     key: "name",
@@ -79,6 +81,7 @@ const providerColumns: TableColumn<MicroProvider>[] = [
         : "No Public Liability",
     sortValue: (provider) => provider.publicLiabilityExpiry || null,
   },
+  feePaidColumn,
 ];
 
 export default function Providers() {

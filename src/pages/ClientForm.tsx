@@ -10,6 +10,7 @@ import {
   TextField,
 } from "../components/FormFields";
 import { pageTitle } from "../components/tableStyles";
+import { feeDateInput } from "../lib/format";
 import { createClient, updateClient, useDemoData } from "../lib/store";
 import {
   FUNDING_OPTIONS,
@@ -18,9 +19,9 @@ import {
   type Service,
 } from "../lib/types";
 
-// Create/edit form limited to what the questionnaire captures. Fields the
-// table dropped (custom ID, DOB, postcode, AA, deprivation, status) stay
-// on the record untouched.
+// Create/edit form limited to what the questionnaire captures, plus the fee
+// date the coordinator keeps by hand. Fields the table dropped (custom ID,
+// DOB, postcode, AA, deprivation, status) stay on the record untouched.
 export default function ClientForm() {
   const navigate = useNavigate();
   const { id } = useParams<{ id: string }>();
@@ -34,6 +35,7 @@ export default function ClientForm() {
     name: existing?.name ?? "",
     locality: existing?.locality ?? "",
     onboarded: existing?.onboarded.slice(0, 10) ?? "",
+    feePaymentDate: feeDateInput(existing?.feePaymentDate),
     funding: existing?.funding ?? ([] as string[]),
     services: existing?.services ?? ([] as Service[]),
     headline: existing?.headline ?? "",
@@ -56,6 +58,8 @@ export default function ClientForm() {
       name: form.name,
       locality: form.locality,
       onboarded: form.onboarded,
+      // Clearing the date is how the coordinator marks a fee unpaid.
+      feePaymentDate: form.feePaymentDate || "unpaid",
       funding: form.funding,
       services: form.services,
       headline: form.headline,
@@ -107,6 +111,13 @@ export default function ClientForm() {
                 required
                 value={form.onboarded}
                 onChange={(value) => set("onboarded", value)}
+              />
+              <TextField
+                id="feePaymentDate"
+                label="Fee Payment Date"
+                type="date"
+                value={form.feePaymentDate}
+                onChange={(value) => set("feePaymentDate", value)}
               />
               <CheckboxGroupField
                 label="Funding"

@@ -17,6 +17,7 @@ const menuItems = [
     label: "Public Liability",
     path: "/coordinator/public-liability",
   },
+  { key: "payments", label: "Payments", path: "/coordinator/payments" },
   { key: "records", label: "Records", path: "/coordinator/records" },
 ];
 

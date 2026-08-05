@@ -10,6 +10,7 @@ import {
   TextField,
 } from "../components/FormFields";
 import { pageTitle } from "../components/tableStyles";
+import { feeDateInput } from "../lib/format";
 import { createProvider, updateProvider, useDemoData } from "../lib/store";
 import {
   LOCALITIES,
@@ -18,8 +19,8 @@ import {
   type Service,
 } from "../lib/types";
 
-// Create/edit form limited to what WCN vets and matches on. Fields the
-// table dropped (DOB, fee date) stay on the record untouched.
+// Create/edit form limited to what WCN vets, matches and invoices on. Fields
+// the table dropped (DOB) stay on the record untouched.
 export default function ProviderForm() {
   const navigate = useNavigate();
   const { id } = useParams<{ id: string }>();
@@ -41,6 +42,7 @@ export default function ProviderForm() {
     dbsExpiry: existing?.dbsExpiry ?? "",
     publicLiabilityNumber: existing?.publicLiabilityNumber ?? "",
     publicLiabilityExpiry: existing?.publicLiabilityExpiry ?? "",
+    feePaymentDate: feeDateInput(existing?.feePaymentDate),
     services: existing?.services ?? ([] as Service[]),
     availability: existing?.availability ?? "",
     bio: existing?.bio ?? "",
@@ -71,7 +73,8 @@ export default function ProviderForm() {
       dbsExpiry: form.dbsExpiry,
       publicLiabilityNumber: form.publicLiabilityNumber,
       publicLiabilityExpiry: form.publicLiabilityExpiry,
-      feePaymentDate: existing?.feePaymentDate ?? "unpaid",
+      // Clearing the date is how the coordinator marks a fee unpaid.
+      feePaymentDate: form.feePaymentDate || "unpaid",
       training: existing?.training ?? [],
     };
     if (isEditing && existing) {
@@ -173,6 +176,13 @@ export default function ProviderForm() {
                 type="date"
                 value={form.publicLiabilityExpiry}
                 onChange={(value) => set("publicLiabilityExpiry", value)}
+              />
+              <TextField
+                id="feePaymentDate"
+                label="Fee Payment Date"
+                type="date"
+                value={form.feePaymentDate}
+                onChange={(value) => set("feePaymentDate", value)}
               />
               <ServicesField
                 value={form.services}

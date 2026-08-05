@@ -1,5 +1,9 @@
 import { expiryStatus, formatDate, formatYmdToDmy } from "../lib/dates";
+import { feePaidText, isFeePaid } from "../lib/format";
 import type { Service } from "../lib/types";
+
+const chip =
+  "inline-flex items-center rounded-full px-2.5 py-0.5 font-plex text-[11px] whitespace-nowrap";
 
 const serviceStyles: Record<Service, string> = {
   "Personal Care": "bg-pk-blue-soft text-pk-blue-deep",
@@ -51,11 +55,22 @@ export function ExpiryChip({ label, date }: { label?: string; date: string }) {
         ? `Expires ${formatDate(date)}`
         : `Valid to ${formatDate(date)}`;
   return (
-    <span
-      className={`inline-flex items-center rounded-full px-2.5 py-0.5 font-plex text-[11px] whitespace-nowrap ${expiryStyles[status]}`}
-      title={wording}
-    >
+    <span className={`${chip} ${expiryStyles[status]}`} title={wording}>
       {text}
+    </span>
+  );
+}
+
+// Fees are amber, not clay, when unpaid: chasing a subscription is admin,
+// not the compliance red an expired DBS or insurance earns.
+export function FeeChip({ date }: { date?: string }) {
+  const paid = isFeePaid(date);
+  return (
+    <span
+      className={`${chip} ${paid ? "bg-pk-leaf-soft text-pk-leaf" : "bg-pk-amber-soft text-pk-amber"}`}
+      title={paid ? `Fee paid ${formatDate(date)}` : "Fee not yet paid"}
+    >
+      {feePaidText(date)}
     </span>
   );
 }

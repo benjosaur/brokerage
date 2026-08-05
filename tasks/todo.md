@@ -354,3 +354,57 @@ removed). Provider cards get the same icon rows, lose the services
 overlap counter, and show DBS/Insurance as ticks (clay cross when
 expired, verified against Josh Parkin's expired insurance). No
 font-plex remains on the page.
+
+# Fee Paid column + Payments page (2026-08-05)
+
+Paddock records an MP subscription as `feePaymentDate` (ISO date or the
+literal "unpaid", shared/schemas/index.ts) and shows it as a "Fee Date"
+column on the MPs table. User asked for the same on both clients and MPs,
+plus a separate left-hand nav tab for payments.
+
+- [x] 1. Data: add `feePaymentDate` to Client (clients pay a membership fee,
+      MPs an accreditation fee); seed all six clients, newest one "unpaid";
+      questionnaire-created clients start "unpaid"
+- [x] 2. Fee helpers in lib/format.ts (`isFeePaid`, `feePaidText`,
+      `feeDateInput`) so the "unpaid" literal is decoded in one place, and a
+      `FeeChip` next to ExpiryChip
+- [x] 3. Shared `feePaidColumn` (components/columns.tsx) added to Clients and
+      Micro-providers, so the field can't drift between pages
+- [x] 4. Payments page ("Payment Records", Clients | MPs tabs) modelled on
+      the DBS/Public Liability pages; nav item between Public Liability and
+      Records, route /coordinator/payments
+- [x] 5. Fee Payment Date input on both forms (empty = unpaid, Paddock's
+      MpForm dialect) + Fee Payment Date row on the client detail modal
+- [x] 6. Verify: build clean, Playwright over both tabs, both tables, both
+      form round-trips, modal and column filter
+
+## Decisions taken (flag to user)
+
+- Fee renders as a chip in DD-MM-YYYY like every other date in these tables,
+  not Paddock's raw ISO. Reverses the earlier "raw ISO exactly as Paddock"
+  call, which was made when the column was Paddock-faithful; the chip lives
+  in `feePaidColumn` so it is one edit to undo.
+- Unpaid is amber, not clay: chasing a subscription is admin, not the
+  compliance red an expired DBS or insurance earns, and it keeps the seed's
+  single red flag (Josh Parkin's insurance) unique.
+- Payments tabs default-sort fee descending so "unpaid" sits at the top of
+  the chase list, mirroring the expiry pages leading with the worst row.
+- Both forms now edit the fee date. Without it nothing could move from
+  Unpaid to paid, which would leave the new page inert in a demo.
+- Volunteers have no fee (Paddock's volunteer schema omits it), so the
+  Payments tabs are Clients | MPs.
+
+## Review
+
+Two commits: the fee feature, plus a fix for main's broken build
+(`src/lib/mailto.ts` was deleted in #6 while RequestMatches.tsx still
+imported `buildMailto`; the match view now opens a blank email like
+Results.tsx does, and says "Email" not "Draft email"). `bun run build`
+clean.
+
+Verified via Playwright: Payments page Total 14 with unpaid first on both
+tabs (Iris Quick, Josh Parkin), Fee Paid last column on Clients and
+Micro-providers, fee filter "unpaid" narrows Total to 1, client detail
+modal shows "Fee Payment Date: Unpaid", and both form round-trips work in
+each direction (set a date -> green dated chip; clear it -> amber Unpaid).
+Seed still holds exactly one red compliance chip.

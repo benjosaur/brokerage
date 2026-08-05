@@ -3,7 +3,7 @@ import { Dialog, DialogFooter, DialogTitle } from "../Dialog";
 import { Tabs } from "../Tabs";
 import { ServiceBadgeList } from "../badges";
 import { formatYmdToDmy } from "../../lib/dates";
-import { deprivationFlags, fundingShort } from "../../lib/format";
+import { deprivationFlags, feePaidText, fundingShort } from "../../lib/format";
 import { useDemoData } from "../../lib/store";
 import { DetailItem } from "./DetailItem";
 import { tabPanel } from "./tabPanel";
@@ -60,6 +60,10 @@ export function ClientDetailModal({
                   />
                   <DetailItem label="Locality" value={client.locality} />
                   <DetailItem label="Post Code" value={client.postCode} />
+                  <DetailItem
+                    label="Fee Payment Date"
+                    value={feePaidText(client.feePaymentDate)}
+                  />
                   <DetailItem label="Status" value={client.status} />
                 </div>
               ),

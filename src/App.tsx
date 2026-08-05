@@ -8,6 +8,7 @@ import CoordinatorHome from "./pages/CoordinatorHome";
 import Dbs from "./pages/Dbs";
 import FindSupport from "./pages/FindSupport";
 import Landing from "./pages/Landing";
+import Payments from "./pages/Payments";
 import ProviderForm from "./pages/ProviderForm";
 import Providers from "./pages/Providers";
 import PublicLiability from "./pages/PublicLiability";
@@ -44,6 +45,7 @@ export default function App() {
           <Route path="volunteers/edit/:id" element={<VolunteerForm />} />
           <Route path="dbs" element={<Dbs />} />
           <Route path="public-liability" element={<PublicLiability />} />
+          <Route path="payments" element={<Payments />} />
           <Route path="records" element={<Records />} />
           <Route path="requests/:requestId" element={<RequestMatches />} />
           <Route

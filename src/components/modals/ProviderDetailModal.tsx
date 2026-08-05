@@ -4,7 +4,7 @@ import { Tabs } from "../Tabs";
 import { TrainingRecordsTable } from "../TrainingRecordsTable";
 import { ServiceBadgeList } from "../badges";
 import { formatYmdToDmy } from "../../lib/dates";
-import { areasCoveredText } from "../../lib/format";
+import { areasCoveredText, feePaidText } from "../../lib/format";
 import { useDemoData } from "../../lib/store";
 import { DetailItem } from "./DetailItem";
 import { tabPanel } from "./tabPanel";
@@ -77,11 +77,7 @@ export function ProviderDetailModal({
                   />
                   <DetailItem
                     label="Fee Payment Date"
-                    value={
-                      provider.feePaymentDate === "unpaid"
-                        ? "Unpaid"
-                        : formatYmdToDmy(provider.feePaymentDate)
-                    }
+                    value={feePaidText(provider.feePaymentDate)}
                   />
                   <DetailItem label="Services">
                     <span className="inline-block align-middle">

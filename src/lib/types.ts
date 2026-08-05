@@ -100,6 +100,7 @@ export interface Client {
   services: Service[];
   funding?: string[]; // FUNDING_OPTIONS values from the questionnaire
   onboarded: string; // agreement date, ISO date
+  feePaymentDate: string; // ISO date, or "unpaid"
   status: "Active" | "Matched" | "New request";
   attendanceAllowance?: AttendanceAllowanceStatus;
   deprivation?: { income: boolean; health: boolean };

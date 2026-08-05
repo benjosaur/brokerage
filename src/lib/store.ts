@@ -178,6 +178,7 @@ export function submitRequest(
     services: input.services,
     funding: input.funding,
     onboarded: new Date().toISOString(),
+    feePaymentDate: "unpaid",
     status: "New request",
     headline: input.headline,
   };

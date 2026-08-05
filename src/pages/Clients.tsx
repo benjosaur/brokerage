@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router";
 import { ServiceBadgeList } from "../components/badges";
+import { feePaidColumn } from "../components/columns";
 import { DataTable, type TableColumn } from "../components/DataTable";
 import { ClientDetailModal } from "../components/modals/ClientDetailModal";
 import { formatYmdToDmy } from "../lib/dates";
@@ -10,7 +11,7 @@ import type { Client } from "../lib/types";
 
 // The columns the questionnaire actually feeds: agreement date is the
 // form submission date and funding is its "how will your care be funded?"
-// answer.
+// answer. Fee Paid is the one column the coordinator maintains by hand.
 const clientColumns: TableColumn<Client>[] = [
   {
     key: "name",
@@ -43,6 +44,7 @@ const clientColumns: TableColumn<Client>[] = [
     text: (client) => client.services.join(", "),
     sortValue: (client) => client.services.join(", "),
   },
+  feePaidColumn,
 ];
 
 export default function Clients() {
