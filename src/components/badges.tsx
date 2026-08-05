@@ -2,8 +2,11 @@ import { expiryStatus, formatDate, formatYmdToDmy } from "../lib/dates";
 import { feePaidText, isFeeDue, isFeePaid } from "../lib/format";
 import type { Service } from "../lib/types";
 
-const chip =
-  "inline-flex items-center rounded-full px-2.5 py-0.5 font-plex text-[11px] whitespace-nowrap";
+// One pill shape for every badge on the page: service, expiry and fee. Body
+// Inter at text-xs, not the mono the date chips used to carry, so a date pill
+// reads as the same object as the service pill sitting next to it.
+const pill =
+  "inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium whitespace-nowrap";
 
 const serviceStyles: Record<Service, string> = {
   "Personal Care": "bg-pk-blue-soft text-pk-blue-deep",
@@ -19,9 +22,7 @@ const serviceShort: Record<Service, string> = {
 
 export function ServiceBadge({ service }: { service: Service }) {
   return (
-    <span
-      className={`inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium whitespace-nowrap ${serviceStyles[service]}`}
-    >
+    <span className={`${pill} ${serviceStyles[service]}`}>
       {serviceShort[service]}
     </span>
   );
@@ -55,7 +56,7 @@ export function ExpiryChip({ label, date }: { label?: string; date: string }) {
         ? `Expires ${formatDate(date)}`
         : `Valid to ${formatDate(date)}`;
   return (
-    <span className={`${chip} ${expiryStyles[status]}`} title={wording}>
+    <span className={`${pill} ${expiryStyles[status]}`} title={wording}>
       {text}
     </span>
   );
@@ -76,7 +77,7 @@ export function FeeChip({ date }: { date?: string }) {
   const due = isFeeDue(date);
   return (
     <span
-      className={`${chip} ${due ? "bg-pk-amber-soft text-pk-amber" : "bg-pk-leaf-soft text-pk-leaf"}`}
+      className={`${pill} ${due ? "bg-pk-amber-soft text-pk-amber" : "bg-pk-leaf-soft text-pk-leaf"}`}
       title={feeWording(date)}
     >
       {feePaidText(date)}

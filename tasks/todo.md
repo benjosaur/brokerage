@@ -438,3 +438,14 @@ makes both tabs share one `paymentColumns` set the way the DBS and Public
 Liability pages share theirs. Those fields still show on the entity tables
 and detail modals. Verified via Playwright: both tabs show two columns,
 unpaid still leads (Iris Quick, Josh Parkin), 6 and 8 rows.
+
+## Follow-up: date pills drop the mono font (2026-08-05)
+
+User dislikes IBM Plex Mono in the date pills. ExpiryChip and FeeChip now
+share the service badge's exact shape (`pill` in badges.tsx: Inter, text-xs,
+font-medium) instead of font-plex at 11px, so a date pill and a service pill
+next to each other read as the same object. Verified in the browser: pills
+compute to Inter 12px/500, matching the service pills in the same row.
+
+font-plex still appears in the demo ribbon, the public shell byline and
+Eyebrow labels; left alone as those are not date pills.
