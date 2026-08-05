@@ -429,3 +429,12 @@ Parkin), backdating Margaret Holloway's fee to 10-01-2025 pushed the client
 box to 2 and turned her chip amber with the renewal tooltip, and Reset demo
 data put both back to 1. Six boxes render as a 3-column grid at 1200px.
 `bun run build` clean.
+
+## Follow-up: Payments tables trimmed (2026-08-05)
+
+User's call: the Payments tabs carry Name and Fee Paid only. Locality and
+the agreement/start dates were bloat on a chase list, and dropping them
+makes both tabs share one `paymentColumns` set the way the DBS and Public
+Liability pages share theirs. Those fields still show on the entity tables
+and detail modals. Verified via Playwright: both tabs show two columns,
+unpaid still leads (Iris Quick, Josh Parkin), 6 and 8 rows.
