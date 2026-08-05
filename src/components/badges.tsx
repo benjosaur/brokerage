@@ -6,7 +6,7 @@ import type { Service } from "../lib/types";
 // Inter at text-xs, not the mono the date chips used to carry, so a date pill
 // reads as the same object as the service pill sitting next to it.
 const pill =
-  "inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium whitespace-nowrap";
+  "inline-flex items-center rounded-full px-2.5 py-0.5 text-[13px] font-medium whitespace-nowrap";
 
 const serviceStyles: Record<Service, string> = {
   "Personal Care": "bg-pk-blue-soft text-pk-blue-deep",

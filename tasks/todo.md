@@ -442,10 +442,11 @@ unpaid still leads (Iris Quick, Josh Parkin), 6 and 8 rows.
 ## Follow-up: date pills drop the mono font (2026-08-05)
 
 User dislikes IBM Plex Mono in the date pills. ExpiryChip and FeeChip now
-share the service badge's exact shape (`pill` in badges.tsx: Inter, text-xs,
+share the service badge's exact shape (`pill` in badges.tsx: Inter, 13px,
 font-medium) instead of font-plex at 11px, so a date pill and a service pill
-next to each other read as the same object. Verified in the browser: pills
-compute to Inter 12px/500, matching the service pills in the same row.
+next to each other read as the same object. Bumped to 13px on the user's follow-up ("make slightly bigger"), one step
+under the 14px table text. Verified in the browser: pills compute to Inter
+13px/500 with no horizontal overflow.
 
 font-plex still appears in the demo ribbon, the public shell byline and
 Eyebrow labels; left alone as those are not date pills.
