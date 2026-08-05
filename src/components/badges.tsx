@@ -1,5 +1,5 @@
 import { expiryStatus, formatDate, formatYmdToDmy } from "../lib/dates";
-import { feePaidText, isFeePaid } from "../lib/format";
+import { feePaidText, isFeeDue, isFeePaid } from "../lib/format";
 import type { Service } from "../lib/types";
 
 const chip =
@@ -61,14 +61,23 @@ export function ExpiryChip({ label, date }: { label?: string; date: string }) {
   );
 }
 
-// Fees are amber, not clay, when unpaid: chasing a subscription is admin,
-// not the compliance red an expired DBS or insurance earns.
+function feeWording(date?: string): string {
+  if (!isFeePaid(date)) return "Fee not yet paid";
+  return isFeeDue(date)
+    ? `Due for renewal, last paid ${formatDate(date)}`
+    : `Fee paid ${formatDate(date)}`;
+}
+
+// Fees are amber, not clay, when due: chasing a subscription is admin, not
+// the compliance red an expired DBS or insurance earns. Amber covers both
+// ways a fee falls due, never paid and a year since it last was, so the
+// chip always agrees with the dashboard's renewal counters.
 export function FeeChip({ date }: { date?: string }) {
-  const paid = isFeePaid(date);
+  const due = isFeeDue(date);
   return (
     <span
-      className={`${chip} ${paid ? "bg-pk-leaf-soft text-pk-leaf" : "bg-pk-amber-soft text-pk-amber"}`}
-      title={paid ? `Fee paid ${formatDate(date)}` : "Fee not yet paid"}
+      className={`${chip} ${due ? "bg-pk-amber-soft text-pk-amber" : "bg-pk-leaf-soft text-pk-leaf"}`}
+      title={feeWording(date)}
     >
       {feePaidText(date)}
     </span>

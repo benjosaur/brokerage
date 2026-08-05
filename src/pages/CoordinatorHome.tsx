@@ -4,6 +4,7 @@ import { AnimatedCounter } from "../components/AnimatedCounter";
 import { ServiceBadgeList } from "../components/badges";
 import { pageTitle, secondaryButton } from "../components/tableStyles";
 import { expiryStatus, formatDate, isWithinLastDays } from "../lib/dates";
+import { isFeeDue } from "../lib/format";
 import { useDemoData } from "../lib/store";
 
 export default function CoordinatorHome() {
@@ -17,6 +18,16 @@ export default function CoordinatorHome() {
   const liabilityDue = providers
     .map((provider) => provider.publicLiabilityExpiry)
     .filter((date) => expiryStatus(date) !== "valid").length;
+
+  // Fee renewals, counted the same way for both sides: unpaid counts as due,
+  // so does a fee whose year has run out.
+  const clientFeesDue = clients.filter((client) =>
+    isFeeDue(client.feePaymentDate),
+  ).length;
+
+  const providerFeesDue = providers.filter((provider) =>
+    isFeeDue(provider.feePaymentDate),
+  ).length;
 
   const newThisWeek = clients.filter((client) =>
     isWithinLastDays(client.onboarded, 7),
@@ -39,7 +50,9 @@ export default function CoordinatorHome() {
         </Link>
       </div>
 
-      <div className="mt-6 grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-4">
+      {/* Six boxes sit as two rows of three; the four renewal counters lead
+          and the totals follow. */}
+      <div className="mt-6 grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
         <AnimatedCounter
           targetValue={dbsDue}
           label="DBS Renewals Due (90 Days)"
@@ -47,6 +60,14 @@ export default function CoordinatorHome() {
         <AnimatedCounter
           targetValue={liabilityDue}
           label="Public Liability Due (90 Days)"
+        />
+        <AnimatedCounter
+          targetValue={clientFeesDue}
+          label="Client Fee Renewals Due"
+        />
+        <AnimatedCounter
+          targetValue={providerFeesDue}
+          label="MP Fee Renewals Due"
         />
         <AnimatedCounter targetValue={clients.length} label="Total Clients" />
         <AnimatedCounter

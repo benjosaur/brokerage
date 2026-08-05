@@ -396,10 +396,12 @@ plus a separate left-hand nav tab for payments.
 
 ## Review
 
-Two commits: the fee feature, plus a fix for main's broken build
-(`src/lib/mailto.ts` was deleted in #6 while RequestMatches.tsx still
-imported `buildMailto`; the match view now opens a blank email like
-Results.tsx does, and says "Email" not "Draft email"). `bun run build`
+Main was not building when this work started: #6 deleted `src/lib/mailto.ts`
+while RequestMatches.tsx still imported `buildMailto`, so that commit's
+Vercel build would have failed. Rather than stack a fix commit on top, #6
+itself was amended to update the match view too (blank mailto, "Email" not
+"Draft email") and main force-pushed, since the missing call site was always
+part of that change. The fee work then rebased on top. `bun run build`
 clean.
 
 Verified via Playwright: Payments page Total 14 with unpaid first on both
@@ -408,3 +410,22 @@ Micro-providers, fee filter "unpaid" narrows Total to 1, client detail
 modal shows "Fee Payment Date: Unpaid", and both form round-trips work in
 each direction (set a date -> green dated chip; clear it -> amber Unpaid).
 Seed still holds exactly one red compliance chip.
+
+## Follow-up: dashboard fee renewal boxes (2026-08-05)
+
+Two more counters, one per side: "Client Fee Renewals Due" and "MP Fee
+Renewals Due". A fee is due when it was never paid ("unpaid" counts as due)
+or when a year has passed since it last was — `isFeeDue` in lib/format.ts,
+FEE_PERIOD_DAYS = 365. The dashboard grid becomes two rows of three, the
+four renewal counters leading and the totals following.
+
+FeeChip now turns amber on the same test rather than on "unpaid" alone, so
+a fee paid three years ago can't sit green on the Payments page while the
+dashboard counts it as due; the tooltip reads "Due for renewal, last paid
+DD Mon YYYY".
+
+Verified via Playwright: both boxes read 1 on seed data (Iris Quick, Josh
+Parkin), backdating Margaret Holloway's fee to 10-01-2025 pushed the client
+box to 2 and turned her chip amber with the renewal tooltip, and Reset demo
+data put both back to 1. Six boxes render as a 3-column grid at 1200px.
+`bun run build` clean.

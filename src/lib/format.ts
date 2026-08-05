@@ -1,4 +1,4 @@
-import { formatYmdToDmy } from "./dates";
+import { daysUntil, formatYmdToDmy } from "./dates";
 import { FUNDING_OPTIONS, type AreaCovered, type Client } from "./types";
 
 // Paddock's deprivation flag derivation (routes/ClientsRoutes.tsx).
@@ -31,6 +31,18 @@ export function isFeePaid(feePaymentDate?: string): feePaymentDate is string {
 /** The fee cell: the payment date in DD-MM-YYYY, or "Unpaid". */
 export function feePaidText(feePaymentDate?: string): string {
   return isFeePaid(feePaymentDate) ? formatYmdToDmy(feePaymentDate) : "Unpaid";
+}
+
+/** A fee covers a year, so it falls due again on its first anniversary. */
+const FEE_PERIOD_DAYS = 365;
+
+/** Due for renewal: never paid, or last paid over a year ago. */
+export function isFeeDue(feePaymentDate?: string): boolean {
+  return (
+    !isFeePaid(feePaymentDate) ||
+    // daysUntil counts backwards for a date already gone by.
+    daysUntil(feePaymentDate) < -FEE_PERIOD_DAYS
+  );
 }
 
 /** Date input value for a fee: empty means unpaid, as in Paddock's MpForm. */
